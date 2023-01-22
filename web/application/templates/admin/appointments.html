@@ -1,0 +1,825 @@
+{% extends 'shared/layout.html' %}
+{% block title %}
+Appointments
+{% endblock %}
+
+{% block modal %}
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content card bg-secondary shadow">
+            <div class="modal-header card-header bg-white border-0">
+                <h4 class="card-title">Appointment Information</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body card-body">
+                <div class="row">
+                    <input id="id" name="id" type="text" class="form-control " hidden value="-1">
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-control-label">Details <span id="details_error" class="h5 text-danger"></span></label>
+                            <textarea id="details" name="details" type="text" class="form-control " rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="appointment_date" class="form-control-label">Appointment <span id="appointment_date_error" class="h5 text-danger"></span></label>
+                            <input class="form-control " type="datetime-local" id="appointment_date">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-control-label">Service <span id="service_id_error" class="h5 text-danger"></span></label>
+                            <select id="service_id" name="service_id" data-style="bg-white px-4 py-3 shadow-sm"
+                                class="form-control selectpicker" data-live-search="true">
+                                {% for service in data.services %}
+                                    <option value="{{service.id}}">{{service.service}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-control-label">Patient <span id="account_id_error" class="h5 text-danger"></span></label>
+                            <select id="account_id" name="account_id" data-style="bg-white px-4 py-3 shadow-sm" class="form-control selectpicker" data-live-search="true">
+                                {% for resident in data.residents %}
+                                    <option value="{{resident.id}}">{{resident.first_name}} {{resident.last_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-control-label">Status <span id="status_id_error" class="h5 text-danger"></span></label>
+                            <select id="status_id" name="status_id" data-style="bg-white px-4 py-3 shadow-sm" class="form-control  selectpicker" data-live-search="true">
+                                {% for status in data.status %}
+                                    {% if status.id <= 4 %}
+                                        <option value="{{status.id}}">{{status.status}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-sm btn-success" onclick="SaveAppointment()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-record">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content card bg-secondary shadow">
+            <div class="modal-header card-header bg-white border-0">
+                <h4 class="card-title">Medical Record</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body card-body">
+                <div class="row">
+                    <input id="appointment_id" name="appointment_id" type="text" class="form-control " hidden value="-1">
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label class="form-control-label">Record Number <span id="record_number_error" class="h5 text-danger"></span></label>
+                            <input id="record_number" name="record_number" type="text" class="form-control " disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <label for="record_date" class="form-control-label">Date Recorded <span id="record_date_error" class="h5 text-danger"></span></label>
+                            <input class="form-control " type="datetime-local" id="record_date">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-control-label">Details<span id="record_details_error" class="h5 text-danger"></span></label>
+                            <textarea id="record_details" name="record_details" type="text" class="form-control " rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row card">
+                    <div class="card-header"><label class="form-control-label">Medical Form</label></div>
+                    <div id="form_viewer" class="card-body container"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <label class="form-control-label">Prescriptions<span id="prescriptions_error" class="h5 text-danger"></span></label>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="table align-items-center table-flush">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Item</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col" class="text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="prescriptions_list">
+                                        <tr>
+                                            <td>
+                                                <select data-style="bg-white shadow-sm" data-title="Please select an item" class="form-control border border-1 selectpicker show-tick" data-live-search="true" onchange="$('#prescription_quantity').attr('data-item', this.value)">
+                                                    {% for item in data.inventories if item.available_items|length > 0 %}
+                                                        <option data-subtext="{{ item.available_items|length }} items available" value="{{item.id}}">({{item.item_code}}) {{item.item}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input class="form-control" type="number">
+                                            </td>
+                                            <td class="text-right">
+                                                <button onclick='AddPrescription(this)' class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-sm btn-success" onclick="SaveRecord()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="main-content" id="panel">
+    <!-- Header -->
+    <div class="header pb-6">
+        <div class="container-fluid">
+            <div class="header-body">
+                <div class="row align-items-center py-4">
+                    <div class="col-lg-6 col-7">
+                        <p class="display-2 text-default d-inline-block mb-0">Appointments</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-0">                        
+                        <div class="row align-items-center">
+                            
+                            <div class="col">
+
+                                <form action="/admin/appointment/search" method="post">
+
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                    <!-- <input id="date" name="date" type="text" class="datepicker form-control form-control-sm  w-25 d-inline-block" value="{{data.current_date.strftime('%m/%d/%Y')}}"> -->
+                                    
+                                    <div class="row">
+                                        <div class="input-daterange datepicker col-md-4 row">
+                                            <div class="form-group col">
+                                                <label class="form-control-label">Start Date</label>
+                                                <input name="start_date" class="form-control form-control-sm" placeholder="Start date" type="text" value="{{ now.strftime('%m/%d/%Y') if data.form is none else data.form['start_date'] }}">
+                                            </div>
+                                            <div class="form-group col">
+                                                <label class="form-control-label">End Date</label>
+                                                <input name="end_date" class="form-control form-control-sm" placeholder="End date" type="text" value="{{ now.strftime('%m/%d/%Y') if data.form is none else data.form['end_date'] }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="form-control-label">Patient</label>
+                                                <select id="patient" name="patient" data-style="bg-white shadow-sm border border-1"  class="form-control form-control-sm selectpicker" data-live-search="true">
+                                                    <option value="-1" selected hidden>Please Select</option>
+                                                    {% for resident in data.residents %}
+                                                        <option value="{{resident.id}}">{{resident.first_name}} {{resident.last_name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="form-control-label">Service</label>
+                                                <select id="service" name="service" data-style="bg-white shadow-sm border border-1" class="form-control form-control-sm selectpicker" data-live-search="true">
+                                                    <option value="-1" selected hidden>Please Select</option>
+                                                    {% for service in data.services %}
+                                                        <option value="{{service.id}}">{{service.service}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="form-control-label">Status</label>
+                                                <select id="status" name="status" data-style="bg-white shadow-sm border border-1" class="form-control form-control-sm selectpicker" data-live-search="true">
+                                                    <option value="-1" selected hidden>Please Select</option>
+                                                    {% for status in data.status %}
+                                                        {% if status.id <= 4 %}
+                                                            <option value="{{status.id}}">{{status.status}}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 d-flex justify-content-between py-3">
+                                            <button class="btn btn-sm btn-success" type="submit">Start Search</button>
+                                        </div>
+                                    </div>
+
+                                </form>
+
+                                <button class="btn btn-sm btn-success" onclick="AddNewAppointment()">Add New</button>
+
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <h4 class="card-title">Approved</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <!-- Projects table -->
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Appointment Date</th>
+                                    <th scope="col">Patient</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Medical Record</th>
+                                    <th scope="col" class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for appointment in data.appointments %}
+                                    {% if appointment.status.status == 'Approved' %}
+                                    <tr id='appointment-{{appointment.id}}' data-id={{appointment.id}}>
+                                        <th scope="row">
+                                            {% if appointment.appointment_date is not none %}
+                                                {{appointment.appointment_date.strftime('%h %d %Y %I:%M %p')}}
+                                            {% else %}
+                                                None
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{appointment.account.last_name}}
+                                        </td>
+                                        <td>
+                                            {{ appointment.account.phone }}
+                                        </td>
+                                        <td>
+                                            {{ appointment.service.service }}
+                                        </td>
+                                        <td>
+                                            {{ appointment.status.status }}
+                                        </td>
+                                        <td>
+                                            <a type="button" onclick="UpsertRecord('{{ appointment.id }}')" class="text-info">View Medical Record</a>
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="/admin/appointment/{{appointment.id}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                            <button onclick='EditAppointment(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                                            <button onclick='DeleteAppointment(this)' class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <div class="col text-left">
+                                    <h4 class="card-title">Pending</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <!-- Projects table -->
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Appointment Date</th>
+                                    <th scope="col">Patient</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Medical Record</th>
+                                    <th scope="col" class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for appointment in data.appointments %}
+                                    {% if appointment.status.status == 'Pending' %}
+                                    <tr id='appointment-{{appointment.id}}' data-id={{appointment.id}}>
+                                        <th scope="row">
+                                            {% if appointment.appointment_date is not none %}
+                                                {{appointment.appointment_date.strftime('%h %d %Y %I:%M %p')}}
+                                            {% else %}
+                                                None
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{appointment.account.last_name}}
+                                        </td>
+                                        <td>
+                                            {{ appointment.account.phone }}
+                                        </td>
+                                        <td>
+                                            {{ appointment.service.service }}
+                                        </td>
+                                        <td>
+                                            {{ appointment.status.status }}
+                                        </td>
+                                        <td>
+                                            <a type="button" onclick="UpsertRecord('{{ appointment.id }}')" class="text-info">View Medical Record</a>
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="/admin/appointment/{{appointment.id}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                            <button onclick='EditAppointment(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                                            <button onclick='DeleteAppointment(this)' class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <div class="col text-left">
+                                    <h4 class="card-title">Declined / Cancelled</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <!-- Projects table -->
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Appointment Date</th>
+                                    <th scope="col">Patient</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Medical Record</th>
+                                    <th scope="col" class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for appointment in data.appointments %}
+                                    {% if appointment.status.status == 'Declined' or appointment.status.status == 'Cancelled' %}
+                                    <tr id='appointment-{{appointment.id}}' data-id={{appointment.id}}>
+                                        <th scope="row">
+                                            {% if appointment.appointment_date is not none %}
+                                                {{appointment.appointment_date.strftime('%h %d %Y %I:%M %p')}}
+                                            {% else %}
+                                                None
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{appointment.account.last_name}}
+                                        </td>
+                                        <td>
+                                            {{ appointment.account.phone }}
+                                        </td>
+                                        <td>
+                                            {{ appointment.service.service }}
+                                        </td>
+                                        <td>
+                                            {{ appointment.status.status }}
+                                        </td>
+                                        <td>
+                                            <a type="button" onclick="UpsertRecord('{{ appointment.id }}')" class="text-info">View Medical Record</a>
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="/admin/appointment/{{appointment.id}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                            <button onclick='EditAppointment(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                                            <button onclick='DeleteAppointment(this)' class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+    var EditForm = function (forms) {
+
+        if (forms == null) return null;
+
+        viewer = document.getElementById('form_viewer')
+        viewer.innerHTML = ''
+
+        JSON.parse(forms).forEach(form => {
+
+            field_name = form[0]
+            field_type = form[1]
+            field_cols = form[2]
+
+            switch (field_type) {
+
+                case 'Text Field':
+
+                    col_node = document.createElement('div')
+                    col_node.setAttribute('class', 'col-md-' + field_cols)
+
+                    group_node = document.createElement('div')
+                    group_node.setAttribute('class', 'form-group')
+
+                    label_node = document.createElement('label')
+                    label_node.setAttribute('class', 'form-control-label')
+                    label_node.innerHTML = field_name
+
+                    input_node = document.createElement('input')
+                    input_node.setAttribute('placeholder', field_name)
+                    input_node.setAttribute('class', 'form-control')
+                    input_node.setAttribute('type', 'text')
+
+                    group_node.appendChild(label_node)
+                    group_node.appendChild(input_node)
+                    col_node.appendChild(group_node)
+                    viewer.lastChild.appendChild(col_node)
+
+                    break;
+
+                case 'Large Text Field':
+
+                    col_node = document.createElement('div')
+                    col_node.setAttribute('class', 'col-md-' + field_cols)
+
+                    group_node = document.createElement('div')
+                    group_node.setAttribute('class', 'form-group')
+
+                    label_node = document.createElement('label')
+                    label_node.setAttribute('class', 'form-control-label')
+                    label_node.innerHTML = field_name
+
+                    input_node = document.createElement('textarea')
+                    input_node.setAttribute('placeholder', field_name)
+                    input_node.setAttribute('class', 'form-control')
+                    input_node.setAttribute('type', 'text')
+                    input_node.setAttribute('rows', '10')
+
+                    group_node.appendChild(label_node)
+                    group_node.appendChild(input_node)
+                    col_node.appendChild(group_node)
+                    viewer.lastChild.appendChild(col_node)
+
+                    break;
+
+                case 'New Row':
+
+                    node = document.createElement('div')
+                    node.setAttribute('class', 'row')
+
+                    viewer.appendChild(node)
+
+                    break;
+
+                default:
+                    break;
+
+            }
+
+        })
+
+    }
+
+</script>
+
+<script>
+
+    var AddPrescription = function(el) {
+
+        body        = el.parentNode.parentNode.parentNode
+        row         = body.children[0]
+
+        item_id     = row.children[0].children[0].children[0].value
+        item_text   = row.children[0].children[0].children[1].title
+        quantity    = row.children[1].children[0].value
+
+        $('#prescriptions_error').html('')
+
+        if (item_id < 1) {
+            $('#prescriptions_error').html(' Please select an item.')
+            return null
+        }
+        if (quantity < 1) {
+            $('#prescriptions_error').html(' Invalid quantity.')
+            return null
+        }
+
+        new_row = row.cloneNode(true)
+        new_row.setAttribute('class', 'prescription_item')
+        new_row.children[0].innerHTML = '<input class="form-control" type="text" value="' + item_id + '" disabled hidden>'+
+                                        '<input class="form-control" type="text" value="' + item_text + '" disabled>' //item
+        new_row.children[1].innerHTML = '<input class="form-control" type="text" value="' + quantity + '" disabled>' //quantity
+        new_row.children[2].innerHTML = '<button onclick="this.parentNode.parentNode.remove()" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>'
+
+        body.appendChild(new_row)
+        
+        $(".selectpicker").selectpicker('deselectAll')
+        $(".selectpicker").selectpicker('val', [])
+        row.children[1].children[0].value = 0
+
+    }
+
+    var ViewPrescription = function(meds) {
+
+        if (meds == null) return null;
+
+        JSON.parse(meds).forEach(med => {
+
+            body        = document.getElementById('prescriptions_list')
+            row         = body.children[0]
+            item_id     = med[0]
+            item_text   = med[1]
+            quantity    = med[2]
+
+            new_row = row.cloneNode(true)
+            new_row.setAttribute('class', 'prescription_item')
+            new_row.children[0].innerHTML = '<input class="form-control" type="text" value="' + item_id + '" disabled hidden>'+
+                                            '<input class="form-control" type="text" value="' + item_text + '" disabled>' //item
+            new_row.children[1].innerHTML = '<input class="form-control" type="text" value="' + quantity + '" disabled>' //quantity
+            new_row.children[2].innerHTML = '<button onclick="this.parentNode.parentNode.remove()" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>'
+
+            body.appendChild(new_row)
+
+        })
+
+    }
+
+</script>
+
+<script>
+
+    setSideBar('#menu-appointments')
+
+    var modal           = '#modal-default'
+    var modal_record    = '#modal-record'
+
+    var AddNewAppointment = function () {
+
+        $('#record_id_error').html('')
+        $('#details_error').html('')
+        $('#appointment_date_error').html('')
+        $('#account_id_error').html('')
+        $('#status_id_error').html('')
+        $('#service_id_error').html('')
+
+        $('#id').val('-1')
+        $(".selectpicker").selectpicker('deselectAll')
+        $(".selectpicker").selectpicker('val', [])
+        $('#details').val('')
+        $('#appointment_date').val("{{ data.current_date.strftime('%Y-%m-%dT%H:%M') }}")
+
+        $(modal).modal({
+            "backdrop": "static",
+            "keyboard": true,
+            "show": true
+        })
+
+    }
+
+    var SaveAppointment = function () {
+
+        data = {
+            'id'                : $('#id').val(),
+            'account_id'        : $('#account_id').val(),
+            'service_id'        : $('#service_id').val(),
+            'status_id'         : $('#status_id').val(),
+            'details'           : $('#details').val(),
+            'appointment_date'  : $('#appointment_date').val(),
+            'time'              : 0,
+            'assigned'          : ''
+        }
+
+        // if (document.getElementById('09:00AM-10:00AM').checked) data.time = 9
+        // if (document.getElementById('10:00AM-11:00AM').checked) data.time = 10
+        // if (document.getElementById('11:00AM-12:00NN').checked) data.time = 11
+        // if (document.getElementById('01:00PM-02:00PM').checked) data.time = 13
+        // if (document.getElementById('02:00PM-03:00PM').checked) data.time = 14
+        // if (document.getElementById('03:00PM-04:00PM').checked) data.time = 15
+        // if (document.getElementById('04:00PM-05:00PM').checked) data.time = 16
+        // if (data.time == 0) data.appointment_date = ''
+
+        $('#record_id_error').html('')
+        $('#details_error').html('')
+        $('#appointment_date_error').html('')
+        $('#account_id_error').html('')
+        $('#status_id_error').html('')
+        $('#service_id_error').html('')
+
+        Controller.POST('/api/appointment/upsert', data).done(function (result) {
+            console.log(result)
+            if (result.success == true) {
+                location.reload()
+            }
+            else {
+                
+                if (result.errors.account_id) $('#account_id_error').html(result.errors.account_id)
+                if (result.errors.status_id) $('#status_id_error').html(result.errors.status_id)
+                if (result.errors.service_id) $('#service_id_error').html(result.errors.service_id)
+                if (result.errors.details) $('#details_error').html(result.errors.details)               
+                if (result.errors.appointment_date) $('#appointment_date_error').html(result.errors.appointment_date)               
+            }
+        })
+
+    }
+
+    var EditAppointment = function (e) {
+
+        $('#record_id_error').html('')
+        $('#details_error').html('')
+        $('#appointment_date_error').html('')
+        $('#account_id_error').html('')
+        $('#status_id_error').html('')
+        $('#service_id_error').html('')
+
+        id = e.parentNode.parentNode.dataset.id
+
+        Controller.GET('/api/appointment/get/' + id, {}).done(function (result) {
+
+            $('#id').val(result.id)
+            $("#account_id").selectpicker('val', result.account_id)
+            $("#status_id").selectpicker('val', result.status_id)
+            $("#service_id").selectpicker('val', result.service_id)
+            $('#details').val(result.details)
+            $('#appointment_date').val(result.appointment_date)
+
+            $(modal).modal({
+                "backdrop": "static",
+                "keyboard": true,
+                "show": true
+            })
+
+        })
+
+    }
+
+    var DeleteAppointment = function (e) {
+
+        id = e.parentNode.parentNode.dataset.id
+
+        bootbox.confirm({
+            message: "Medical Records associated to this appointment will be lost. Continue?",
+            buttons: {
+                confirm: {
+                    label: 'Delete',
+                    className: 'btn-sm btn-danger'
+                },
+                cancel: {
+                    label: 'Cancel',
+                    className: 'btn-sm btn-info'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+
+                    Controller.POST('/api/appointment/delete', { 'id': id }).done(function (result) {
+                        if (result.success) e.parentNode.parentNode.remove()
+                    })
+
+                }
+            }
+        })
+    }
+
+    // ===============================
+
+    var UpsertRecord = function(appointment_id) {
+        
+        document.querySelectorAll('[class=prescription_item]').forEach(e => e.parentNode.removeChild(e))
+        
+        $('#prescription_quantity').val('')
+        $(".selectpicker").selectpicker('deselectAll')
+        $(".selectpicker").selectpicker('val', [])
+
+        $('#prescriptions_error').html('')
+        $('#record_number_error').html('')
+        $('#record_date_error').html('')
+        $('#record_details_error').html('')
+
+        Controller.GET('/api/record/get/' + appointment_id, {}).done(function (result) {
+
+            $('#appointment_id').val(appointment_id)
+            $('#record_number').val(result.record_number==null ? appointment_id + "-{{now.month}}{{now.year}}" : result.record_number)
+            $('#record_date').val(result.record_date==null ? "{{ data.current_date.strftime('%Y-%m-%dT%H:%M') }}" : result.record_date)
+            $('#record_details').html(result.record_details)
+
+            ViewPrescription(result.meds)
+            if(result.record_form == null) EditForm(result.service_form)
+            else $('#form_viewer').html(result.record_form)
+
+            $(modal_record).modal({
+                "backdrop": "static",
+                "keyboard": true,
+                "show": true
+            })
+
+        })
+
+    }
+
+    var SaveRecord = function() {
+
+        meds = []
+        document.querySelectorAll('[class=prescription_item]').forEach(e => {
+            item_id     = e.children[0].children[0].value
+            item_text   = e.children[0].children[1].value
+            quantity    = e.children[1].children[0].value
+            meds.push([item_id, item_text, quantity])
+        })
+
+        $('#record_number_error').html('')
+        $('#record_date_error').html('')
+        $('#record_details_error').html('')
+        
+        document.querySelectorAll('#form_viewer input').forEach(e => {
+            e.setAttribute('value', e.value)
+        })
+
+        data = {
+            'id'                : $('#appointment_id').val(),
+            'record_number'     : $('#record_number').val(),
+            'record_date'       : $('#record_date').val(),
+            'record_details'    : $('#record_details').val(),
+            'record_form'       : $('#form_viewer').html(),
+            'meds'              : JSON.stringify(meds),
+            'next_appointments' : null
+        }
+
+        Controller.POST('/api/record/upsert', data).done(function (result) {
+            if (result.success == true) {
+                location.reload()
+            }
+            else {
+                if (result.errors.record_number) $('#record_number_error').html(result.errors.record_number)
+                if (result.errors.record_date) $('#record_date_error').html(result.errors.record_date)
+                if (result.errors.record_details) $('#record_details_error').html(result.errors.record_details)
+            }
+            
+        })
+
+    }
+
+</script>
+{% endblock %}

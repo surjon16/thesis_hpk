@@ -1,0 +1,207 @@
+{% extends 'shared/layout.html' %}
+{% block title %}
+Appointments
+{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block modal %}
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content card bg-secondary shadow">
+            <div class="modal-header card-header bg-white border-0">
+                <h4 class="card-title">Appointment Information</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body card-body">
+                <div class="row">
+                    <input id="id" name="id" type="text" class="form-control " hidden
+                        value="-1">
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-control-label">Record Number <span id="record_id_error" class="h5 text-danger"></span></label>
+                            <select id="record_id" name="record_id" data-style="bg-white px-4 py-3 shadow-sm"
+                                class="form-control  selectpicker" data-live-search="true">
+                                {% for record in data.appointment.records %}
+                                    <option value="{{record.id}}">{{record.record_number}} ({{record.case_title}} at {{record.location}})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-control-label">Details <span id="details_error" class="h5 text-danger"></span></label>
+                            <textarea type="text" class="form-control " rows="12">{{ data.appointment.details }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="appointment" class="form-control-label">Appointment <span id="appointment_error"
+                                    class="h5 text-danger"></span></label>
+                            <input class="form-control " type="datetime-local" id="appointment">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-sm btn-success" onclick="Save()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="main-content" id="panel">
+    <!-- Header -->
+    <div class="header pb-6">
+        <div class="container-fluid">
+            <div class="header-body">
+                <div class="row align-items-center py-4">
+                    <div class="col-lg-6 col-7">
+                        <p class="display-2 text-default d-inline-block mb-0">Appointment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header border-1">
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <!-- <button class="btn btn-sm btn-success" onclick="AddNew()">Add New</button> -->
+                                <h4 class="card-title">Appointment Details</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-control-label">Details</label>
+                                    <textarea type="text" class="form-control" rows="5">{{ data.appointment.details }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-control-label">Date</label>
+                                    <input class="form-control" type="text" value="{{data.appointment.appointment_date}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-control-label">Service</label>
+                                    <input class="form-control" type="text" value="{{data.appointment.service.service}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">Status</label>
+                                    <input class="form-control" type="text" value="{{data.appointment.status.status}}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header border-1">
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <h4 class="card-title">Medical Record</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-control-label">Record Number</label>
+                                    <input type="text" class="form-control" value="{{data.appointment.record_number}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="record_date" class="form-control-label">Date Recorded</label>
+                                    <input class="form-control" type="text" value="{{data.appointment.record_date}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-control-label">Patient</label>
+                                    <input class="form-control" type="text" value="{{data.appointment.account.first_name}} {{data.appointment.account.last_name}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-control-label">Details</label>
+                                    <textarea type="text" class="form-control" rows="5">{{ data.appointment.record_details }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-control-label">Prescriptions</label>
+                                    {% for i in data.appointment.prescriptions %}
+                                        <input class="form-control mb-2" type="text" value="{{ i[2] }} items of {{ i[1] }}">
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="form-group">
+                            <label class="form-control-label">Medical Form</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {% if data.appointment.record_form is none %}
+                            {{ data.appointment.status.form|safe }}
+                        {% else %}
+                            {{ data.appointment.record_form|safe }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+    setSideBar('#menu-appointments')
+
+</script>
+{% endblock %}
