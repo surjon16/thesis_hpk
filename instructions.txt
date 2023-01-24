@@ -1,0 +1,37 @@
+1. Install the following:
+    - Git Bash
+    - Python 3.9.0
+    - XAMPP (Latest Version)
+    - VS Code (Programming IDE)
+
+2. Activate the virtual environment
+    - Right click on the project folder and click on "Git Bash Here"
+    - In the terminal, run the following command:
+        - source .env/Scripts/activate
+
+3. Install all project modules
+    - In the terminal, run the following command:
+        - pip install -r requirements.txt
+    - After installing all modules in requirements.txt, run the following command:
+        - pip install mysqlclient-2.0.2-cp39-cp39-win_amd64.whl
+        - pip install flask_migrate marshmallow python-dateutil
+
+4. Setup Database
+    - Run XAMPP Control Panel, start Apache and MySQL
+    - On your browser, visit this link: localhost/phpmyadmin
+    - At the left panel, click "New"
+        - In the "Database Name" textbox write, "db_hpk" and click the "Create" button
+    - In the terminal, change directory to "web"
+        - cd web
+    - Then run the following command:
+        - flask db migrate
+        - python app.py
+
+5. Populate the Database
+    - On your browser, visit this link: localhost:8080/api/populate
+        - It should return a "success:true" json message
+
+6. Login to Admin
+    - On your browser, login with the following account credentials:
+        - email: admin@gmail.com
+        - password: admin1234
