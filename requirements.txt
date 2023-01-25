@@ -23,7 +23,6 @@ Mako==1.2.4
 MarkupSafe==1.1.1
 marshmallow==3.0.0
 mccabe==0.6.1
-mysqlclient @ file:///C:/Users/Administrator/Documents/THESIS_2023/thesis_hpk/mysqlclient-2.0.2-cp39-cp39-win_amd64.whl
 packaging==23.0
 pycodestyle==2.7.0
 PyJWT==1.7.1

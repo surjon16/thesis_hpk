@@ -23,7 +23,9 @@ Accounts
                                 <label class="form-control-label">Roles <span id="role_id_error" class="h5 text-danger"></span></label>
                                 <select id="role_id" name="role_id" data-style="bg-white px-4 py-3 shadow-sm" class="form-control  selectpicker" data-live-search="true">
                                     <option value="1">Administrator</option>
-                                    <option value="2">Staff</option>
+                                    <option value="2">Faculty</option>
+                                    <option value="3">Student</option>
+                                    <option value="4">Guest</option>
                                 </select>
                             </div>
                         </div>
@@ -98,30 +100,8 @@ Accounts
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-control-label">Civil Status</label>
-                                <select id="civil" name="civil" data-style="bg-white px-4 py-3 shadow-sm" class="form-control  selectpicker" data-live-search="true">
-                                    <option value="Single">Single</option>
-                                    <option value="Married">Married</option>
-                                    <option value="Separated">Separated</option>
-                                    <option value="Widowed">Widowed</option>
-                                    <option value="Widower">Widower</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
                                 <label class="form-control-label">Address <span id="address_error" class="h5 text-danger"></span></label>
                                 <input id="address" name="address" type="text" class="form-control ">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-control-label">Occupation</label>
-                                <input id="occupation" name="occupation" type="text" class="form-control ">
                             </div>
                         </div>
                     </div>
@@ -169,31 +149,29 @@ Accounts
                                 <tr>
                                     <th scope="col">Full Name</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Occupation</th>
+                                    <th scope="col">Account Type</th>
                                     <th scope="col" class="text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for account in data %}
                                     {% if account.role_id is not none %}
-                                        {% if account.role_id < 3 %}
-                                            <tr id='account-{{account.id}}' data-id={{account.id}}>
-                                                <th scope="row">
-                                                    {{account.first_name + ' ' + account.last_name}}
-                                                </th>
-                                                <td>
-                                                    {{account.email}}
-                                                </td>
-                                                <td>
-                                                    {{account.occupation}}
-                                                </td>
-                                                <td class="text-right">
-                                                    <a href="/admin/account/{{account.id}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                                    <button onclick='Edit(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
-                                                    <button onclick='Delete(this)' class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                                                </td>
-                                            </tr>
-                                        {% endif %}
+                                        <tr id='account-{{account.id}}' data-id={{account.id}}>
+                                            <th scope="row">
+                                                {{account.first_name + ' ' + account.last_name}}
+                                            </th>
+                                            <td>
+                                                {{account.email}}
+                                            </td>
+                                            <td>
+                                                {{account.role.role}}
+                                            </td>
+                                            <td class="text-right">
+                                                <a href="/admin/account/{{account.id}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                                <button onclick='Edit(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                                                <button onclick='Delete(this)' class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
                                     {% endif %}
                                 {% endfor %}
                             </tbody>

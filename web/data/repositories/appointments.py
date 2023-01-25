@@ -21,8 +21,7 @@ class AppointmentsRepo:
         return Appointments.query.order_by(Appointments.status_id.desc(), Appointments.time_start.asc()).all()
     
     def readDailyAppointments(date):
-        data = Appointments.query.filter(extract('month', Appointments.appointment_date) == int(date[0:2]), extract('day', Appointments.appointment_date) == int(date[3:5]), extract('year', Appointments.appointment_date) == int(date[6:])).order_by(Appointments.status_id.desc(), Appointments.appointment_date.asc()).all()
-        return data
+        return []
 
     def readAppointment(id):
         return Appointments.query.filter_by(id=id).first()

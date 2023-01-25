@@ -39,29 +39,18 @@ def admin_login_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
 
-        if current_user.role_id is None:
-            return redirect(url_for('patient_dashboard'))
-            
+        if current_user.role_id == 2:
+            return redirect(url_for('faculty_dashboard'))
+
         if current_user.role_id == 3:
-            return redirect(url_for('patient_dashboard'))
+            return redirect(url_for('student_dashboard'))
+
+        if current_user.role_id == 4 or current_user.role_id is None:
+            return redirect(url_for('guest_dashboard'))
 
         return f(*args, **kwargs)
     return wrapper
        
-def patient_login_required(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-
-        if current_user.role_id == 1:
-            return redirect(url_for('dashboard'))
-
-        # if current_user.role_id == 2:
-        #     return redirect(url_for('dashboard'))
-            
-        return f(*args, **kwargs)
-    return wrapper
-       
-
 # ===============================================================
 # WEB VIEWS
 # ===============================================================
@@ -88,12 +77,9 @@ def appointments():
     response = {
         'roles'         : Repository.readRoles(),
         'status'        : Repository.readAllStatus(),
-        'services'      : Repository.readServices(),
         'accounts'      : Repository.readAccounts(),
         'residents'     : Repository.readResidentAccounts(),
-        'records'       : Repository.readRecords(),
         'appointments'  : Repository.readDailyAppointments(datetime.now().strftime('%m/%d/%Y')),
-        'inventories'   : Repository.readInventories(),
         'current_date'  : datetime.now(),
         'form'          : None
     }
@@ -117,12 +103,9 @@ def search_appointments():
         response = {
             'roles'         : Repository.readRoles(),
             'status'        : Repository.readAllStatus(),
-            'services'      : Repository.readServices(),
             'accounts'      : Repository.readAccounts(),
             'residents'     : Repository.readResidentAccounts(),
-            'records'       : Repository.readRecords(),
             'appointments'  : Repository.searchAppointments(request.form),
-            'inventories'   : Repository.readInventories(),
             'current_date'  : datetime.strptime(date, '%m/%d/%Y'),
             'form'          : request.form
         }

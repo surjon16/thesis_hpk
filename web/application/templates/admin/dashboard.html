@@ -17,33 +17,16 @@
                     </div>
                 </div>
                 <div class="row">
-                    <!-- <div class="col-xl-4 col-md-6">
+                    <div class="col-xl-2 col-md-4">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col">
-                                        <h5 class="card-title text-uppercase text-muted mb-0">Medical Records</h5>
-                                        <span class="h2 font-weight-bold mb-0">{{data.records|length}}</span>
+                                        <h5 class="card-title text-uppercase text-muted mb-0">Faculties</h5>
+                                        <span class="h2 font-weight-bold mb-0">{{data.accounts|selectattr("role_id", "equalto", 2)|list|length}}</span>
                                     </div>
                                     <div class="col-auto">
                                         <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                                            <i class="ni ni-briefcase-24"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-                    <div class="col-xl-4 col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <h5 class="card-title text-uppercase text-muted mb-0">Registered Accounts</h5>
-                                        <span class="h2 font-weight-bold mb-0">{{data.accounts|length}}</span>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
                                             <i class="ni ni-single-02"></i>
                                         </div>
                                     </div>
@@ -51,7 +34,41 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-4 col-md-6">
+                    <div class="col-xl-2 col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="card-title text-uppercase text-muted mb-0">Students</h5>
+                                        <span class="h2 font-weight-bold mb-0">{{data.accounts|selectattr("role_id", "equalto", 3)|list|length}}</span>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="icon icon-shape bg-gradient-blue text-white rounded-circle shadow">
+                                            <i class="ni ni-hat-3"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="card-title text-uppercase text-muted mb-0">Guests</h5>
+                                        <span class="h2 font-weight-bold mb-0">{{data.accounts|selectattr("role_id", "equalto", 4)|list|length}}</span>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                                            <i class="ni ni-badge"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-4">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
