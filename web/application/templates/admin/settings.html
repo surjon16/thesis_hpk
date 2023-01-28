@@ -6,6 +6,36 @@ Settings
 {% block css %}{% endblock %}
 
 {% block modal %}
+<div class="modal fade" id="modal-purposes">
+    <div class="modal-dialog">
+        <div class="modal-content card bg-secondary shadow">
+            <form>
+                <div class="modal-header card-header bg-white border-0">
+                    <h4 class="card-title">Purpose Info</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body card-body">
+                    <div class="row">
+                        <input id="id" name="id" type="text" class="form-control " hidden value="-1">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-control-label">Purpose</label>
+                                <input id="purpose" name="purpose" type="text"
+                                    class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-sm btn-success" data-dismiss="modal" onclick="SavePurpose()">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="modal-roles">
     <div class="modal-dialog">
         <div class="modal-content card bg-secondary shadow">
@@ -91,6 +121,50 @@ Settings
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col">
+                                <p class="display-4 d-inline-block mb-0">Purposes</p>
+                            </div>
+                            <div class="col text-right">
+                                <button class="btn btn-sm btn-success" onclick="AddNewPurpose()">Add New</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <!-- Projects table -->
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Purpose</th>
+                                    <th scope="col" class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for purpose in data.purpose %}
+                                <tr id='purpose-{{purpose.id}}' data-id={{purpose.id}}>
+                                    <th scope="row">
+                                        {{purpose.id}}
+                                    </th>
+                                    <td>
+                                        {{purpose.purpose}}
+                                    </td>
+                                    <td class="text-right">
+                                        <button onclick='EditPurpose(this)' class="btn btn-warning btn-sm" >Edit</button>
+                                        <button onclick='DeletePurpose(this)' class="btn btn-danger btn-sm">Delete</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
                                 <p class="display-4 d-inline-block mb-0">Roles</p>
                             </div>
                             <div class="col text-right">
@@ -118,7 +192,7 @@ Settings
                                         {{role.role}}
                                     </td>
                                     <td class="text-right">
-                                        {% if role.id <= 3 %}
+                                        {% if role.id <= 4 %}
                                             <button onclick='EditRole(this)' class="btn btn-warning btn-sm"  disabled>Edit</button>
                                             <button onclick='DeleteRole(this)' class="btn btn-danger btn-sm" disabled>Delete</button>
                                         {% else %}
@@ -192,8 +266,94 @@ Settings
 
     setSideBar('#menu-settings')
 
+    var modal_purposes  = '#modal-purposes'
     var modal_roles     = '#modal-roles'
     var modal_status    = '#modal-status'
+
+    var AddNewPurpose = function () {
+
+        $('#id').val('-1')
+        $('#purpose').val('')
+
+        $(modal_purposes).modal({
+            "backdrop": "static",
+            "keyboard": true,
+            "show": true
+        })
+
+    }
+
+    var SavePurpose = function () {
+
+        data = {
+            'id'    : $('#id').val(),
+            'purpose'  : $('#purpose').val()
+        }
+
+        Controller.POST('/api/purpose/upsert', data).done(function (result) {
+            console.log(result)
+            if (result.success) {
+                e = document.getElementById('purpose-' + data.id)
+                if (e == null) {
+                    location.reload()
+                }
+                else {
+                    e.childNodes[1].innerHTML = data.id
+                    e.childNodes[3].innerHTML = data.purpose
+                }
+            }
+        })
+
+    }
+
+    var EditPurpose = function (e) {
+
+        id = e.parentNode.parentNode.dataset.id
+
+        Controller.GET('/api/purpose/get/' + id, {}).done(function (result) {
+
+            $('#id').val(result.id)
+            $('#purpose').val(result.purpose)
+
+            $(modal_purposes).modal({
+                "backdrop": "static",
+                "keyboard": true,
+                "show": true
+            })
+
+        })
+
+    }
+
+    var DeletePurpose = function (e) {
+
+        id = e.parentNode.parentNode.dataset.id
+
+        bootbox.confirm({
+            message: "Delete item?",
+            buttons: {
+                confirm: {
+                    label: 'Delete',
+                    className: 'btn-sm btn-danger'
+                },
+                cancel: {
+                    label: 'Cancel',
+                    className: 'btn-sm btn-info'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+
+                    Controller.POST('/api/purpose/delete', { 'id': id }).done(function (result) {
+                        if (result.success) e.parentNode.parentNode.remove()
+                    })
+
+                }
+            }
+        })
+    }
+
+    // ======================================================================================================================
 
     var AddNewRole = function () {
 

@@ -52,13 +52,52 @@ def admin_login_required(f):
     return wrapper
        
 # ===============================================================
-# WEB VIEWS
+# COMMON WEB VIEWS
 # ===============================================================
- 
+
 @app.route('/')
 @login_required
 def home():
     return redirect(url_for('dashboard'))
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        data = Repository.loginAccount(request.form)
+        if data is not None and data is not False:
+            if data.role_id is not None:
+                if data.role_id < 3 :
+                    return redirect(url_for('dashboard'))        
+            return redirect(url_for('patient_dashboard'))
+        else:
+            flash('Invalid credentials.')
+    return render_template('common/login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.')
+    return redirect(url_for('login'))
+
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    if request.method == 'POST':
+        
+        validator = RegisterAccountSchema(unknown='EXCLUDE')
+        errors = validator.validate(request.form)
+
+        if errors:
+            return render_template('common/register.html', data={'errors': errors, 'input': request.form})
+
+        if Repository.registerAccount(request.form):
+            return redirect(url_for('login'))
+        
+    return render_template('common/register.html', data={'errors':[], 'input': []})
+
+# ===============================================================
+# ADMIN WEB VIEWS
+# ===============================================================
 
 @app.route('/admin/dashboard')
 @login_required
@@ -78,7 +117,6 @@ def appointments():
         'roles'         : Repository.readRoles(),
         'status'        : Repository.readAllStatus(),
         'accounts'      : Repository.readAccounts(),
-        'residents'     : Repository.readResidentAccounts(),
         'appointments'  : Repository.readDailyAppointments(datetime.now().strftime('%m/%d/%Y')),
         'current_date'  : datetime.now(),
         'form'          : None
@@ -132,42 +170,8 @@ def account(id):
 @admin_login_required
 def settings():
     response = {
-        'roles' : Repository.readRoles(),
-        'status' : Repository.readAllStatus()
+        'purpose'   : Repository.readAllPurpose(),
+        'roles'     : Repository.readRoles(),
+        'status'    : Repository.readAllStatus()
     }
     return render_template('admin/settings.html', data=response)
-
-@app.route('/login', methods=['POST', 'GET'])
-def login():
-    if request.method == 'POST':
-        data = Repository.loginAccount(request.form)
-        if data is not None and data is not False:
-            if data.role_id is not None:
-                if data.role_id < 3 :
-                    return redirect(url_for('dashboard'))        
-            return redirect(url_for('patient_dashboard'))
-        else:
-            flash('Invalid credentials.')
-    return render_template('common/login.html')
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    flash('You have been logged out.')
-    return redirect(url_for('login'))
-
-@app.route('/register', methods=['POST', 'GET'])
-def register():
-    if request.method == 'POST':
-        
-        validator = RegisterAccountSchema(unknown='EXCLUDE')
-        errors = validator.validate(request.form)
-
-        if errors:
-            return render_template('common/register.html', data={'errors': errors, 'input': request.form})
-
-        if Repository.registerAccount(request.form):
-            return redirect(url_for('login'))
-        
-    return render_template('common/register.html', data={'errors':[], 'input': []})

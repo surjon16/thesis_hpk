@@ -33,6 +33,14 @@ Accounts
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label class="form-control-label">ID Number <span style="font-weight: 100">(Required if student)</span> <span id="id_number_error" class="h5 text-danger"></span></label>
+                                <input id="id_number" name="id_number" type="text" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label class="form-control-label">First Name <span id="first_name_error" class="h5 text-danger"></span></label>
                                 <input id="first_name" name="first_name" type="text" class="form-control ">
                             </div>
@@ -193,6 +201,7 @@ Accounts
 
     var AddNew = function() {
         
+        $('#id_number_error').html('')
         $('#first_name_error').html('')
         $('#last_name_error').html('')
         $('#phone_error').html('')
@@ -213,7 +222,7 @@ Accounts
         $('#password').val('')
         $('#birth_date').val('')
         $('#address').val('')
-        $('#occupation').val('')
+        $('#role').val('')
 
         $(modal).modal({ 
             "backdrop"  : "static",
@@ -225,6 +234,7 @@ Accounts
 
     var Save = function() {
         
+        $('#id_number_error').html('')
         $('#first_name_error').html('')
         $('#last_name_error').html('')
         $('#phone_error').html('')
@@ -234,6 +244,7 @@ Accounts
 
         data = {
             'id'            : $('#id').val(),
+            'id_number'     : $('#id_number').val(),
             'role_id'       : $('#role_id').val(),
             'first_name'    : $('#first_name').val(),
             'middle_name'   : $('#middle_name').val(),
@@ -241,11 +252,9 @@ Accounts
             'email'         : $('#email').val(),
             'phone'         : $('#phone').val(),
             'gender'        : $('#gender').val(),
-            'civil'         : $('#civil').val(),
             'password'      : $('#password').val(),
             'birth_date'    : $('#birth_date').val(),
-            'address'       : $('#address').val(),
-            'occupation'      : $('#occupation').val()
+            'address'       : $('#address').val()
         }
 
         Controller.POST('/api/account/upsert', data).done(function(result) {
@@ -253,20 +262,21 @@ Accounts
             console.log(data, result)
 
             if (result.success == true) {
-                e = document.getElementById('account-'+data.id)
+                e = document.getElementById('account-'+result.account.id)
                 if (e == null) {
                     location.reload()
                 }
                 else {
-                    e.childNodes[1].innerHTML = data.first_name + ' ' + data.last_name
-                    e.childNodes[3].innerHTML = data.email
-                    e.childNodes[5].innerHTML = data.occupation
+                    e.childNodes[1].innerHTML = result.account.first_name + ' ' + result.account.last_name
+                    e.childNodes[3].innerHTML = result.account.email
+                    e.childNodes[5].innerHTML = result.account.role
                     $(modal).modal('hide')
                 }
             }
             else {
 
                 if(result.errors.role_id) $('#role_id_error').html(result.errors.role_id)
+                if(result.errors.id_number) $('#id_number_error').html(result.errors.id_number)
                 if(result.errors.first_name) $('#first_name_error').html(result.errors.first_name)
                 if(result.errors.last_name) $('#last_name_error').html(result.errors.last_name)
                 if(result.errors.phone) $('#phone_error').html(result.errors.phone)
@@ -281,6 +291,7 @@ Accounts
 
     var Edit = function(e) {
 
+        $('#id_number_error').html('')
         $('#first_name_error').html('')
         $('#last_name_error').html('')
         $('#phone_error').html('')
@@ -295,6 +306,7 @@ Accounts
             console.log(result)
 
             $('#id').val(result.id)
+            $('#id_number').val(result.id_number)
             $("#role_id").selectpicker('val', result.role_id)
             $('#first_name').val(result.first_name)
             $('#middle_name').val(result.middle_name)

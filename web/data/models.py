@@ -71,7 +71,8 @@ class Accounts(UserMixin, db.Model):
             'created_at'    : self.created_at,
             'updated_at'    : self.updated_at,
             'address'       : self.address,
-            'role_id'       : self.role_id
+            'role_id'       : self.role_id,
+            'role'          : self.role.role
         }
 
 class Consultations(db.Model):

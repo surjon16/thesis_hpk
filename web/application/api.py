@@ -1,7 +1,8 @@
 from flask          import jsonify, render_template, request, redirect, url_for, make_response
 from application    import app
 from data.repo      import Repository
-from data.schemas   import CreateAccountSchema, UpdateAccountSchema, CreateRecordSchema, CreateAppointmentSchema, CreateServiceSchema, CreateInventorySchema, AddItemsSchema
+from data.schemas   import CreateStudentAccountSchema, UpdateStudentAccountSchema, CreateAccountSchema, UpdateAccountSchema, CreateRecordSchema, CreateAppointmentSchema, CreateServiceSchema, CreateInventorySchema, AddItemsSchema
+from data           import auth
 import json
 
 # API RESOURCE PATTERN
@@ -11,6 +12,14 @@ import json
 # POST        /data/upsert/     upsert data
 # POST        /data/delete/     delete data
 
+@auth.verify_password
+def authenticate(username, password):
+    if username and password:
+        if username == 'hpk' and password == 'hpk':
+            return True
+        else:
+            return False
+            
 # ==================================================================================
 # ACCOUNTS
 
@@ -25,20 +34,33 @@ def get_all_accounts():
 @app.route('/api/account/upsert', methods=['POST'])
 def upsert_account():
 
+    validator = None
+
     if int(request.form['id']) == -1:
-        validator = CreateAccountSchema(unknown='EXCLUDE')
+
+        if int(request.form['role_id']) == 3:
+            validator = CreateStudentAccountSchema(unknown='EXCLUDE')
+        else:
+            validator = CreateAccountSchema(unknown='EXCLUDE')
+
         errors = validator.validate(request.form)
         if errors:
             return jsonify({'success':False, 'errors':errors})
+
     else:
-        validator = UpdateAccountSchema(unknown='EXCLUDE')
+
+        if int(request.form['role_id']) == 3:
+            validator = UpdateStudentAccountSchema(unknown='EXCLUDE')
+        else:
+            validator = UpdateAccountSchema(unknown='EXCLUDE')
+
         errors = validator.validate(request.form)
         if errors:
             return jsonify({'success':False, 'errors':errors})
 
     if Repository.upsertAccount(request.form):
-        return {'success':True}
-    return {'success':True}
+        return {'success':True , 'account': Repository.readAccount(request.form['id']).serialize()}
+    return {'success':False}
 
 @app.route('/api/account/delete', methods=['POST'])
 def delete_account():
@@ -161,6 +183,29 @@ def upsert_inventory_items():
 @app.route('/api/inventory/delete', methods=['POST'])
 def delete_inventory():
     if Repository.deleteInventory(request.form):
+        return {'success':True}
+    return {'success':False}
+
+# ==================================================================================
+# PURPOSE
+
+@app.route('/api/purpose/get/<id>', methods=['GET'])
+def get_purpose(id):
+    return jsonify(Repository.readPurpose(id).serialize())
+
+@app.route('/api/purpose/get/all', methods=['GET'])
+def get_all_purposes():
+    return jsonify([data.serialize() for data in Repository.readPurpose()])
+
+@app.route('/api/purpose/upsert', methods=['POST'])
+def upsert_purpose():
+    if Repository.upsertPurpose(request.form):
+        return {'success':True}
+    return {'success':False}
+
+@app.route('/api/purpose/delete', methods=['POST'])
+def delete_purpose():
+    if Repository.deletePurpose(request.form):
         return {'success':True}
     return {'success':False}
 

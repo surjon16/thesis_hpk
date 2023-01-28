@@ -22,10 +22,7 @@ class AccountsRepo:
         return Accounts.query.all()
 
     def readRegisteredAccounts():
-        return Accounts.query.filter(Accounts.role_id.in_([1,2,3])).all()
-    
-    def readResidentAccounts():
-        return Accounts.query.filter(or_(Accounts.role_id.is_(None), Accounts.role_id == 3)).all()
+        return Accounts.query.filter(Accounts.role_id.in_([1,2,3,4])).all()
     
     def readAccount(id):
         return Accounts.query.filter_by(id=id).first()
@@ -119,12 +116,12 @@ class AccountsRepo:
             return False
         else:
 
-            # delete all notifications
-            for notification in data.account_notifications:
-                db.session.delete(notification)
+            # # delete all notifications
+            # for notification in data.account_notifications:
+            #     db.session.delete(notification)
 
-            for appointment in data.account_appointments:
-                db.session.delete(appointments)
+            # for appointment in data.account_appointments:
+            #     db.session.delete(appointments)
 
             # finally, delete account
             db.session.delete(data)

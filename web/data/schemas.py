@@ -1,7 +1,129 @@
 from datetime import datetime
-from marshmallow import Schema, fields, validates, ValidationError
+from marshmallow import Schema, fields, validates, validates_schema, ValidationError
 
 # All classes declared will be used for validation
+
+class CreateStudentAccountSchema(Schema):
+    
+    id_number   = fields.Str(required=True)
+    first_name  = fields.Str(required=True)
+    last_name   = fields.Str(required=True)
+    phone       = fields.Str(required=True)
+    email       = fields.Email(required=True)
+    address     = fields.Str(required=True)
+    password    = fields.Str(required=True)
+
+    @validates('id_number')
+    def validate_id_number(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide your id number.')
+
+    @validates('first_name')
+    def validate_first_name(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide your first name.')
+
+    @validates('last_name')
+    def validate_last_name(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide your last name.')
+
+    @validates('phone')
+    def validate_phone(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide a phone number.')
+        if len(value) != 11:
+            raise ValidationError('Invalid phone number.')
+
+    @validates('address')
+    def validate_address(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide an address.')
+
+    @validates('password')
+    def validate_password(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide a password.')
+
+class UpdateStudentAccountSchema(Schema):
+    
+    id_number   = fields.Str(required=True)
+    first_name  = fields.Str(required=True)
+    last_name   = fields.Str(required=True)
+    phone       = fields.Str(required=True)
+    email       = fields.Email(required=True)
+    address     = fields.Str(required=True)
+    role_id     = fields.Str(required=True)
+
+    @validates('id_number')
+    def validate_id_number(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide your id number.')
+
+    @validates('first_name')
+    def validate_first_name(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide your first name.')
+
+    @validates('last_name')
+    def validate_last_name(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide your last name.')
+
+    @validates('phone')
+    def validate_phone(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide a phone number.')
+        if len(value) != 11:
+            raise ValidationError('Invalid phone number.')
+
+    @validates('address')
+    def validate_address(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide an address.')
+
+    @validates('role_id')
+    def validate_role_id(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide a role.')
+
+class RegisterStudentAccountSchema(Schema):
+
+    id_number   = fields.Str(required=True)
+    first_name  = fields.Str(required=True)
+    last_name   = fields.Str(required=True)
+    email       = fields.Email(required=True)
+    phone       = fields.Str(required=True)
+    password    = fields.Str(required=True)
+
+    @validates('id_number')
+    def validate_id_number(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide your id number.')
+
+    @validates('first_name')
+    def validate_first_name(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide your first name.')
+
+    @validates('last_name')
+    def validate_last_name(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide your last name.')
+
+    @validates('phone')
+    def validate_phone(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide a phone number.')
+        # if value[:4] != '+639':
+        #     raise ValidationError('Invalid phone number.')
+        if len(value) < 11 :
+            raise ValidationError('Invalid phone number.')
+
+    @validates('password')
+    def validate_password(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide a password.')
 
 class CreateAccountSchema(Schema):
     
@@ -26,9 +148,7 @@ class CreateAccountSchema(Schema):
     def validate_phone(self, value):
         if value == '' or value is None:
             raise ValidationError('Please provide a phone number.')
-        if value[:4] != '+639':
-            raise ValidationError('Invalid phone number.')
-        if len(value) != 13:
+        if len(value) != 11:
             raise ValidationError('Invalid phone number.')
 
     @validates('address')
@@ -43,6 +163,7 @@ class CreateAccountSchema(Schema):
 
 class UpdateAccountSchema(Schema):
     
+    id_number   = fields.Str(required=True)
     first_name  = fields.Str(required=True)
     last_name   = fields.Str(required=True)
     phone       = fields.Str(required=True)
@@ -64,9 +185,7 @@ class UpdateAccountSchema(Schema):
     def validate_phone(self, value):
         if value == '' or value is None:
             raise ValidationError('Please provide a phone number.')
-        if value[:4] != '+639':
-            raise ValidationError('Invalid phone number.')
-        if len(value) != 13:
+        if len(value) != 11:
             raise ValidationError('Invalid phone number.')
 
     @validates('address')
@@ -78,7 +197,6 @@ class UpdateAccountSchema(Schema):
     def validate_role_id(self, value):
         if value == '' or value is None:
             raise ValidationError('Please provide a role.')
-
 
 class RegisterAccountSchema(Schema):
 
@@ -111,7 +229,6 @@ class RegisterAccountSchema(Schema):
     def validate_password(self, value):
         if value == '' or value is None:
             raise ValidationError('Please provide a password.')
-
 
 class CreateRecordSchema(Schema):
     

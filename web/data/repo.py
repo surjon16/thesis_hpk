@@ -21,7 +21,7 @@ class Repository(AccountsRepo, AppointmentsRepo, RolesRepo, StatusRepo, PurposeR
         role = Roles(role='admin')
         db.session.add(role)
 
-        role = Roles(role='instructor')
+        role = Roles(role='faculty')
         db.session.add(role)
 
         role = Roles(role='student')
@@ -67,6 +67,9 @@ class Repository(AccountsRepo, AppointmentsRepo, RolesRepo, StatusRepo, PurposeR
         status = Status(status='Available')
         db.session.add(status)
 
+        status = Status(status='Unavailable')
+        db.session.add(status)
+
         # create accounts
 
         account = Accounts(
@@ -86,12 +89,12 @@ class Repository(AccountsRepo, AppointmentsRepo, RolesRepo, StatusRepo, PurposeR
         account = Accounts(
             first_name  = 'Sample',
             middle_name = '',
-            last_name   = 'Instructor',
+            last_name   = 'Faculty',
             gender      = '',
             phone       = '+639354796747',
             birth_date  = '',
             address     = 'CDO',
-            email       = 'instructor@gmail.com',
+            email       = 'faculty@gmail.com',
             password    = 'admin1234',
             role_id     = 2
         )
