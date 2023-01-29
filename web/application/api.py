@@ -34,14 +34,10 @@ def get_all_accounts():
 @app.route('/api/account/upsert', methods=['POST'])
 def upsert_account():
 
-    validator = None
 
     if int(request.form['id']) == -1:
 
-        if int(request.form['role_id']) == 3:
-            validator = CreateStudentAccountSchema(unknown='EXCLUDE')
-        else:
-            validator = CreateAccountSchema(unknown='EXCLUDE')
+        validator = CreateStudentAccountSchema(unknown='EXCLUDE') if int(request.form['role_id']) == 3 else  CreateAccountSchema(unknown='EXCLUDE')
 
         errors = validator.validate(request.form)
         if errors:
@@ -49,17 +45,17 @@ def upsert_account():
 
     else:
 
-        if int(request.form['role_id']) == 3:
-            validator = UpdateStudentAccountSchema(unknown='EXCLUDE')
-        else:
-            validator = UpdateAccountSchema(unknown='EXCLUDE')
+        validator = UpdateStudentAccountSchema(unknown='EXCLUDE') if int(request.form['role_id']) == 3 else UpdateAccountSchema(unknown='EXCLUDE')
 
         errors = validator.validate(request.form)
         if errors:
             return jsonify({'success':False, 'errors':errors})
 
-    if Repository.upsertAccount(request.form):
-        return {'success':True , 'account': Repository.readAccount(request.form['id']).serialize()}
+    data = Repository.upsertAccount(request.form)
+
+    if data:
+        return {'success':True , 'account': Repository.readAccount(data.id).serialize()}
+
     return {'success':False}
 
 @app.route('/api/account/delete', methods=['POST'])

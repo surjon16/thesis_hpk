@@ -10,10 +10,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+# WEB VIEWS WITH LOGIN REQUIRED
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+login_manager.session_protection = "strong"
 
+# API BASIC AUTH
 auth = HTTPBasicAuth()
 
 csrf = CSRFProtect()

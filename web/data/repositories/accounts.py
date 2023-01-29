@@ -82,12 +82,14 @@ class AccountsRepo:
                 )
 
             try: 
+                
                 db.session.add(data) 
                 db.session.commit() 
-                return True
+
+                return data
 
             except AssertionError as exception_message: 
-                return False
+                return None
                 
         else:
 
@@ -106,7 +108,7 @@ class AccountsRepo:
 
             db.session.commit()
 
-        return True
+        return data
 
     def deleteAccount(request):
 

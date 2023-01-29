@@ -28,18 +28,6 @@ class CreateStudentAccountSchema(Schema):
         if value == '' or value is None:
             raise ValidationError('Please provide your last name.')
 
-    @validates('phone')
-    def validate_phone(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please provide a phone number.')
-        if len(value) != 11:
-            raise ValidationError('Invalid phone number.')
-
-    @validates('address')
-    def validate_address(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please provide an address.')
-
     @validates('password')
     def validate_password(self, value):
         if value == '' or value is None:
@@ -70,18 +58,6 @@ class UpdateStudentAccountSchema(Schema):
         if value == '' or value is None:
             raise ValidationError('Please provide your last name.')
 
-    @validates('phone')
-    def validate_phone(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please provide a phone number.')
-        if len(value) != 11:
-            raise ValidationError('Invalid phone number.')
-
-    @validates('address')
-    def validate_address(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please provide an address.')
-
     @validates('role_id')
     def validate_role_id(self, value):
         if value == '' or value is None:
@@ -111,15 +87,6 @@ class RegisterStudentAccountSchema(Schema):
         if value == '' or value is None:
             raise ValidationError('Please provide your last name.')
 
-    @validates('phone')
-    def validate_phone(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please provide a phone number.')
-        # if value[:4] != '+639':
-        #     raise ValidationError('Invalid phone number.')
-        if len(value) < 11 :
-            raise ValidationError('Invalid phone number.')
-
     @validates('password')
     def validate_password(self, value):
         if value == '' or value is None:
@@ -143,18 +110,6 @@ class CreateAccountSchema(Schema):
     def validate_last_name(self, value):
         if value == '' or value is None:
             raise ValidationError('Please provide your last name.')
-
-    @validates('phone')
-    def validate_phone(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please provide a phone number.')
-        if len(value) != 11:
-            raise ValidationError('Invalid phone number.')
-
-    @validates('address')
-    def validate_address(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please provide an address.')
 
     @validates('password')
     def validate_password(self, value):
@@ -215,15 +170,6 @@ class RegisterAccountSchema(Schema):
     def validate_last_name(self, value):
         if value == '' or value is None:
             raise ValidationError('Please provide your last name.')
-
-    @validates('phone')
-    def validate_phone(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please provide a phone number.')
-        # if value[:4] != '+639':
-        #     raise ValidationError('Invalid phone number.')
-        if len(value) < 11 :
-            raise ValidationError('Invalid phone number.')
 
     @validates('password')
     def validate_password(self, value):
