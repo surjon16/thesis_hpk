@@ -14,7 +14,7 @@ var setSideBarTitle = function(element, _title) {
 }
 
 var Controller = {
-    GET: function (_url, _data) {
+    GET: function (_url, _data) {   
         return $.ajax({
             url: _url,
             type: 'GET',
