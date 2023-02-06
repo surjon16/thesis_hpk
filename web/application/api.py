@@ -1,7 +1,7 @@
 from flask          import jsonify, render_template, request, redirect, url_for, make_response
 from application    import app
 from data.repo      import Repository
-from data.schemas   import CreateStudentAccountSchema, UpdateStudentAccountSchema, CreateAccountSchema, UpdateAccountSchema, CreateRecordSchema, CreateAppointmentSchema, CreateServiceSchema, CreateInventorySchema, AddItemsSchema
+from data.schemas   import CreateStudentAccountSchema, UpdateStudentAccountSchema, CreateAccountSchema, UpdateAccountSchema, CreateConsultationSchema, CreateAppointmentSchema
 from data           import auth
 import json
 
@@ -95,7 +95,6 @@ def delete_record():
         return {'success':True}
     return {'success':False}
 
-
 # ==================================================================================
 # APPOINTMENTS
 
@@ -140,45 +139,45 @@ def delete_appointment():
     return {'success':False}
 
 # ==================================================================================
-# INVENTORY
+# CONSULTATIONS
 
-@app.route('/api/inventory/get/<id>', methods=['GET'])
-def get_inventory(id):
-    return jsonify(Repository.readInventory(id).serialize())
+@app.route('/api/consultation/get/<id>', methods=['GET'])
+def get_consultation(id):
+    return jsonify(Repository.readConsultation(id).serialize())
 
-@app.route('/api/inventory/get/all', methods=['GET'])
-def get_all_inventory():
-    return jsonify([data.serialize() for data in Repository.readInventories()])
+@app.route('/api/consultation/get/daily', methods=['GET'])
+def get_daily_consultations():
+    return jsonify(Repository.readInventoriesGroupByItem())
+    return jsonify([data.serialize() for data in Repository.readInventoriesGroupByItem()])
 
-@app.route('/api/inventory/upsert', methods=['POST'])
-def upsert_inventory():
+@app.route('/api/consultation/get/all', methods=['GET'])
+def get_all_consultations():
+    return jsonify([data.serialize() for data in Repository.readConsultations()])
+
+@app.route('/api/consultation/get/schedules', methods=['GET'])
+def get_scheduled_consultations():
+    return jsonify(Repository.readSchedules())
+
+@app.route('/api/consultation/get/slots', methods=['GET'])
+def get_slots_consultations():
+    return jsonify(Repository.readAvailableSlots())
+
+@app.route('/api/consultation/upsert', methods=['POST'])
+def upsert_consultation():
     
-    validator = CreateInventorySchema(unknown='EXCLUDE')
+    validator = CreateConsultationSchema(unknown='EXCLUDE')
     errors = validator.validate(request.form)
 
     if errors:
         return jsonify({'success':False, 'errors':errors})
 
-    if Repository.upsertInventory(request.form):
+    if Repository.upsertConsultation(request.form):
         return {'success':True}
     return {'success':False}
 
-@app.route('/api/inventory/items/upsert', methods=['POST'])
-def upsert_inventory_items():
-    
-    validator = AddItemsSchema(unknown='EXCLUDE')
-    errors = validator.validate(request.form)
-
-    if errors:
-        return jsonify({'success':False, 'errors':errors})
-
-    if Repository.upsertItems(request.form):
-        return {'success':True}
-    return {'success':False}
-
-@app.route('/api/inventory/delete', methods=['POST'])
-def delete_inventory():
-    if Repository.deleteInventory(request.form):
+@app.route('/api/consultation/delete', methods=['POST'])
+def delete_consultation():
+    if Repository.deleteConsultation(request.form):
         return {'success':True}
     return {'success':False}
 
@@ -229,36 +228,6 @@ def delete_role():
     return {'success':False}
 
 # ==================================================================================
-# SERVICES
-
-@app.route('/api/service/get/<id>', methods=['GET'])
-def get_service(id):
-    return jsonify(Repository.readService(id).serialize())
-
-@app.route('/api/service/get/all', methods=['GET'])
-def get_services():
-    return jsonify([data.serialize() for data in Repository.readServices()])
-
-@app.route('/api/service/upsert', methods=['POST'])
-def upsert_service():
-    
-    validator = CreateServiceSchema(unknown='EXCLUDE')
-    errors = validator.validate(request.form)
-
-    if errors:
-        return jsonify({'success':False, 'errors':errors})
-
-    if Repository.upsertService(request.form):
-        return {'success':True}
-    return {'success':False}
-
-@app.route('/api/service/delete', methods=['POST'])
-def delete_service():
-    if Repository.deleteService(request.form):
-        return {'success':True}
-    return {'success':False}
-
-# ==================================================================================
 # STATUS
 
 @app.route('/api/status/get/<id>', methods=['GET'])
@@ -282,39 +251,9 @@ def delete_status():
     return {'success':False}
 
 # ==================================================================================
-# NOTIFICATIONS
-
-@app.route('/api/notifications/sms/send', methods=['GET'])
-def send_sms():
-    response = Repository.sendSMS()
-    return jsonify(response)
-    
-@app.route('/api/notifications/get/all', methods=['GET'])
-def get_all_notifications():
-    return jsonify([data.serialize() for data in Repository.readAllNotifications()])
-
-@app.route('/api/notifications/account/get/<id>', methods=['GET'])
-def get_account_notifications(id):
-    return jsonify([data.serialize() for data in Repository.readAccountNotifications(id)])
-
-@app.route('/api/notifications/get/<id>', methods=['GET'])
-def get_notification(id):
-    return jsonify(Repository.readNotification(id).serialize())
-
-@app.route('/api/notifications/update/<id>', methods=['GET'])
-def update_notification(id):
-    if Repository.updateNotification(id):
-        return {'success':True}
-    return {'success':False}
-
-# ==================================================================================
 # FACTORY
 
 @app.route('/api/populate', methods=['GET'])
 def populate():
     Repository.populate()
     return {'success':True}
-
-@app.route('/api/tester', methods=['GET'])
-def tester():
-    return jsonify(Repository.readSchedules())    

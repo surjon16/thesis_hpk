@@ -81,6 +81,7 @@ class Consultations(db.Model):
     id          = db.Column(db.Integer, primary_key=True)
     time_start  = db.Column(db.DateTime)
     time_end    = db.Column(db.DateTime)
+    day         = db.Column(db.String(10))
 
     # timestamps
     created_at  = db.Column(db.DateTime, default=db.func.current_timestamp())

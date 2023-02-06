@@ -176,28 +176,6 @@ class RegisterAccountSchema(Schema):
         if value == '' or value is None:
             raise ValidationError('Please provide a password.')
 
-class CreateRecordSchema(Schema):
-    
-    record_number   = fields.Str(required=True)
-    record_details  = fields.Str(required=True)
-    record_date   = fields.Str(required=True)
-    
-    @validates('record_number')
-    def validate_record_number(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please provide a record number.')
-
-    @validates('record_details')
-    def validate_record_details(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please provide the details.')
-
-    @validates('record_date')
-    def validate_record_date(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please specify the date.')
-
-
 class CreateAppointmentSchema(Schema):
     
     details             = fields.Str(required=True)
@@ -226,85 +204,29 @@ class CreateAppointmentSchema(Schema):
         if value == '' or value is None:
             raise ValidationError('Please select a status.')
 
-    @validates('service_id')
-    def validate_service_id(self, value):
+class CreateConsultationSchema(Schema):
+    
+    time_start  = fields.Str(required=True)
+    time_end    = fields.Str(required=True)
+    day         = fields.Str(required=True)
+    faculty     = fields.Str(required=True)
+    
+    @validates('time_start')
+    def validate_time_start(self, value):
         if value == '' or value is None:
-            raise ValidationError('Please select a service.')
+            raise ValidationError('Please provide the start time.')
 
-class CreateServiceSchema(Schema):
-
-    service         = fields.Str(required=True)
-    availability    = fields.Str(required=True)
-
-    @validates('service')
-    def validate_service(self, value):
+    @validates('time_end')
+    def validate_time_end(self, value):
         if value == '' or value is None:
-            raise ValidationError('Please provide a service name.')
+            raise ValidationError('Please provide the time it ends.')
 
-    # @validates('availability')
-    # def validate_availability(self, value):
-    #     if value == '' or value is None:
-    #         raise ValidationError('Please specify the availability.')
-
-
-class CreateInventorySchema(Schema):
-
-    item_code       = fields.Str(required=True)
-    item            = fields.Str(required=True)
-    min_quantity    = fields.Str(required=True)
-    max_quantity    = fields.Str(required=True)
-    reorder_level   = fields.Str(required=True)
-
-    @validates('item_code')
-    def validate_item_code(self, value):
+    @validates('day')
+    def validate_day(self, value):
         if value == '' or value is None:
-            raise ValidationError('Please provide an item code.')
+            raise ValidationError('Please select a day for this consultation.')
 
-    @validates('item')
-    def validate_item(self, value):
+    @validates('faculty')
+    def validate_faculty(self, value):
         if value == '' or value is None:
-            raise ValidationError('Please provide an item name.')
-
-    @validates('min_quantity')
-    def validate_min_quantity(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please indicate the minimum quantity.')
-
-    @validates('max_quantity')
-    def validate_max_quantity(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please indicate the max quantity.')
-
-    @validates('reorder_level')
-    def validate_reorder_level(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please indicate the reorder level.')
-
-
-class AddItemsSchema(Schema):
-
-    inventory_id    = fields.Str(required=True)
-    quantity        = fields.Str(required=True)
-    expiry_date     = fields.Str(required=True)
-    status_id       = fields.Str(required=True)
-
-    @validates('inventory_id')
-    def validate_inventory_id(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please select a supply.')
-
-    @validates('quantity')
-    def validate_quantity(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please indicate the quantity.')
-
-    @validates('expiry_date')
-    def validate_expiry_date(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please specify the expiry date.')
-
-    @validates('status_id')
-    def validate_status_id(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please specify the item status.')
-
+            raise ValidationError('Please specify which faculty to set this schedule.')

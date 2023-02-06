@@ -1,13 +1,14 @@
 from data.repositories.accounts         import AccountsRepo
 from data.repositories.appointments     import AppointmentsRepo
+from data.repositories.consultations    import ConsultationsRepo
 from data.repositories.roles            import RolesRepo
 from data.repositories.status           import StatusRepo
 from data.repositories.purpose          import PurposeRepo
 
 from data                               import db
-from data.models                        import Roles, Status, Accounts, Purpose
+from data.models                        import Roles, Status, Accounts, Purpose, Consultations
 
-class Repository(AccountsRepo, AppointmentsRepo, RolesRepo, StatusRepo, PurposeRepo):
+class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, RolesRepo, StatusRepo, PurposeRepo):
 
     def __init__(self):
         pass
@@ -127,6 +128,16 @@ class Repository(AccountsRepo, AppointmentsRepo, RolesRepo, StatusRepo, PurposeR
             role_id     = 4
         )
         db.session.add(account)
+
+        # create consultations
+
+        consultation = Consultations(
+            time_start  = '2023-02-06 13:00:00',
+            time_end    = '2023-02-06 13:30:00',
+            faculty     = Accounts.query.filter_by(role_id=2).first().id,
+            day         = 'Monday'
+        )
+        db.session.add(consultation)
 
         db.session.commit()
 
