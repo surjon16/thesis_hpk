@@ -154,6 +154,20 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, RolesRepo, S
         )
         db.session.add(appointment)
 
+        appointment = Appointments(
+            time_start      = Consultations.query.filter_by(id=1).first().time_start,
+            time_end        = Consultations.query.filter_by(id=1).first().time_end,
+            priority        = Accounts.query.filter_by(role_id=2).first().last_name + str(Appointments.query.count() + 1),
+            participants    = Accounts.query.filter(Accounts.id.in_([2,4])).all(),
+            status_id       = Status.query.filter_by(status="Pending").first().id,
+            purpose_id      = Purpose.query.filter_by(purpose="Inquire").first().id
+        )
+        db.session.add(appointment)
+
+        # create queueing
+
+        
+
         db.session.commit()
 
         return True    

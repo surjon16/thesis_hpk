@@ -1,0 +1,22 @@
+SETTING FACULTY STATUS
+- Can appear as offline or busy during open consultation time due to unexpected reasons.
+
+
+APPOINTMENT INFO
+- Add Remarks (Consultation Status see Specific Reasons below) > Faculty
+- Can Reschedule Cancelled/Pending appointments if faculty is busy during the appointment schedule. > Student
+
+
+FACULTY
+- Add Feedback (Needs Clarification: Rating or Comment Type) > Student
+
+
+FEEDBACK FLOW
+SELECT FACULTY > FEEDBACK
+
+
+STATUS FLOW
+SET SCHEDULE    : WAITING > ON GOING > DONE (REMARKS: SPECIFIC REASON / NOT RESOLVED / PENDING / NEEDS RESCHEDULE / NOT ENOUGH TIME)
+                : WAITING > DECLINED (REMARKS: SKIPPED / NEEDS RESCHEDULE / APPEARED AS OFFLINE OR BUSY)
+
+
