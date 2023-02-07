@@ -1,3 +1,4 @@
+import json
 from data                   import db
 from data                   import login_manager
 from flask_login            import UserMixin
@@ -34,8 +35,7 @@ class Accounts(UserMixin, db.Model):
     # relationship
     role_id         = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=True)
     participant     = db.relationship('Appointments', secondary=participants, backref=db.backref('participant', uselist=False),  lazy='dynamic')
-    # appointments    = db.relationship('Appointments', backref='faculty', lazy=True)
-    # consultations   = db.relationship('Consultations', backref='faculty', lazy=True)
+    consultations   = db.relationship('Consultations', backref='faculty', lazy=True)
 
     @property
     def password(self):
@@ -88,7 +88,7 @@ class Consultations(db.Model):
     updated_at  = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
     # relationship
-    faculty  = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=True)
+    account_id  = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=True)
     
     @hybrid_property
     def schedule(self):
@@ -111,7 +111,7 @@ class Appointments(db.Model):
     id              = db.Column(db.Integer, primary_key=True)
     time_start      = db.Column(db.DateTime)
     time_end        = db.Column(db.DateTime)
-    priority_code   = db.Column(db.String(15))
+    priority        = db.Column(db.String(15))
 
     # timestamps
     created_at  = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -120,8 +120,6 @@ class Appointments(db.Model):
     # relationship
     purpose_id      = db.Column(db.Integer, db.ForeignKey('purpose.id'), nullable=True)
     status_id       = db.Column(db.Integer, db.ForeignKey('status.id'), nullable=True)
-    # created_by      = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=True)
-    faculty         = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=True)
     participants    = db.relationship('Accounts', secondary=participants, lazy='subquery', backref=db.backref('appointment', lazy=True))
     
     @hybrid_property
@@ -131,13 +129,16 @@ class Appointments(db.Model):
             'time': self.time_start.strftime('%I:%M%p') + '-' + self.time_end.strftime('%I:%M%p'),
         }
     
+    @hybrid_property
+    def participants_list(self):
+        return json.loads(self.participants) if self.participants is None else json.loads(self.participants)
+    
     def serialize(self):
         return {
             'id'            : self.id,
             'purpose'       : self.purpose.purpose,
             'schedule'      : self.schedule,
-            'faculty'       : self.faculty.first_name + ' ' + self.faculty.middle_name + ' ' + self.faculty.last_name,
-            # 'created_by'    : self.created_by.first_name + ' ' + self.created_by.middle_name + ' ' + self.created_by.last_name,
+            # 'participants'  : self.participants_list,
             'created_at'    : self.created_at,
             'updated_at'    : self.updated_at,
             'status'        : self.status.status,

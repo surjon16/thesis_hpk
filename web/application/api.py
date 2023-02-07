@@ -64,48 +64,12 @@ def delete_account():
         return {'success':True}
     return {'success':False}
 
-
-# ==================================================================================
-# RECORDS
-
-@app.route('/api/record/get/<id>', methods=['GET'])
-def get_record(id):
-    return jsonify(Repository.readRecord(id).serialize())
-
-@app.route('/api/record/get/all', methods=['GET'])
-def get_all_records():
-    return jsonify([data.serialize() for data in Repository.readRecords()])
-
-@app.route('/api/record/upsert', methods=['POST'])
-def upsert_record():
-    
-    validator = CreateRecordSchema(unknown='EXCLUDE')
-    errors = validator.validate(request.form)
-
-    if errors:
-        return jsonify({'success':False, 'errors':errors})
-
-    if Repository.upsertRecord(request.form):
-        return {'success':True}
-    return {'success':False}
-
-@app.route('/api/record/delete', methods=['POST'])
-def delete_record():
-    if Repository.deleteRecord(request.form):
-        return {'success':True}
-    return {'success':False}
-
 # ==================================================================================
 # APPOINTMENTS
 
 @app.route('/api/appointment/get/<id>', methods=['GET'])
 def get_appointment(id):
     return jsonify(Repository.readAppointment(id).serialize())
-
-@app.route('/api/appointment/get/daily', methods=['GET'])
-def get_daily_appointments():
-    return jsonify(Repository.readInventoriesGroupByItem())
-    return jsonify([data.serialize() for data in Repository.readInventoriesGroupByItem()])
 
 @app.route('/api/appointment/get/all', methods=['GET'])
 def get_all_appointments():
@@ -114,10 +78,6 @@ def get_all_appointments():
 @app.route('/api/appointment/get/schedules', methods=['GET'])
 def get_scheduled_appointments():
     return jsonify(Repository.readSchedules())
-
-@app.route('/api/appointment/get/slots', methods=['GET'])
-def get_slots_appointments():
-    return jsonify(Repository.readAvailableSlots())
 
 @app.route('/api/appointment/upsert', methods=['POST'])
 def upsert_appointment():

@@ -20,9 +20,6 @@ class AppointmentsRepo:
     def readAppointments():
         return Appointments.query.order_by(Appointments.status_id.desc(), Appointments.time_start.asc()).all()
     
-    def readDailyAppointments(date):
-        return []
-
     def readAppointment(id):
         return Appointments.query.filter_by(id=id).first()
 
@@ -65,23 +62,6 @@ class AppointmentsRepo:
 
         return schedules
 
-    def searchAppointments(request):
-
-        start_date  = datetime.strptime(request['start_date'], '%m/%d/%Y').strftime('%Y-%m-%d') if request['start_date'] is not None else None
-        end_date    = (datetime.strptime(request['end_date'], '%m/%d/%Y') + timedelta(days=1)).strftime('%Y-%m-%d') if request['end_date'] is not None else None
-        patient     = int(request['patient'])
-        service     = int(request['service'])
-        status      = int(request['status'])
-
-        data = db.session.query(Appointments).filter(Appointments.appointment_date >= start_date).filter(Appointments.appointment_date <= end_date)
-        
-        if patient > -1: data = data.filter(Appointments.account_id==patient)
-        if service > -1: data = data.filter(Appointments.service_id==service)
-        if status  > -1: data = data.filter(Appointments.status_id==status)
-
-        return data.all()
-        
-
     def updateAppointmentStatus(request):
 
         data = Appointments.query.filter_by(id=request['id']).first()
@@ -123,33 +103,6 @@ class AppointmentsRepo:
                 
         db.session.commit()
 
-        # =============================================================================================================
-        # Create a notification after creating an appointment
-
-        content = 'Hi, ' + str(data.account.first_name) + '. This is from the Barangay Hi-Prof Kiosk. We would like to inform you that your requested appointment for ' + str(data.service.service) + ' on ' + str(data.appointment_date.strftime('%h %d %Y %I:%M %p')) + ' is now ' + str(data.status.status) + '. Thank you!'
-
-        notifs = Notifications(content=content, notif_type='app', account_id=data.account.id)
-        db.session.add(notifs)
-        db.session.commit()
-
-        # try:
-            
-        #     # Send an sms to the patient.
-        #     sms = {
-        #         '1'         : data.account.phone,
-        #         '2'         : content,
-        #         '3'         : 'ST-LEONE670607_8GLTB',
-        #         'passwd'    : 'm6}}ktrp{{'
-        #     }
-        #     response = requests.post(url=itexmo_url, data=sms)
-        #     print(response.text)
-
-        # except:
-            
-        #     return True
-
-        # =============================================================================================================
-        
         return True
 
     def deleteAppointment(request):

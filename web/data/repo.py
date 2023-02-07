@@ -6,7 +6,7 @@ from data.repositories.status           import StatusRepo
 from data.repositories.purpose          import PurposeRepo
 
 from data                               import db
-from data.models                        import Roles, Status, Accounts, Purpose, Consultations
+from data.models                        import Roles, Status, Accounts, Purpose, Consultations, Appointments
 
 class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, RolesRepo, StatusRepo, PurposeRepo):
 
@@ -69,6 +69,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, RolesRepo, S
         db.session.add(status)
 
         status = Status(status='Unavailable')
+        db.session.add(status)
+
+        status = Status(status='Fullybooked')
         db.session.add(status)
 
         # create accounts
@@ -134,10 +137,22 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, RolesRepo, S
         consultation = Consultations(
             time_start  = '2023-02-06 13:00:00',
             time_end    = '2023-02-06 13:30:00',
-            faculty     = Accounts.query.filter_by(role_id=2).first().id,
+            account_id  = Accounts.query.filter_by(role_id=2).first().id,
             day         = 'Monday'
         )
         db.session.add(consultation)
+
+        # create appointments
+
+        appointment = Appointments(
+            time_start      = Consultations.query.filter_by(id=1).first().time_start,
+            time_end        = Consultations.query.filter_by(id=1).first().time_end,
+            priority        = Accounts.query.filter_by(role_id=2).first().last_name + str(Appointments.query.count() + 1),
+            participants    = Accounts.query.filter(Accounts.id.in_([2,3])).all(),
+            status_id       = Status.query.filter_by(status="Pending").first().id,
+            purpose_id      = Purpose.query.filter_by(purpose="Capstone").first().id
+        )
+        db.session.add(appointment)
 
         db.session.commit()
 
