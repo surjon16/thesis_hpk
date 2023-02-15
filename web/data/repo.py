@@ -1,14 +1,15 @@
 from data.repositories.accounts         import AccountsRepo
 from data.repositories.appointments     import AppointmentsRepo
 from data.repositories.consultations    import ConsultationsRepo
+from data.repositories.purpose          import PurposeRepo
+from data.repositories.queue            import QueuesRepo
 from data.repositories.roles            import RolesRepo
 from data.repositories.status           import StatusRepo
-from data.repositories.purpose          import PurposeRepo
 
 from data                               import db
 from data.models                        import Roles, Status, Accounts, Purpose, Consultations, Appointments
 
-class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, RolesRepo, StatusRepo, PurposeRepo):
+class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo, QueuesRepo, RolesRepo, StatusRepo ):
 
     def __init__(self):
         pass
@@ -105,6 +106,7 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, RolesRepo, S
         db.session.add(account)
 
         account = Accounts(
+            id_number   = '2010100926',
             first_name  = 'Sample',
             middle_name = '',
             last_name   = 'Student',
@@ -145,9 +147,7 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, RolesRepo, S
         # create appointments
 
         appointment = Appointments(
-            time_start      = Consultations.query.filter_by(id=1).first().time_start,
-            time_end        = Consultations.query.filter_by(id=1).first().time_end,
-            priority        = Accounts.query.filter_by(role_id=2).first().last_name + str(Appointments.query.count() + 1),
+            priority        = Accounts.query.filter_by(role_id=2).first().last_name + ' ' + str(Appointments.query.count() + 1),
             participants    = Accounts.query.filter(Accounts.id.in_([2,3])).all(),
             status_id       = Status.query.filter_by(status="Pending").first().id,
             purpose_id      = Purpose.query.filter_by(purpose="Capstone").first().id
@@ -155,9 +155,7 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, RolesRepo, S
         db.session.add(appointment)
 
         appointment = Appointments(
-            time_start      = Consultations.query.filter_by(id=1).first().time_start,
-            time_end        = Consultations.query.filter_by(id=1).first().time_end,
-            priority        = Accounts.query.filter_by(role_id=2).first().last_name + str(Appointments.query.count() + 1),
+            priority        = Accounts.query.filter_by(role_id=2).first().last_name + ' ' + str(Appointments.query.count() + 1),
             participants    = Accounts.query.filter(Accounts.id.in_([2,4])).all(),
             status_id       = Status.query.filter_by(status="Pending").first().id,
             purpose_id      = Purpose.query.filter_by(purpose="Inquire").first().id

@@ -1,4 +1,4 @@
-from data.models    import Accounts, Roles, Appointments, Status
+from data.models    import Accounts, Appointments, Consultations, Purpose, Roles, Status
 from data           import db
 
 from flask_login    import login_user, current_user
@@ -9,7 +9,7 @@ from datetime       import datetime, timedelta
 import requests, json
 import os
 
-class AppointmentsRepo:
+class QueuesRepo:
     
     # ==================================================================================
     # APPOINTMENTS

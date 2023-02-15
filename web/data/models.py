@@ -109,8 +109,6 @@ class Appointments(db.Model):
 
     # appointment info
     id              = db.Column(db.Integer, primary_key=True)
-    time_start      = db.Column(db.DateTime)
-    time_end        = db.Column(db.DateTime)
     priority        = db.Column(db.String(15))
 
     # timestamps
@@ -123,21 +121,14 @@ class Appointments(db.Model):
     participants    = db.relationship('Accounts', secondary=participants, lazy='subquery', backref=db.backref('appointment', lazy=True))
     
     @hybrid_property
-    def schedule(self):
-        return {
-            'day': self.time_start.strftime('%m/%d/%Y'), 
-            'time': self.time_start.strftime('%I:%M%p') + '-' + self.time_end.strftime('%I:%M%p'),
-        }
-    
-    @hybrid_property
-    def participants_list(self):
-        return json.loads(self.participants) if self.participants is None else json.loads(self.participants)
+    def participants_list(self): 
+        return None if self.participants is None else json.dumps(self.participants)
     
     def serialize(self):
         return {
             'id'            : self.id,
             'purpose'       : self.purpose.purpose,
-            'schedule'      : self.schedule,
+            'priority'      : self.priority,
             # 'participants'  : self.participants_list,
             'created_at'    : self.created_at,
             'updated_at'    : self.updated_at,
