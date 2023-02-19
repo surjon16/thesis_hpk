@@ -141,35 +141,39 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
         db.session.add(account)
 
         # create consultations
-
-        consultation = Consultations(
-            time_start  = '2023-02-06 13:00:00',
-            time_end    = '2023-02-06 13:30:00',
-            account_id  = Accounts.query.filter_by(role_id=2).first().id,
-            day         = 'Monday'
-        )
-        db.session.add(consultation)
-        consultation = Consultations(
-            time_start  = '2023-02-06 14:00:00',
-            time_end    = '2023-02-06 14:30:00',
-            account_id  = Accounts.query.filter_by(role_id=2).first().id,
-            day         = 'Monday'
-        )
-        db.session.add(consultation)
-        consultation = Consultations(
-            time_start  = '2023-02-06 15:00:00',
-            time_end    = '2023-02-06 15:30:00',
-            account_id  = Accounts.query.filter_by(role_id=2).first().id,
-            day         = 'Monday'
-        )
-        db.session.add(consultation)
-        consultation = Consultations(
-            time_start  = '2023-02-06 16:00:00',
-            time_end    = '2023-02-06 16:30:00',
-            account_id  = Accounts.query.filter_by(role_id=2).first().id,
-            day         = 'Monday'
-        )
-        db.session.add(consultation)
+        for i in range(20):
+            consultation = Consultations(
+                time_start  = '2023-02-06 13:00:00',
+                time_end    = '2023-02-06 13:30:00',
+                account_id  = Accounts.query.filter_by(role_id=2).filter_by(id=i+2).first().id,
+                day         = 'Monday',
+                room        = ''
+            )
+            db.session.add(consultation)
+            consultation = Consultations(
+                time_start  = '2023-02-06 14:00:00',
+                time_end    = '2023-02-06 14:30:00',
+                account_id  = Accounts.query.filter_by(role_id=2).filter_by(id=i+2).first().id,
+                day         = 'Tuesday',
+                room        = ''
+            )
+            db.session.add(consultation)
+            consultation = Consultations(
+                time_start  = '2023-02-06 15:00:00',
+                time_end    = '2023-02-06 15:30:00',
+                account_id  = Accounts.query.filter_by(role_id=2).filter_by(id=i+2).first().id,
+                day         = 'Wednesday',
+                room        = ''
+            )
+            db.session.add(consultation)
+            consultation = Consultations(
+                time_start  = '2023-02-06 16:00:00',
+                time_end    = '2023-02-06 16:30:00',
+                account_id  = Accounts.query.filter_by(role_id=2).filter_by(id=i+2).first().id,
+                day         = 'Thursday',
+                room        = ''
+            )
+            db.session.add(consultation)
 
         # create appointments
 

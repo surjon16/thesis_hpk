@@ -22,6 +22,8 @@ class Accounts(UserMixin, db.Model):
     phone       = db.Column(db.String(15))
     birth_date  = db.Column(db.DateTime)
     address     = db.Column(db.String(100))
+    # position    = db.Column(db.String(100))
+    # objective   = db.Column(db.String(100))
 
     # login
     email           = db.Column(db.String(100))
@@ -85,6 +87,7 @@ class Consultations(db.Model):
     time_start  = db.Column(db.DateTime)
     time_end    = db.Column(db.DateTime)
     day         = db.Column(db.String(10))
+    room        = db.Column(db.String(100))
 
     # timestamps
     created_at  = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -132,7 +135,7 @@ class Appointments(db.Model):
             'id'            : self.id,
             'purpose'       : self.purpose.purpose,
             'priority'      : self.priority,
-            # 'participants'  : self.participants_list,
+            #'participants'  : self.participants_list,
             'created_at'    : self.created_at,
             'updated_at'    : self.updated_at,
             'status'        : self.status.status,
