@@ -64,6 +64,12 @@ def delete_account():
         return {'success':True}
     return {'success':False}
 
+@app.route('/api/account/set/status', methods=['POST'])
+def set_account_status():
+    if Repository.setAccountStatus(request.form):
+        return {'success':True}
+    return {'success':False}
+
 # ==================================================================================
 # APPOINTMENTS
 

@@ -84,8 +84,6 @@ class AppointmentsRepo:
 
         if data == None:
 
-            
-
             data = Appointments(
                 priority        = request['priority'],
                 participants    = Accounts.query.filter(Accounts.id.in_(request['participants'])).all(),

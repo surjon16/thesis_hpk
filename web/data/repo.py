@@ -87,38 +87,43 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             address     = 'CDO',
             email       = 'admin@gmail.com',
             password    = 'admin1234',
-            role_id     = 1
+            role_id     = 1,
+            status_id   = 5
         )
         db.session.add(account)
 
-        account = Accounts(
-            first_name  = 'Sample',
-            middle_name = '',
-            last_name   = 'Faculty',
-            gender      = '',
-            phone       = '+639354796747',
-            birth_date  = '',
-            address     = 'CDO',
-            email       = 'faculty@gmail.com',
-            password    = 'admin1234',
-            role_id     = 2
-        )
-        db.session.add(account)
+        for i in range(20):
+            account = Accounts(
+                first_name  = 'Sample',
+                middle_name = '',
+                last_name   = 'Faculty ' + str(i+1),
+                gender      = '',
+                phone       = '+639354796747',
+                birth_date  = '',
+                address     = 'CDO',
+                email       = 'faculty@gmail.com',
+                password    = 'admin1234',
+                role_id     = 2,
+                status_id   = 5
+            )
+            db.session.add(account)
 
-        account = Accounts(
-            id_number   = '2010100926',
-            first_name  = 'Sample',
-            middle_name = '',
-            last_name   = 'Student',
-            gender      = '',
-            phone       = '+639354796747',
-            birth_date  = '',
-            address     = 'CDO',
-            email       = 'student@gmail.com',
-            password    = 'admin1234',
-            role_id     = 3
-        )
-        db.session.add(account)
+        for i in range(20):
+            account = Accounts(
+                id_number   = '2010100926' + str(i+1),
+                first_name  = 'Sample',
+                middle_name = '',
+                last_name   = 'Student ' + str(i+1),
+                gender      = '',
+                phone       = '+639354796747',
+                birth_date  = '',
+                address     = 'CDO',
+                email       = 'student@gmail.com',
+                password    = 'admin1234',
+                role_id     = 3,
+                status_id   = 5
+            )
+            db.session.add(account)
 
         account = Accounts(
             first_name  = 'Sample',
@@ -130,7 +135,8 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             address     = 'CDO',
             email       = 'guest@gmail.com',
             password    = 'admin1234',
-            role_id     = 4
+            role_id     = 4,
+            status_id   = 5
         )
         db.session.add(account)
 
@@ -139,6 +145,27 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
         consultation = Consultations(
             time_start  = '2023-02-06 13:00:00',
             time_end    = '2023-02-06 13:30:00',
+            account_id  = Accounts.query.filter_by(role_id=2).first().id,
+            day         = 'Monday'
+        )
+        db.session.add(consultation)
+        consultation = Consultations(
+            time_start  = '2023-02-06 14:00:00',
+            time_end    = '2023-02-06 14:30:00',
+            account_id  = Accounts.query.filter_by(role_id=2).first().id,
+            day         = 'Monday'
+        )
+        db.session.add(consultation)
+        consultation = Consultations(
+            time_start  = '2023-02-06 15:00:00',
+            time_end    = '2023-02-06 15:30:00',
+            account_id  = Accounts.query.filter_by(role_id=2).first().id,
+            day         = 'Monday'
+        )
+        db.session.add(consultation)
+        consultation = Consultations(
+            time_start  = '2023-02-06 16:00:00',
+            time_end    = '2023-02-06 16:30:00',
             account_id  = Accounts.query.filter_by(role_id=2).first().id,
             day         = 'Monday'
         )
@@ -164,6 +191,7 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
 
         # create queueing
 
+        
         
 
         db.session.commit()

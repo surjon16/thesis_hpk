@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content='{{ csrf_token() }}'>
+    <title>Register | Hi-Prof Kiosk</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href='/static/argon/vendor/nucleo/css/nucleo.css' type="text/css">
+    <link rel="stylesheet" href='/static/argon/vendor/@fortawesome/fontawesome-free/css/all.min.css' type="text/css">
+    <link rel="stylesheet" href='/static/argon/css/argon.min.css' type="text/css">
+
+</head>
+
+<body class="bg-secondary">
+
+    <div class="main-content">
+
+        <div class="header bg-secondary">
+            <div class="container">
+                <div class="header-body text-center mb-3">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5 col-md-6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="separator separator-bottom separator-skew zindex-100">
+                <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <polygon class="fill-secondary" points="2560 0 2560 100 0 100"></polygon>
+                </svg>
+            </div>
+        </div>
+
+        <div class="container-fluid py-5 ">
+            <div class="row">
+            {% for i in data.faculties %}
+                <div class="col-lg-3 col-md-4">
+                    <a id=link-{{i.id}} href="/faculty/{{i.id}}">
+                        <div class="card bg-secondary border">
+                            <div class="card-header text-center">
+                                <span id=badge-{{i.id}} class="badge badge-md badge-circle badge-success float-left"> </span>
+                            </div>
+                            <div class="card-body px-lg-5 py-lg-5 text-center">
+                                <h1>{{ i.first_name }} {{ i.middle_name }} {{ i.last_name }}</h1>
+                                
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Argon Scripts -->
+    <!-- Core -->
+    <script src='/static/argon/vendor/jquery/dist/jquery.min.js'></script>
+    <script src='/static/argon/vendor/bootstrap/dist/js/bootstrap.bundle.min.js'></script>
+    <script src='/static/argon/vendor/js-cookie/js.cookie.js'></script>
+    <script src='/static/argon/vendor/jquery.scrollbar/jquery.scrollbar.min.js'></script>
+    <script src='/static/argon/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js'></script>
+    <script src='/static/argon/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'></script>
+
+    <!-- Argon JS -->
+    <script src='/static/argon/js/argon.min.js'></script>
+
+    <!-- Backend JS -->
+    <script src="/static/js/core.js"></script>
+    
+    <script>
+    
+        setInterval(function() {
+                
+            Controller.GET('/api/account/get/all').done(function(result) {
+                result.forEach(function(i){
+                    if(i.status_id == 5) {
+                        $('#link-'+i.id).attr("href", "/faculty/"+i.id)
+                        if($('#badge-'+i.id).hasClass("badge-danger")) {
+                            $('#badge-'+i.id).toggleClass("badge-danger")
+                            $('#badge-'+i.id).toggleClass("badge-success")
+                        }
+                    }
+                    else {
+                        $('#link-'+i.id).attr("href", "#")
+                        if($('#badge-'+i.id).hasClass("badge-success")) {
+                            $('#badge-'+i.id).toggleClass("badge-danger")
+                            $('#badge-'+i.id).toggleClass("badge-success")
+                        }
+                    }
+                })
+            })
+
+        }, 5000);
+
+    </script>
+
+</body>
+
+</html>

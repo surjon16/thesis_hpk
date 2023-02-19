@@ -21,6 +21,9 @@ class AccountsRepo:
     def readAccounts():
         return Accounts.query.all()
 
+    def readFaculties():
+        return Accounts.query.filter(Accounts.role_id.in_([2])).all()
+
     def readRegisteredAccounts():
         return Accounts.query.filter(Accounts.role_id.in_([1,2,3,4])).all()
     
@@ -40,6 +43,12 @@ class AccountsRepo:
 
         db.session.add(data)
         db.session.commit()
+
+        return True
+    
+    def setAccountStatus(request):
+        data = Accounts.query.filter_by(id=request['id']).first()
+        data.status_id = request['status_id']
 
         return True
 
@@ -66,7 +75,8 @@ class AccountsRepo:
                     address     = request['address'],
                     email       = request['email'],
                     password    = request['password'],
-                    role_id     = int(request['role_id'])
+                    role_id     = int(request['role_id']),
+                    status_id   = 5
                 )
             else:
                 data = Accounts(
@@ -78,7 +88,8 @@ class AccountsRepo:
                     birth_date  = birth_date,
                     address     = request['address'],
                     email       = request['email'],
-                    role_id     = int(request['role_id'])
+                    role_id     = int(request['role_id']),
+                    status_id   = 5
                 )
 
             try: 

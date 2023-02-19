@@ -34,6 +34,7 @@ class Accounts(UserMixin, db.Model):
 
     # relationship
     role_id         = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=True)
+    status_id       = db.Column(db.Integer, db.ForeignKey('status.id'), nullable=True)
     participant     = db.relationship('Appointments', secondary=participants, backref=db.backref('participant', uselist=False),  lazy='dynamic')
     consultations   = db.relationship('Consultations', backref='faculty', lazy=True)
 
@@ -72,7 +73,9 @@ class Accounts(UserMixin, db.Model):
             'updated_at'    : self.updated_at,
             'address'       : self.address,
             'role_id'       : self.role_id,
-            'role'          : self.role.role
+            'role'          : self.role.role,
+            'status_id'     : self.status_id,
+            'status'        : self.status.status
         }
 
 class Consultations(db.Model):
@@ -186,6 +189,7 @@ class Status(db.Model):
 
     # relationship
     appointment_status  = db.relationship('Appointments',   backref='status', lazy=True)
+    accounts_status     = db.relationship('Accounts', backref='status', lazy=True)
 
     def serialize(self):
         return {

@@ -11,11 +11,18 @@ import dateutil.parser as parser
 # DECORATORS
 # ===============================================================
 
-@app.template_filter('strftime')
+@app.template_filter('strfdate')
 def _jinja2_filter_datetime(date, fmt=None):
     date = parser.parse(date)
     native = date.replace(tzinfo=None)
     format='%m/%d/%Y'
+    return native.strftime(format)
+
+@app.template_filter('strftime')
+def _jinja2_filter_datetime(date, fmt=None):
+    date = parser.parse(date)
+    native = date.replace(tzinfo=None)
+    format='%hh:%mm %tt'
     return native.strftime(format)
 
 @app.context_processor
@@ -50,15 +57,17 @@ def admin_login_required(f):
 
         return f(*args, **kwargs)
     return wrapper
-       
+
 # ===============================================================
 # COMMON WEB VIEWS
 # ===============================================================
 
 @app.route('/')
-@login_required
-def home():
-    return redirect(url_for('dashboard'))
+def windows():
+    response = {
+        'faculties'  : Repository.readFaculties()
+    }
+    return render_template('common/windows.html', data=response)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -94,6 +103,17 @@ def register():
             return redirect(url_for('login'))
         
     return render_template('common/register.html', data={'errors':[], 'input': []})
+
+# ===============================================================
+# FACULTY WEB VIEWS
+# ===============================================================
+
+@app.route('/faculty/<id>')
+def faculty(id):
+    response = {
+        'faculty'  : Repository.readAccount(id)
+    }
+    return render_template('common/faculty.html', data=response)
 
 # ===============================================================
 # ADMIN WEB VIEWS
