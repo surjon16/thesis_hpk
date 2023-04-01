@@ -66,10 +66,7 @@
             Controller.GET('/api/account/get/all').done(function(result) {
                 result.forEach(function(i){
                     if(i.status_id == 5) {
-<<<<<<< HEAD:web/application/templates/common/faculties.html
                         $('#link-'+i.id).attr("href", "/common/faculty/"+i.id)
-=======
->>>>>>> bf6dad4343f7440d36dbef447231f4d65ed7493a:web/application/templates/common/windows.html
                         if($('#badge-'+i.id).hasClass("badge-danger")) {
                             $('#badge-'+i.id).toggleClass("badge-danger")
                             $('#badge-'+i.id).toggleClass("badge-success")
