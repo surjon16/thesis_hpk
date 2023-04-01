@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content='{{ csrf_token() }}'>
-    <title>Register | Hi-Prof Kiosk</title>
+    <title>Faculties | Hi-Prof Kiosk</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
     <link rel="stylesheet" href='/static/argon/vendor/nucleo/css/nucleo.css' type="text/css">
@@ -19,29 +19,12 @@
 
     <div class="main-content">
 
-        <div class="header bg-secondary">
-            <div class="container">
-                <div class="header-body text-center mb-3">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-5 col-md-6">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="separator separator-bottom separator-skew zindex-100">
-                <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <polygon class="fill-secondary" points="2560 0 2560 100 0 100"></polygon>
-                </svg>
-            </div>
-        </div>
-
         <div class="container-fluid py-5 ">
-            <div class="row">
+            <div class="row m-0 p-0">
             {% for i in data.faculties %}
-                <div class="col-lg-3 col-md-4">
-                    <a id=link-{{i.id}} href="/faculty/{{i.id}}">
-                        <div class="card bg-secondary border">
+                <div class="col-lg-3 col-md-4 m-0 p-1">
+                    <a id=link-{{i.id}} href="/common/faculty/{{i.id}}">
+                        <div class="card bg-white border m-0 p-0">
                             <div class="card-header text-center">
                                 <span id=badge-{{i.id}} class="badge badge-md badge-circle badge-success float-left"> </span>
                             </div>
@@ -55,6 +38,7 @@
             {% endfor %}
             </div>
         </div>
+
     </div>
 
     <!-- Argon Scripts -->
@@ -79,7 +63,7 @@
             Controller.GET('/api/account/get/all').done(function(result) {
                 result.forEach(function(i){
                     if(i.status_id == 5) {
-                        $('#link-'+i.id).attr("href", "/faculty/"+i.id)
+                        $('#link-'+i.id).attr("href", "/common/faculty/"+i.id)
                         if($('#badge-'+i.id).hasClass("badge-danger")) {
                             $('#badge-'+i.id).toggleClass("badge-danger")
                             $('#badge-'+i.id).toggleClass("badge-success")

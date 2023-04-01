@@ -11,6 +11,8 @@ import dateutil.parser as parser
 # DECORATORS
 # ===============================================================
 
+app.jinja_env.filters['zip'] = zip
+
 @app.template_filter('strfdate')
 def _jinja2_filter_datetime(date, fmt=None):
     date = parser.parse(date)
@@ -63,11 +65,11 @@ def admin_login_required(f):
 # ===============================================================
 
 @app.route('/')
-def windows():
+def faculties():
     response = {
         'faculties'  : Repository.readFaculties()
     }
-    return render_template('common/windows.html', data=response)
+    return render_template('common/faculties.html', data=response)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -104,16 +106,58 @@ def register():
         
     return render_template('common/register.html', data={'errors':[], 'input': []})
 
+@app.route('/window')
+def window():
+    response = {
+        'faculties' : Repository.readFaculties(),
+        'active'    : Repository.readActive(),
+        'declined'  : Repository.readDeclined()
+    }
+    return render_template('common/window.html', data=response)
+
+@app.route('/common/faculty/<id>')
+def faculty(id):
+    response = Repository.readAccount(id)
+    return render_template('common/faculty.html', data=response)
+
+@app.route('/common/wave/<id>/<faculty_id>', methods=['POST', 'GET'])
+def wave(id, faculty_id):
+
+    if request.method == 'POST':
+        response = Repository.setAppointment(id, faculty_id, request.form.to_dict(flat=False))
+        return render_template('common/success.html', data=response)
+        
+    response = {
+        'purpose'   : Repository.readAllPurpose(),
+        'students'  : Repository.readStudents(),
+    }
+    return render_template('common/wave.html', data={'errors':[], 'input': [], 'id': id, 'faculty_id': faculty_id, 'repo': response})
+
+# @app.route('/common/wave/send', methods=['POST', 'GET'])
+# def wave_send():
+#     pass
+#     # return render_template('common/wave.html', data={'errors':[], 'input': request.form})
+
 # ===============================================================
 # FACULTY WEB VIEWS
 # ===============================================================
 
-@app.route('/faculty/<id>')
-def faculty(id):
+@app.route('/faculty/dashboard')
+@login_required
+def faculty_dashboard():
     response = {
-        'faculty'  : Repository.readAccount(id)
+        'appointments' : Repository.readAppointments()
     }
-    return render_template('common/faculty.html', data=response)
+    return render_template('faculty/dashboard.html', data=response)
+
+@app.route('/faculty/appointments')
+@login_required
+def faculty_appointments():
+    response = {
+        'active'    : Repository.readActive(),
+        'declined'  : Repository.readDeclined()
+    }
+    return render_template('faculty/appointments.html', data=response)
 
 # ===============================================================
 # ADMIN WEB VIEWS

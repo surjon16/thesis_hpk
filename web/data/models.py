@@ -37,6 +37,8 @@ class Accounts(UserMixin, db.Model):
     status_id       = db.Column(db.Integer, db.ForeignKey('status.id'), nullable=True)
     participant     = db.relationship('Appointments', secondary=participants, backref=db.backref('participant', uselist=False),  lazy='dynamic')
     consultations   = db.relationship('Consultations', backref='faculty', lazy=True)
+    faculty         = db.relationship('Appointments', backref='faculty', lazy=True)
+
 
     @property
     def password(self):
@@ -121,6 +123,7 @@ class Appointments(db.Model):
     # relationship
     purpose_id      = db.Column(db.Integer, db.ForeignKey('purpose.id'), nullable=True)
     status_id       = db.Column(db.Integer, db.ForeignKey('status.id'), nullable=True)
+    account_id      = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=True)
     participants    = db.relationship('Accounts', secondary=participants, lazy='subquery', backref=db.backref('appointment', lazy=True))
     
     @hybrid_property
@@ -132,7 +135,7 @@ class Appointments(db.Model):
             'id'            : self.id,
             'purpose'       : self.purpose.purpose,
             'priority'      : self.priority,
-            # 'participants'  : self.participants_list,
+            'faculty'       : self.account_id,
             'created_at'    : self.created_at,
             'updated_at'    : self.updated_at,
             'status'        : self.status.status,

@@ -1,0 +1,86 @@
+{% extends 'faculty/shared/layout.html' %}
+{% block title %}
+    Appointments
+{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+<div class="main-content" id="panel">
+
+    <!-- Header -->
+    <div class="header pb-6">
+        <div class="container-fluid">
+            <div class="header-body">
+                <div class="row align-items-center py-4">
+                    <div class="col-lg-6 col-7">
+                        <p class="display-2 text-default d-inline-block mb-0">Appointments</p>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>
+
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <button class="btn btn-lg btn-danger" onclick="Decline()">DECLINE</button>
+                                <button class="btn btn-lg btn-success" onclick="Approve()">APPROVE</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <!-- Projects table -->
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">PRIORITY</th>
+                                    <th scope="col">ID NUMBER</th>
+                                    <th scope="col">NAME</th>
+                                    <th scope="col">PURPOSE</th>
+                                    <th scope="col" class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in data.active | selectattr("account_id", "equalto", current_user.id) | list %}
+                                    <tr>
+                                        <td>
+                                            <h3>{{i.priority}}</h3>
+                                        </td>
+                                        <td>
+                                            <h3>--</h3>
+                                        </td>
+                                        <td>
+                                            <h3>--</h3>
+                                        </td>
+                                        <td>
+                                            <h3>{{i.purpose.purpose}}</h3>
+                                        </td>
+                                            <td class="text-right">
+                                                <button onclick='CALL(this)' class="btn btn-success btn-sm">CALL</button>
+                                                <button onclick='DECLINE(this)' class="btn btn-danger btn-sm">DECLINE</button>
+                                            </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    
+    setSideBar('#menu-appointments')
+
+</script>
+{% endblock %}

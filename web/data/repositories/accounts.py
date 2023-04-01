@@ -24,6 +24,9 @@ class AccountsRepo:
     def readFaculties():
         return Accounts.query.filter(Accounts.role_id.in_([2])).all()
 
+    def readStudents():
+        return Accounts.query.filter(Accounts.role_id.in_([3])).all()
+
     def readRegisteredAccounts():
         return Accounts.query.filter(Accounts.role_id.in_([1,2,3,4])).all()
     

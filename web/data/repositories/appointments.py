@@ -19,6 +19,12 @@ class AppointmentsRepo:
     
     def readAppointment(id):
         return Appointments.query.filter_by(id=id).first()
+    
+    def readActive():
+        return Appointments.query.filter(and_(Appointments.status_id==4, func.date(Appointments.created_at) == datetime.now().date())).order_by(Appointments.id.asc()).all()
+
+    def readDeclined():
+        return Appointments.query.filter(and_(Appointments.status_id==2, func.date(Appointments.created_at) == datetime.now().date())).order_by(Appointments.id.asc()).limit(5).all()
 
     def readAvailableSlots():
 
@@ -66,6 +72,61 @@ class AppointmentsRepo:
 
         db.session.commit()
 
+        return True
+    
+    def setAppointment(id, account_id, request):
+
+        queues = Appointments.query.filter(func.date(Appointments.created_at) == datetime.now().date()).all()
+        faculty = Accounts.query.filter_by(id=account_id).first()
+        priority = faculty.last_name + ' ' + str(len(queues) + 1)
+
+        if id == "1":
+            
+            data = Appointments(
+                priority        = priority,
+                participants    = Accounts.query.filter(Accounts.id.in_(request['id_number'])).all(),
+                status_id       = Status.query.filter_by(status="Pending").first().id,
+                purpose_id      = request['purpose'],
+                account_id      = account_id
+            )
+            db.session.add(data)
+            db.session.commit()
+
+        elif id == "2":
+        
+            data = Appointments(
+                priority        = priority,
+                participants    = Accounts.query.filter(Accounts.id.in_(request['id_number'])).all(),
+                status_id       = Status.query.filter_by(status="Pending").first().id,
+                purpose_id      = request['purpose'],
+                account_id      = account_id
+            )
+            db.session.add(data)
+            db.session.commit()
+
+        elif id =="3":
+
+            account = Accounts(
+                first_name  = request['first_name'],
+                last_name   = request['last_name'],
+                status_id   = 5,
+                role_id     = 4
+            )
+            db.session.add(account)
+            db.session.commit()
+
+            data = Appointments(
+                priority        = priority,
+                participants    = Accounts.query.filter(Accounts.id.in_([account.id])).all(),
+                status_id       = Status.query.filter_by(status="Pending").first().id,
+                purpose_id      = request['purpose'],
+                account_id      = account_id
+            )
+            db.session.add(data)
+            db.session.commit()
+
+
+            
         return True
 
     def upsertAppointment(request):

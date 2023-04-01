@@ -19,18 +19,57 @@
     <!-- <link href="/static/argon/assets/css/argon-dashboard.css?v=1.1.0" rel="stylesheet" /> -->
 
     <style>
-        * {
-            font-size: 3.6vw;
+        a.nav-link.active {
+            color: #525f7f !important;
         }
+        
+        .bg-01 {
+            background-color: #FEFADF!important;
+        }
+
+        .bg-02 {
+            background-color: #FEBD89!important;
+        }
+
+        .bg-03 {
+            background-color: #F1F1F1!important;
+        }
+
+        .bg-04 {
+            background-color: #FFBD59!important;
+        }
+
+        .text-01 {
+            color: #E59567!important;
+        }
+
+        .text-02 {
+            color: #004F78!important;
+        }
+
+        .text-03 {
+            color: #C4D9E7!important;
+        }
+
+        .fs-01 {
+            font-size: 6em;
+        }
+
+        .fs-02 {
+            font-size: 4em;
+        }
+
     </style>
+
     {% block css %}{% endblock %}
 
 </head>
-<body>
+<body class="bg-01">
 
     {% block modal %}{% endblock %}
+    {% include 'faculty/shared/sidebar.html' %}
     <div class="main-content">
-        {% include 'patient/shared/navigation.html' %}
+        {% include 'faculty/shared/navigation.html' %}
         {% block content %}{% endblock %}
     </div>
 
@@ -46,9 +85,6 @@
     <!-- Argon JS -->
     <script src='/static/argon/js/argon.min.js'></script>
 
-    <!-- Select -->
-    <script src="/static/js/bootstrap-select.min.js"></script>
-
     <!--   Core   -->
     <!-- <script src="/static/argon/assets/js/plugins/jquery/dist/jquery.min.js"></script> -->
     <!-- <script src="/static/argon/assets/js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js"></script> -->
@@ -60,6 +96,9 @@
 
     <!-- Bootbox -->
     <script src="/static/js/bootbox.min.js"></script>
+
+    <!-- Select -->
+    <script src="/static/js/bootstrap-select.min.js"></script>
 
     <!-- Backend JS -->
     <script src="/static/js/core.js"></script>
@@ -73,56 +112,6 @@
         var setSideBarTitle = function (element, _title) {
             $(element + "-title").text(_title);
         }
-
-        var total_notifs = 0
-
-        async function getNotifications() {
-            let mPromise = new Promise(function(resolve, reject) {
-                new_notifs = []
-                Controller.GET('/api/notifications/account/get/{{current_user.id}}').done(function (result) {
-                    resolve(result)
-                })
-            })
-            new_notifs = await mPromise
-            document.getElementById('total-notifs').innerHTML = new_notifs.filter(function(notif) { return notif.viewed == false }).length
-            
-            notif_list = document.getElementById('notif-list')
-            if (notif_list != null) {
-                if(total_notifs < new_notifs.length) {
-                    total_notifs = new_notifs.length
-                    notif_list.innerHTML = ''
-                    new_notifs.forEach(notif => {
-
-                        tr = document.createElement('tr')
-                        td = document.createElement('td')
-                        a = document.createElement('a')
-                        span_1 = document.createElement('span')
-                        span_2 = document.createElement('span')
-
-                        td.setAttribute('scope', 'row')
-                        a.setAttribute('href', '/patient/notification/' + notif.id)
-                        if(notif.viewed) a.setAttribute('class', 'text-dark lead card p-3')
-                        else a.setAttribute('class', 'text-dark card h1 p-3')
-                        span_1.setAttribute('class', 'd-block')
-                        span_2.setAttribute('class', 'd-block')
-                        
-                        span_1.append(new Date(notif.created_at).toLocaleDateString("en-US"))
-                        span_2.append(notif.content.substring(0, 25) + '...')
-
-                        a.append(span_1)
-                        a.append(span_2)
-                        td.append(a)
-                        tr.append(td)
-
-                        notif_list.prepend(tr)
-                    })
-                }
-            }
-
-            setTimeout(getNotifications, 5000) // loop this request every 5s
-
-        }
-        getNotifications()
 
     </script>
     {% block scripts %}{% endblock %}

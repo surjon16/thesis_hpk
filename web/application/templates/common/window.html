@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content='{{ csrf_token() }}'>
+
+    <title> Monitoring | Hi-Prof Kiosk</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href='/static/argon/vendor/nucleo/css/nucleo.css' type="text/css">
+    <link rel="stylesheet" href='/static/argon/vendor/@fortawesome/fontawesome-free/css/all.min.css' type="text/css">
+    <link rel="stylesheet" href='/static/argon/css/argon.min.css' type="text/css">
+
+    <style>
+
+        .bg-01 {
+            background-color: #FEFADF!important;
+        }
+
+        .bg-02 {
+            background-color: #FEBD89!important;
+        }
+
+        .bg-03 {
+            background-color: #F1F1F1!important;
+        }
+
+        .text-01 {
+            color: #E59567!important;
+        }
+
+        .text-02 {
+            color: #004F78!important;
+        }
+
+        .text-03 {
+            color: #C4D9E7!important;
+        }
+
+        .fs-01 {
+            font-size: 6em;
+        }
+
+        .fs-02 {
+            font-size: 4em;
+        }
+
+    </style>
+
+</head>
+
+<body class="bg-03">
+
+    <div class="main-content">
+
+        <div class="header bg-02 py-4">
+            <div class="container-fluid">
+                <div class="header-body text-center">
+                    <p class="display-1 fs-02">CALLING</p>
+                    <hr class="border border-white border-5 my-0">
+                    <p class="display-1 fs-01 text-danger">ROJO 10</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid py-4">
+            <div class="row justify-content-center">
+                <div class="col-5">
+
+                    <div class="card shadow border-0">
+                        <div class="card-header text-center">
+                            <h1>DECLINED</h1>
+                        </div>
+                        <div class="table-responsive">
+                            <!-- Projects table -->
+                            <table class="table table-striped align-items-center table-flush">
+                                <tbody>
+                                    {% for i in data.declined %}
+                                        <tr>
+                                            <td class="border">
+                                                <h1>{{i.priority}}</h1>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}                                      
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-7">
+
+                    <div class="card shadow border-0">
+                        <div class="card-header text-center">
+                            <h1>PRIORITY NUMBER</h1>
+                        </div>
+                        <div class="table-responsive ">
+                            <!-- Projects table -->
+                            <table class="table table-striped align-items-center table-flush">
+                                <tbody>
+                                    {% for i in data.active %}
+                                        <tr>
+                                            <td class="border">
+                                                <h1>{{i.faculty.last_name}}</h1>
+                                            </td>
+                                            <td class="border">
+                                                <h1 id="active-{{i.faculty.id}}">{{i.id}}</h1>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Argon Scripts -->
+    <!-- Core -->
+    <script src='/static/argon/vendor/jquery/dist/jquery.min.js'></script>
+    <script src='/static/argon/vendor/bootstrap/dist/js/bootstrap.bundle.min.js'></script>
+    <script src='/static/argon/vendor/js-cookie/js.cookie.js'></script>
+    <script src='/static/argon/vendor/jquery.scrollbar/jquery.scrollbar.min.js'></script>
+    <script src='/static/argon/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js'></script>
+    <script src='/static/argon/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'></script>
+
+    <!-- Argon JS -->
+    <script src='/static/argon/js/argon.min.js'></script>
+
+    <!-- Backend JS -->
+    <script src="/static/js/core.js"></script>
+    
+    <script>
+
+        setInterval(function() {
+            
+            Controller.GET('/api/appointment/get/queue').done(function(result) {
+                console.log(result)
+                //result.forEach(function(i){
+                //    console.log(i)
+                //})
+            })
+
+        }, 3000)
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+{% extends 'faculty/shared/layout.html' %}
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+<div class="main-content" id="panel">
+
+    <!-- Header -->
+    <div class="header pb-6">
+        <div class="container-fluid">
+            <div class="header-body">
+                <div class="row align-items-center py-4">
+                    <div class="col-lg-6 col-7">
+                        <p class="display-2 text-default d-inline-block mb-0">Dashboard</p>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>
+
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    
+    setSideBar('#menu-dashboard')
+
+</script>
+{% endblock %}

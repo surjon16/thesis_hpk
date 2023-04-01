@@ -18,6 +18,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
 
     def populate():
 
+        db.drop_all()
+        db.create_all()
+
         # create roles
 
         role = Roles(role='admin')
@@ -92,23 +95,24 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
         )
         db.session.add(account)
 
-        for i in range(20):
-            account = Accounts(
-                first_name  = 'Sample',
-                middle_name = '',
-                last_name   = 'Faculty ' + str(i+1),
-                gender      = '',
-                phone       = '+639354796747',
-                birth_date  = '',
-                address     = 'CDO',
-                email       = 'faculty@gmail.com',
-                password    = 'admin1234',
-                role_id     = 2,
-                status_id   = 5
-            )
-            db.session.add(account)
+        # faculties
+        account = Accounts(
+            first_name  = 'Sample',
+            middle_name = '',
+            last_name   = 'Faculty',
+            gender      = '',
+            phone       = '+639354796747',
+            birth_date  = '',
+            address     = 'CDO',
+            email       = 'faculty@gmail.com',
+            password    = 'admin1234',
+            role_id     = 2,
+            status_id   = 5
+        )
+        db.session.add(account)
 
-        for i in range(20):
+        # 5 students
+        for i in range(5):
             account = Accounts(
                 id_number   = '2010100926' + str(i+1),
                 first_name  = 'Sample',
@@ -118,7 +122,7 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
                 phone       = '+639354796747',
                 birth_date  = '',
                 address     = 'CDO',
-                email       = 'student@gmail.com',
+                email       = 'student'+str(i+1)+'@gmail.com',
                 password    = 'admin1234',
                 role_id     = 3,
                 status_id   = 5
@@ -144,56 +148,26 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
 
         consultation = Consultations(
             time_start  = '2023-02-06 13:00:00',
-            time_end    = '2023-02-06 13:30:00',
-            account_id  = Accounts.query.filter_by(role_id=2).first().id,
-            day         = 'Monday'
-        )
-        db.session.add(consultation)
-        consultation = Consultations(
-            time_start  = '2023-02-06 14:00:00',
-            time_end    = '2023-02-06 14:30:00',
-            account_id  = Accounts.query.filter_by(role_id=2).first().id,
-            day         = 'Monday'
-        )
-        db.session.add(consultation)
-        consultation = Consultations(
-            time_start  = '2023-02-06 15:00:00',
-            time_end    = '2023-02-06 15:30:00',
-            account_id  = Accounts.query.filter_by(role_id=2).first().id,
-            day         = 'Monday'
-        )
-        db.session.add(consultation)
-        consultation = Consultations(
-            time_start  = '2023-02-06 16:00:00',
             time_end    = '2023-02-06 16:30:00',
             account_id  = Accounts.query.filter_by(role_id=2).first().id,
             day         = 'Monday'
         )
         db.session.add(consultation)
-
-        # create appointments
-
-        appointment = Appointments(
-            priority        = Accounts.query.filter_by(role_id=2).first().last_name + ' ' + str(Appointments.query.count() + 1),
-            participants    = Accounts.query.filter(Accounts.id.in_([2,3])).all(),
-            status_id       = Status.query.filter_by(status="Pending").first().id,
-            purpose_id      = Purpose.query.filter_by(purpose="Capstone").first().id
+        consultation = Consultations(
+            time_start  = '2023-02-06 13:00:00',
+            time_end    = '2023-02-06 16:30:00',
+            account_id  = Accounts.query.filter_by(role_id=2).first().id,
+            day         = 'Wednesday'
         )
-        db.session.add(appointment)
-
-        appointment = Appointments(
-            priority        = Accounts.query.filter_by(role_id=2).first().last_name + ' ' + str(Appointments.query.count() + 1),
-            participants    = Accounts.query.filter(Accounts.id.in_([2,4])).all(),
-            status_id       = Status.query.filter_by(status="Pending").first().id,
-            purpose_id      = Purpose.query.filter_by(purpose="Inquire").first().id
+        db.session.add(consultation)
+        consultation = Consultations(
+            time_start  = '2023-02-06 13:00:00',
+            time_end    = '2023-02-06 16:30:00',
+            account_id  = Accounts.query.filter_by(role_id=2).first().id,
+            day         = 'Friday'
         )
-        db.session.add(appointment)
+        db.session.add(consultation)
 
         # create queueing
-
-        
-        
-
+                    
         db.session.commit()
-
-        return True    
