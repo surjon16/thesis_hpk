@@ -6,7 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content='{{ csrf_token() }}'>
+<<<<<<< HEAD:web/application/templates/common/faculties.html
     <title>Faculties | Hi-Prof Kiosk</title>
+=======
+    <title>Instructors | Hi-Prof Kiosk</title>
+>>>>>>> bf6dad4343f7440d36dbef447231f4d65ed7493a:web/application/templates/common/windows.html
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
     <link rel="stylesheet" href='/static/argon/vendor/nucleo/css/nucleo.css' type="text/css">
@@ -30,7 +34,6 @@
                             </div>
                             <div class="card-body px-lg-5 py-lg-5 text-center">
                                 <h1>{{ i.first_name }} {{ i.middle_name }} {{ i.last_name }}</h1>
-                                
                             </div>
                         </div>
                     </a>
@@ -63,14 +66,16 @@
             Controller.GET('/api/account/get/all').done(function(result) {
                 result.forEach(function(i){
                     if(i.status_id == 5) {
+<<<<<<< HEAD:web/application/templates/common/faculties.html
                         $('#link-'+i.id).attr("href", "/common/faculty/"+i.id)
+=======
+>>>>>>> bf6dad4343f7440d36dbef447231f4d65ed7493a:web/application/templates/common/windows.html
                         if($('#badge-'+i.id).hasClass("badge-danger")) {
                             $('#badge-'+i.id).toggleClass("badge-danger")
                             $('#badge-'+i.id).toggleClass("badge-success")
                         }
                     }
                     else {
-                        $('#link-'+i.id).attr("href", "#")
                         if($('#badge-'+i.id).hasClass("badge-success")) {
                             $('#badge-'+i.id).toggleClass("badge-danger")
                             $('#badge-'+i.id).toggleClass("badge-success")

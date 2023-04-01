@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content='{{ csrf_token() }}'>
 
+<<<<<<< HEAD
     <title>{{data.last_name}} | Hi-Prof Kiosk</title>
+=======
+    <title>{{data.faculty.last_name}} | Hi-Prof Kiosk</title>
+>>>>>>> bf6dad4343f7440d36dbef447231f4d65ed7493a
     
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
     <link rel="stylesheet" href='/static/argon/vendor/nucleo/css/nucleo.css' type="text/css">
@@ -78,9 +82,18 @@
                     <div class="header-body">
                         <div class="row align-items-center py-4">
                             <div class="col-lg-6 col-7">
+<<<<<<< HEAD
                                 <p class="display-2 text-02 d-inline-block mb-0">{{data.first_name}} {{data.middle_name}} {{data.last_name}}</p>
                                 <p class="display-3 text-03 mb-0">Instructor</p>
                                 <p class="display-4 text-dark mb-0">Objective</p>
+=======
+                                <p class="display-3 text-default d-inline-block mb-0">
+                                    {{data.faculty.first_name}} {{data.faculty.middle_name}} {{data.faculty.last_name}}
+                                </p>
+                                <p class="display-4 text-default mb-0">IT Instructor</p>
+                                <p class="display-5 text-default mb-0">Objective</p>
+                                <span id=badge-{{data.faculty.id}} class="badge badge-lg badge-success float-left"> {{data.faculty.status.status}} </span>
+>>>>>>> bf6dad4343f7440d36dbef447231f4d65ed7493a
                             </div>
                         </div>
                     </div>
@@ -179,6 +192,29 @@
                 "show"      : true
             })
         }
+
+        
+        setInterval(function() {
+            
+            Controller.GET('/api/account/get/all').done(function(result) {
+                result.forEach(function(i){
+                    if(i.status_id == 5) {
+                        if($('#badge-'+i.id).hasClass("badge-danger")) {
+                            $('#badge-'+i.id).toggleClass("badge-danger")
+                            $('#badge-'+i.id).toggleClass("badge-success")
+                        }
+                    }
+                    else {
+                        if($('#badge-'+i.id).hasClass("badge-success")) {
+                            $('#badge-'+i.id).toggleClass("badge-danger")
+                            $('#badge-'+i.id).toggleClass("badge-success")
+                        }
+                    }
+                })
+            })
+
+        }, 5000);
+    
 
     </script>
     

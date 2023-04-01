@@ -1,12 +1,33 @@
+<<<<<<< HEAD
 
 <nav class="navbar navbar-top navbar-expand navbar-light border-bottom bg-04">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+=======
+<!-- Topnav -->
+<nav class="navbar navbar-top navbar-expand navbar-dark bg-dark border-bottom">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            {% if current_user.role_id is not none %}
+                <ul class="navbar-nav align-items-center mr-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/patient/notifications">
+                            <span class="mb-0 text-sm  font-weight-bold">Notifications</span>
+                            <span id="total-notifs" class="badge badge-pill badge-danger"></span>
+                        </a>
+                    </li>
+
+                </ul>
+            {% endif %}
+
+>>>>>>> bf6dad4343f7440d36dbef447231f4d65ed7493a
             <ul class="navbar-nav align-items-center ml-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
                         <div class="media align-items-center">
+<<<<<<< HEAD
                             <div class="media-body ml-2 d-none d-lg-block">
                                 <span class="mb-0 text-sm font-weight-bold">{{current_user.first_name}} {{current_user.last_name}}</span>
                             </div>
@@ -20,6 +41,32 @@
                             <i class="ni ni-single-02"></i>
                             <span>My profile</span>
                         </a> -->
+=======
+                            <div class="media-body ml-2">
+                                <div class="pr-3 sidenav-toggler sidenav-toggler-dark">
+                                    <div class="sidenav-toggler-inner">
+                                        <i class="sidenav-toggler-line"></i>
+                                        <i class="sidenav-toggler-line"></i>
+                                        <i class="sidenav-toggler-line"></i>
+                                    </div>
+                                </div>
+                                <!-- <span class="mb-0 text-sm font-weight-bold">{{current_user.first_name[:1]}} {{current_user.last_name}}</span> -->
+                            </div>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu  dropdown-menu-right ">
+                        {% if current_user.role_id is not none %}
+                        <a href="/patient/appointment/request" class="dropdown-item">
+                            <i class="ni ni-send"></i>
+                            <span>Appointment Request</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        {% endif %}
+                        <a href="/patient/dashboard" class="dropdown-item">
+                            <i class="ni ni-tv-2"></i>
+                            <span>Dashboard</span>
+                        </a>
+>>>>>>> bf6dad4343f7440d36dbef447231f4d65ed7493a
                         <div class="dropdown-divider"></div>
                         <a href="/logout" class="dropdown-item">
                             <i class="ni ni-user-run"></i>
