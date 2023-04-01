@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content='{{ csrf_token() }}'>
 
-    <title>{{data.last_name}} | Hi-Prof Kiosk</title>
+    <title>{{data.account.last_name}} | Hi-Prof Kiosk</title>
     
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
     <link rel="stylesheet" href='/static/argon/vendor/nucleo/css/nucleo.css' type="text/css">
@@ -48,9 +48,9 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body card-body">
-                    <a href="/common/wave/1/{{data.id}}" class="btn btn-lg btn-primary text-white d-block w-100 my-3">INDIVIDUAL</a>
-                    <a href="/common/wave/2/{{data.id}}" class="btn btn-lg btn-primary text-white d-block w-100 my-3">GROUP</a>
-                    <a href="/common/wave/3/{{data.id}}" class="btn btn-lg btn-primary text-white d-block w-100 my-3">GUEST</a>
+                    <a href="/common/wave/1/{{data.account.id}}" class="btn btn-lg btn-primary text-white d-block w-100 my-3">INDIVIDUAL</a>
+                    <a href="/common/wave/2/{{data.account.id}}" class="btn btn-lg btn-primary text-white d-block w-100 my-3">GROUP</a>
+                    <a href="/common/wave/3/{{data.account.id}}" class="btn btn-lg btn-primary text-white d-block w-100 my-3">GUEST</a>
                     <button type="button" class="btn btn-lg btn-primary text-white d-block w-100 my-3" data-dismiss="modal">BACK</button>
                 </div>
             </div>
@@ -63,8 +63,8 @@
             <div class="sidenav-header align-items-center mt-5 ">
                 <img class="img-fluid p-3" src={{url_for('static', filename='img/no-photo.jpg')}} />
                 <p class="display-3 text-01">Contact</p>
-                <p class="text-dark"><b><i class="fas fa-phone"></i> {{data.phone}}</b></p>
-                <p class="text-dark"><b><i class="fas fa-envelope"></i> {{data.email}}</b></p>
+                <p class="text-dark"><b><i class="fas fa-phone"></i> {{data.account.phone}}</b></p>
+                <p class="text-dark"><b><i class="fas fa-envelope"></i> {{data.account.email}}</b></p>
             </div>
         </div>
     </nav>
@@ -78,7 +78,7 @@
                     <div class="header-body">
                         <div class="row align-items-center py-4">
                             <div class="col-lg-6 col-7">
-                                <p class="display-2 text-02 d-inline-block mb-0">{{data.first_name}} {{data.middle_name}} {{data.last_name}}</p>
+                                <p class="display-2 text-02 d-inline-block mb-0">{{data.account.first_name}} {{data.account.middle_name}} {{data.account.last_name}}</p>
                                 <p class="display-3 text-03 mb-0">Instructor</p>
                                 <p class="display-4 text-dark mb-0">Objective</p>
                             </div>

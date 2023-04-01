@@ -117,7 +117,10 @@ def window():
 
 @app.route('/common/faculty/<id>')
 def faculty(id):
-    response = Repository.readAccount(id)
+    response = {
+        'account'       : Repository.readAccount(id),
+        'consultations' : Repository.readAccountConstultations(id),
+    }
     return render_template('common/faculty.html', data=response)
 
 @app.route('/common/wave/<id>/<faculty_id>', methods=['POST', 'GET'])

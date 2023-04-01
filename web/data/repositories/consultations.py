@@ -14,7 +14,7 @@ class ConsultationsRepo:
         return Consultations.query.all()
 
     def readAccountConstultations(id):
-        return Consultations.query.filter_by(faculty=id).all()
+        return Consultations.query.filter_by(account_id=id).all()
 
     def upsertConsultation(request):
 
@@ -25,7 +25,7 @@ class ConsultationsRepo:
             data = Consultations(
                 time_start  = request['time_start'],
                 time_end    = request['time_end'],
-                faculty     = request['faculty'],
+                account_id  = request['faculty'],
                 day         = request['day'],
             )
 
@@ -38,7 +38,7 @@ class ConsultationsRepo:
 
             data.time_start = request['time_start']
             data.time_end   = request['time_end']
-            data.faculty    = request['faculty']
+            data.account_id = request['faculty']
             data.day        = request['day']
 
             db.session.commit()
