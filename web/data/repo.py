@@ -145,7 +145,6 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
         db.session.add(account)
 
         # create consultations
-<<<<<<< HEAD
 
         consultation = Consultations(
             time_start  = '2023-02-06 13:00:00',
@@ -159,49 +158,6 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             time_end    = '2023-02-06 16:30:00',
             account_id  = Accounts.query.filter_by(role_id=2).first().id,
             day         = 'Wednesday'
-=======
-        for i in range(20):
-            consultation = Consultations(
-                time_start  = '2023-02-06 13:00:00',
-                time_end    = '2023-02-06 13:30:00',
-                account_id  = Accounts.query.filter_by(role_id=2).filter_by(id=i+2).first().id,
-                day         = 'Monday',
-                room        = ''
-            )
-            db.session.add(consultation)
-            consultation = Consultations(
-                time_start  = '2023-02-06 14:00:00',
-                time_end    = '2023-02-06 14:30:00',
-                account_id  = Accounts.query.filter_by(role_id=2).filter_by(id=i+2).first().id,
-                day         = 'Tuesday',
-                room        = ''
-            )
-            db.session.add(consultation)
-            consultation = Consultations(
-                time_start  = '2023-02-06 15:00:00',
-                time_end    = '2023-02-06 15:30:00',
-                account_id  = Accounts.query.filter_by(role_id=2).filter_by(id=i+2).first().id,
-                day         = 'Wednesday',
-                room        = ''
-            )
-            db.session.add(consultation)
-            consultation = Consultations(
-                time_start  = '2023-02-06 16:00:00',
-                time_end    = '2023-02-06 16:30:00',
-                account_id  = Accounts.query.filter_by(role_id=2).filter_by(id=i+2).first().id,
-                day         = 'Thursday',
-                room        = ''
-            )
-            db.session.add(consultation)
-
-        # create appointments
-
-        appointment = Appointments(
-            priority        = Accounts.query.filter_by(role_id=2).first().last_name + ' ' + str(Appointments.query.count() + 1),
-            participants    = Accounts.query.filter(Accounts.id.in_([2,3])).all(),
-            status_id       = Status.query.filter_by(status="Pending").first().id,
-            purpose_id      = Purpose.query.filter_by(purpose="Capstone").first().id
->>>>>>> bf6dad4343f7440d36dbef447231f4d65ed7493a
         )
         db.session.add(consultation)
         consultation = Consultations(

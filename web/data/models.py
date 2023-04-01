@@ -138,11 +138,7 @@ class Appointments(db.Model):
             'id'            : self.id,
             'purpose'       : self.purpose.purpose,
             'priority'      : self.priority,
-<<<<<<< HEAD
             'faculty'       : self.account_id,
-=======
-            #'participants'  : self.participants_list,
->>>>>>> bf6dad4343f7440d36dbef447231f4d65ed7493a
             'created_at'    : self.created_at,
             'updated_at'    : self.updated_at,
             'status'        : self.status.status,
