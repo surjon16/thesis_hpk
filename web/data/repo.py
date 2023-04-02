@@ -18,8 +18,8 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
 
     def populate():
 
-        db.drop_all()
-        db.create_all()
+        # db.drop_all()
+        # db.create_all()
 
         # create roles
 
@@ -57,13 +57,13 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
 
         # create status
 
-        status = Status(status='Approved')
+        status = Status(status='Done')
         db.session.add(status)
 
         status = Status(status='Declined')
         db.session.add(status)
 
-        status = Status(status='Cancelled')
+        status = Status(status='Calling')
         db.session.add(status)
 
         status = Status(status='Pending')
@@ -171,3 +171,5 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
         # create queueing
                     
         db.session.commit()
+
+        return True

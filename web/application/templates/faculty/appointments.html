@@ -24,13 +24,18 @@
     <!-- Page content -->
     <div class="container-fluid mt--6">
         <div class="row">
-            <div class="col">
+            <div class="col-9">
                 <div class="card">
                     <div class="card-header border-0">
                         <div class="row align-items-center">
-                            <div class="col text-left">
-                                <button class="btn btn-lg btn-danger" onclick="Decline()">DECLINE</button>
-                                <button class="btn btn-lg btn-success" onclick="Approve()">APPROVE</button>
+                            <div class="col text-left d-flex justify-content-start align-items-center">
+                                <button onclick='Done(data.call.id)' class="btn btn-success btn-lg">DONE</button>
+                                <button onclick='Decline(data.call.id)' class="btn btn-danger btn-lg">DECLINE</button>
+                                {% if data.call %}
+                                    <h3>CURRENTLY SERVING: {{data.call.priority}} - {{data.call.participants_list[0].last_name|capitalize}} - {{data.call.purpose.purpose}}</h3>
+                                {% else %}
+                                    <h3>CURRENTLY SERVING: None</h3>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -53,18 +58,56 @@
                                             <h3>{{i.priority}}</h3>
                                         </td>
                                         <td>
-                                            <h3>--</h3>
+                                            {% for x in i.participants_list %}
+                                                <h3>{{x.id_number}}</h3>
+                                            {% endfor %}
                                         </td>
                                         <td>
-                                            <h3>--</h3>
+                                            {% for x in i.participants_list %}
+                                                <h3>{{x.last_name|capitalize}} ({{x.role.role|capitalize}})</h3>
+                                            {% endfor %}
                                         </td>
                                         <td>
                                             <h3>{{i.purpose.purpose}}</h3>
                                         </td>
                                             <td class="text-right">
-                                                <button onclick='CALL(this)' class="btn btn-success btn-sm">CALL</button>
-                                                <button onclick='DECLINE(this)' class="btn btn-danger btn-sm">DECLINE</button>
+                                                <button onclick='Call({{i.id}})' class="btn btn-success btn-sm">CALL</button>
+                                                <button onclick='Decline({{i.id}})' class="btn btn-danger btn-sm">DECLINE</button>
                                             </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <h3>CALL HISTORY</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <!-- Projects table -->
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">PRIORITY</th>
+                                    <th scope="col">STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in data.history %}
+                                    <tr>
+                                        <td>
+                                            <h3>{{i.priority}}</h3>
+                                        </td>
+                                        <td>
+                                            <h3>{{i.status.status}}</h3>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -81,6 +124,25 @@
 <script>
     
     setSideBar('#menu-appointments')
+
+    function Call(id) {
+
+            Controller.GET('/api/appointment/get/queue').done(function(result) {
+                console.log(result)
+                //result.forEach(function(i){
+                //    console.log(i)
+                //})
+            })
+
+    }
+
+    function Decline(id) {
+
+    }
+
+    function Done(id) {
+
+    }
 
 </script>
 {% endblock %}

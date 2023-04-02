@@ -157,8 +157,9 @@ def faculty_dashboard():
 @login_required
 def faculty_appointments():
     response = {
-        'active'    : Repository.readActive(),
-        'declined'  : Repository.readDeclined()
+        'call'      : Repository.readCall(current_user.id),
+        'history'   : Repository.readHistory(current_user.id),
+        'active'    : Repository.readActive()
     }
     return render_template('faculty/appointments.html', data=response)
 

@@ -116,8 +116,9 @@ class Consultations(db.Model):
 class Appointments(db.Model):
 
     # appointment info
-    id              = db.Column(db.Integer, primary_key=True)
-    priority        = db.Column(db.String(15))
+    id          = db.Column(db.Integer, primary_key=True)
+    priority    = db.Column(db.String(15))
+    remarks     = db.Column(db.String(100))
 
     # timestamps
     created_at  = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -131,7 +132,7 @@ class Appointments(db.Model):
     
     @hybrid_property
     def participants_list(self): 
-        return None if self.participants is None else json.dumps(self.participants)
+        return None if self.participants is None else self.participants
     
     def serialize(self):
         return {
@@ -142,6 +143,24 @@ class Appointments(db.Model):
             'created_at'    : self.created_at,
             'updated_at'    : self.updated_at,
             'status'        : self.status.status,
+        }
+
+class Queue(db.Model):
+
+    # appointment info
+    id              = db.Column(db.Integer, primary_key=True)
+    priority        = db.Column(db.String(15))
+
+    # timestamps
+    created_at  = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at  = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+
+    def serialize(self):
+        return {
+            'id'            : self.id,
+            'priority'      : self.priority,
+            'created_at'    : self.created_at,
+            'updated_at'    : self.updated_at,
         }
 
 class Purpose(db.Model):

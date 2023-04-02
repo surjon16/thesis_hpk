@@ -20,50 +20,17 @@ class AppointmentsRepo:
     def readAppointment(id):
         return Appointments.query.filter_by(id=id).first()
     
+    def readCall(id):
+        return Appointments.query.filter(and_(Appointments.status_id==3, Appointments.account_id==id, func.date(Appointments.created_at) == datetime.now().date())).order_by(Appointments.id.asc()).first()
+
+    def readHistory(id):
+        return Appointments.query.filter(and_(Appointments.status_id.in_([1,2]), Appointments.account_id==id, func.date(Appointments.created_at) == datetime.now().date())).order_by(Appointments.id.asc()).limit(5).all()
+
     def readActive():
         return Appointments.query.filter(and_(Appointments.status_id==4, func.date(Appointments.created_at) == datetime.now().date())).order_by(Appointments.id.asc()).all()
 
     def readDeclined():
         return Appointments.query.filter(and_(Appointments.status_id==2, func.date(Appointments.created_at) == datetime.now().date())).order_by(Appointments.id.asc()).limit(5).all()
-
-    def readAvailableSlots():
-
-        appointments = db.session.query(Appointments.appointment_date).filter(or_(Appointments.status_id==1, Appointments.status_id==4)).all()
-        data = appointments if appointments is not None else []
-
-        daily = [i.appointment_date.strftime('%m/%d/%Y') for i in data]
-        dailylist = list(set(daily))
-
-        hourly = [i.appointment_date for i in data]
-        hourlylist = list(set(hourly))
-        hourlydata = [{
-            'dt': h,
-            'd' : h.strftime('%m/%d/%Y'),
-            'h' : h.strftime('%I:%M%p') + '-' + (h + timedelta(hours=1)).strftime('%I:%M%p')
-        } for h in hourlylist]        
-        
-        return [{
-            'slots' : daily_slots - daily.count(i),
-            'date'  : i,
-            'time'  : [{
-                't' : t['h'],
-                'slots' : max_slots - hourly.count(t['dt'])
-            } for t in hourlydata if t['d'] == i]
-        } for i in dailylist]
-
-    def readSchedules():
-
-        appointments = db.session.query(Appointments.appointment_date).filter(or_(Appointments.status_id==1, Appointments.status_id==4)).all()
-        datalist = list(set(appointments if appointments is not None else []))
-
-        schedules = [{
-                'datetime' : data.appointment_date,
-                'date': data.appointment_date.strftime('%m/%d/%Y'), 
-                'time': data.appointment_date.strftime('%I:%M%p') + '-' + (data.appointment_date + timedelta(hours=1)).strftime('%I:%M%p'),
-                'slots': max_slots - appointments.count(data)
-            } for data in datalist]
-
-        return schedules
 
     def updateAppointmentStatus(request):
 
@@ -124,10 +91,8 @@ class AppointmentsRepo:
             )
             db.session.add(data)
             db.session.commit()
-
-
             
-        return True
+        return priority
 
     def upsertAppointment(request):
         

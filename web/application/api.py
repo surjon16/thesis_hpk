@@ -81,10 +81,6 @@ def get_appointment(id):
 def get_all_appointments():
     return jsonify([data.serialize() for data in Repository.readAppointments()])
 
-@app.route('/api/appointment/get/schedules', methods=['GET'])
-def get_scheduled_appointments():
-    return jsonify(Repository.readSchedules())
-
 @app.route('/api/appointment/get/queue', methods=['GET'])
 def get_queue():
     return jsonify({
@@ -108,6 +104,19 @@ def upsert_appointment():
 @app.route('/api/appointment/delete', methods=['POST'])
 def delete_appointment():
     if Repository.deleteAppointment(request.form):
+        return {'success':True}
+    return {'success':False}
+
+# ==================================================================================
+# QUEUES
+
+@app.route('/api/queue/get/all', methods=['GET'])
+def get_all_queues():
+    return jsonify([data.serialize() for data in Repository.readQueue()])
+
+@app.route('/api/queue/insert', methods=['POST'])
+def insertQueue():
+    if Repository.insertQueue(request.form):
         return {'success':True}
     return {'success':False}
 
