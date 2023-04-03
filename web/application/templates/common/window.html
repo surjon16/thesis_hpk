@@ -84,7 +84,7 @@
 
                     <div class="card shadow border-0">
                         <div class="card-header text-center">
-                            <h1 class="display-3">DECLINED</h1>
+                            <h1 class="display-5">DECLINED</h1>
                         </div>
                         <div id="declined" class="row"></div>
                     </div>
@@ -94,16 +94,16 @@
 
                     <div class="card shadow">
                         <div class="card-header text-center">
-                            <h1 class="display-3">PRIORITY NUMBER</h1>
+                            <h1 class="display-5">PRIORITY NUMBER</h1>
                         </div>
                         <div class="container-fluid">
                             <div class="row">
                                 {% for i in data.faculties %}
-                                    <div class="col-3 p-4 text-right border">
-                                        <h1 class="display-3">{{i.first_name|first}}. {{i.last_name}}</h1>
+                                    <div class="col-2 p-4 text-right border">
+                                        <h1 class="display-5">{{i.first_name|first}}. {{i.last_name}}</h1>
                                     </div>
-                                    <div class="col-3 p-4 text-left border-cell">
-                                        <h1 class="display-3" id="call-{{i.id}}"></h1>
+                                    <div class="col-2 p-4 text-left border-cell">
+                                        <h1 class="display-5" id="call-{{i.id}}">--</h1>
                                     </div>
                                 {% endfor %}
                             </div>
