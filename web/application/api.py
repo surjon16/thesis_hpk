@@ -64,9 +64,13 @@ def delete_account():
         return {'success':True}
     return {'success':False}
 
-@app.route('/api/account/set/status', methods=['POST'])
-def set_account_status():
-    if Repository.setAccountStatus(request.form):
+@app.route('/api/account/get/status/<id>', methods=['GET'])
+def get_account_status(id):
+    return jsonify(Repository.getAccountStatus(id))
+
+@app.route('/api/account/update/status', methods=['POST'])
+def update_account_status():
+    if Repository.updateAccountStatus(request.form):
         return {'success':True}
     return {'success':False}
 
@@ -80,6 +84,21 @@ def get_appointment(id):
 @app.route('/api/appointment/get/all', methods=['GET'])
 def get_all_appointments():
     return jsonify([data.serialize() for data in Repository.readAppointments()])
+
+@app.route('/api/appointment/get/window_data', methods=['GET'])
+def get_window_data():
+    return jsonify({
+        'calls'     : [data.serialize() for data in Repository.readCalls()],
+        'declined'  : [data.serialize() for data in Repository.readDeclined()]
+    })
+
+@app.route('/api/appointment/update/status', methods=['POST'])
+def update_appointment_status():    
+    return {'success': Repository.updateAppointmentStatus(request.form)}
+
+@app.route('/api/appointment/update/remarks', methods=['POST'])
+def update_appointment_remarks():    
+    return {'success': Repository.updateAppointmentRemarks(request.form)}
 
 @app.route('/api/appointment/get/queue', methods=['GET'])
 def get_queue():
@@ -127,22 +146,9 @@ def insertQueue():
 def get_consultation(id):
     return jsonify(Repository.readConsultation(id).serialize())
 
-@app.route('/api/consultation/get/daily', methods=['GET'])
-def get_daily_consultations():
-    return jsonify(Repository.readInventoriesGroupByItem())
-    return jsonify([data.serialize() for data in Repository.readInventoriesGroupByItem()])
-
 @app.route('/api/consultation/get/all', methods=['GET'])
 def get_all_consultations():
     return jsonify([data.serialize() for data in Repository.readConsultations()])
-
-@app.route('/api/consultation/get/schedules', methods=['GET'])
-def get_scheduled_consultations():
-    return jsonify(Repository.readSchedules())
-
-@app.route('/api/consultation/get/slots', methods=['GET'])
-def get_slots_consultations():
-    return jsonify(Repository.readAvailableSlots())
 
 @app.route('/api/consultation/upsert', methods=['POST'])
 def upsert_consultation():

@@ -41,6 +41,25 @@ class AccountsRepo:
             phone       = request['phone'],
             email       = request['email'],
             password    = request['password'],
+            status_id   = 5,
+            role_id     = 2
+        )
+
+        db.session.add(data)
+        db.session.commit()
+
+        return True
+    
+    def registerStudentAccount(request):
+        
+        data = Accounts(
+            id_number   = request['id_number'],
+            first_name  = request['first_name'],
+            last_name   = request['last_name'],
+            phone       = request['phone'],
+            email       = request['email'],
+            password    = request['password'],
+            status_id   = 5,
             role_id     = 3
         )
 
@@ -49,10 +68,16 @@ class AccountsRepo:
 
         return True
     
-    def setAccountStatus(request):
+    def getAccountStatus(id):
+        data = Accounts.query.filter_by(id=id).first()
+        if data.status_id == 5:
+            return True
+        return False
+
+    def updateAccountStatus(request):
         data = Accounts.query.filter_by(id=request['id']).first()
         data.status_id = request['status_id']
-
+        db.session.commit()
         return True
 
     def upsertAccount(request):

@@ -1,0 +1,255 @@
+{% extends 'faculty/shared/layout.html' %}
+{% block title %}
+    Consultation
+{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block modal %}
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content card bg-secondary shadow">
+                <div class="modal-header card-header bg-white border-0">
+                    <h4 class="card-title">Schedule Information</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body card-body">
+                    <div class="row">
+                        <input id="id" name="id" type="text" class="form-control " hidden value="-1">
+                        <input id="faculty" name="faculty" type="text" class="form-control " hidden value="{{current_user.id}}">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-control-label">Day <span id="day_error" class="h5 text-danger"></span></label>
+                                <select id="day" name="day" data-style="bg-white px-4 py-3 shadow-sm" class="form-control  selectpicker" data-live-search="true">
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-control-label">Start Time <span id="time_start_error" class="h5 text-danger"></span></label>
+                                <input id="time_start" name="time_start" type="time" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-control-label">End Time <span id="time_end_error" class="h5 text-danger"></span></label>
+                                <input id="time_end" name="time_end" type="time" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-control-label">Room <span id="room_error" class="h5 text-danger"></span></label>
+                                <input id="room" name="room" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-sm btn-success" onclick="Save()">Save</button>
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="main-content" id="panel">
+
+    <!-- Header -->
+    <div class="header pb-6">
+        <div class="container-fluid">
+            <div class="header-body">
+                <div class="row align-items-center py-4">
+                    <div class="col-lg-6 col-7 d-flex align-items-center">
+                        <p class="display-2 text-default d-inline-block mb-0 mr-4">Consultation</p>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>
+
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <button class="btn btn-sm btn-success" onclick="AddNew()">Add New</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <!-- Projects table -->
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Day</th>
+                                    <th scope="col">From</th>
+                                    <th scope="col">To</th>
+                                    <th scope="col">Room</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for consultation in data.consultations %}
+                                    <tr id='consultation-{{consultation.id}}' data-id={{consultation.id}}>
+                                        <th scope="row">
+                                            {{consultation.day}}
+                                        </th>
+                                        <td>
+                                            {{consultation.time_start.strftime('%I:%M %p')}}
+                                        </td>
+                                        <td>
+                                            {{consultation.time_end.strftime('%I:%M %p')}}
+                                        </td>
+                                        <td>
+                                            {{consultation.room}}
+                                        </td>
+                                        <td class="text-right">
+                                            <button onclick='Edit(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                                            <button onclick='Delete(this)' class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>                                            
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    
+    setSideBar('#menu-consultation')
+
+    var modal = '#modal-default'
+
+    var AddNew = function() {
+        
+        $('#time_start_error').html('')
+        $('#time_end_error').html('')
+        $('#room_error').html('')
+
+        $('#id').val('-1')
+        $('#time_start').val('')
+        $('#time_end').val('')
+        $('#room').val('')
+
+        $(modal).modal({ 
+            "backdrop"  : "static",
+            "keyboard"  : true,
+            "show"      : true
+        })
+
+    }
+
+    var Save = function() {
+        
+        $('#time_start_error').html('')
+        $('#time_end_error').html('')
+        $('#room_error').html('')
+
+        data = {
+            'id'            : $('#id').val(),
+            'faculty'       : $('#faculty').val(),
+            'day'           : $('#day').val(),
+            'time_start'    : $('#time_start').val(),
+            'time_end'      : $('#time_end').val(),
+            'room'          : $('#room').val(),
+        }
+
+        Controller.POST('/api/consultation/upsert', data).done(function(result) {
+            
+            console.log(data, result)
+
+            if (result.success) location.reload()
+            else {
+                if(result.errors.day) $('#day_error').html(result.errors.day)
+                if(result.errors.time_start) $('#time_start_error').html(result.errors.time_start)
+                if(result.errors.time_end) $('#time_end_error').html(result.errors.time_end)
+                if(result.errors.room) $('#room_error').html(result.errors.room)
+            }
+        })
+
+    }
+
+    var Edit = function(e) {
+
+        $('#time_start_error').html('')
+        $('#time_end_error').html('')
+        $('#room_error').html('')
+
+        id = e.parentNode.parentNode.dataset.id
+        
+        Controller.GET('/api/consultation/get/' + id, {}).done(function(result) {
+
+            console.log(result)
+
+            $('#id').val(result.id)
+            $("#day").selectpicker('val', result.day)
+            $('#time_start').val(result.time_start)
+            $('#time_end').val(result.time_end)
+            $('#room').val(result.room)
+
+            $(modal).modal({
+                "backdrop"  : "static",
+                "keyboard"  : true,
+                "show"      : true
+            })
+
+        })
+
+    }
+
+    var Delete = function(e) {
+        
+        id = e.parentNode.parentNode.dataset.id
+        
+        bootbox.confirm({
+            message: "All data related to this consultation will be lost. Continue?",
+            buttons: {
+                confirm: {
+                    label: 'Delete',
+                    className: 'btn-sm btn-danger'
+                },
+                cancel: {
+                    label: 'Cancel',
+                    className: 'btn-sm btn-info'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    
+                    Controller.POST('/api/consultation/delete', {'id': id}).done(function(result) {
+                        if(result.success) e.parentNode.parentNode.remove()
+                    })
+
+                }
+            }
+        })
+    }
+
+</script>
+{% endblock %}

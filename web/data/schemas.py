@@ -96,9 +96,7 @@ class CreateAccountSchema(Schema):
     
     first_name  = fields.Str(required=True)
     last_name   = fields.Str(required=True)
-    phone       = fields.Str(required=True)
     email       = fields.Email(required=True)
-    address     = fields.Str(required=True)
     password    = fields.Str(required=True)
 
     @validates('first_name')
@@ -135,13 +133,6 @@ class UpdateAccountSchema(Schema):
     def validate_last_name(self, value):
         if value == '' or value is None:
             raise ValidationError('Please provide your last name.')
-
-    @validates('phone')
-    def validate_phone(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please provide a phone number.')
-        if len(value) != 11:
-            raise ValidationError('Invalid phone number.')
 
     @validates('address')
     def validate_address(self, value):

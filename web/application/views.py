@@ -2,7 +2,7 @@ from flask          import flash, jsonify, render_template, request, redirect, u
 from flask_login    import login_required, login_user, logout_user, current_user
 from application    import app
 from data.repo      import Repository
-from data.schemas   import RegisterAccountSchema
+from data.schemas   import RegisterAccountSchema, RegisterStudentAccountSchema
 from datetime       import datetime, timedelta
 from functools      import wraps
 import dateutil.parser as parser
@@ -106,10 +106,26 @@ def register():
         
     return render_template('common/register.html', data={'errors':[], 'input': []})
 
+@app.route('/register_non_faculty', methods=['POST', 'GET'])
+def register_non_faculty():
+    if request.method == 'POST':
+        
+        validator = RegisterStudentAccountSchema(unknown='EXCLUDE')
+        errors = validator.validate(request.form)
+
+        if errors:
+            return render_template('common/register_non_faculty.html', data={'errors': errors, 'input': request.form})
+
+        if Repository.registerStudentAccount(request.form):
+            return redirect(url_for('faculties'))
+        
+    return render_template('common/register_non_faculty.html', data={'errors':[], 'input': []})
+
 @app.route('/window')
 def window():
     response = {
         'faculties' : Repository.readFaculties(),
+        'calls'     : Repository.readCalls(),
         'active'    : Repository.readActive(),
         'declined'  : Repository.readDeclined()
     }
@@ -149,19 +165,25 @@ def wave(id, faculty_id):
 @login_required
 def faculty_dashboard():
     response = {
-        'appointments' : Repository.readAppointments()
-    }
-    return render_template('faculty/dashboard.html', data=response)
-
-@app.route('/faculty/appointments')
-@login_required
-def faculty_appointments():
-    response = {
         'call'      : Repository.readCall(current_user.id),
         'history'   : Repository.readHistory(current_user.id),
         'active'    : Repository.readActive()
     }
-    return render_template('faculty/appointments.html', data=response)
+    return render_template('faculty/dashboard.html', data=response)
+
+@app.route('/faculty/consultation')
+@login_required
+def faculty_consultation():
+    response = {        
+        'consultations' : Repository.readAccountConstultations(current_user.id),
+    }
+    return render_template('faculty/consultation.html', data=response)
+
+@app.route('/faculty/profile')
+@login_required
+def faculty_profile():
+    response = Repository.readAccount(current_user.id)
+    return render_template('faculty/profile.html', data=response)
 
 # ===============================================================
 # ADMIN WEB VIEWS

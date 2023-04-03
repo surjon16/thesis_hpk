@@ -95,21 +95,22 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
         )
         db.session.add(account)
 
-        # faculties
-        account = Accounts(
-            first_name  = 'Sample',
-            middle_name = '',
-            last_name   = 'Faculty',
-            gender      = '',
-            phone       = '+639354796747',
-            birth_date  = '',
-            address     = 'CDO',
-            email       = 'faculty@gmail.com',
-            password    = 'admin1234',
-            role_id     = 2,
-            status_id   = 5
-        )
-        db.session.add(account)
+        # 5 faculties
+        for i in range(5):
+            account = Accounts(
+                first_name  = 'Sample',
+                middle_name = '',
+                last_name   = 'Faculty ' + str(i+1),
+                gender      = '',
+                phone       = '+639354796747',
+                birth_date  = '',
+                address     = 'CDO',
+                email       = 'faculty'+str(i+1)+'@gmail.com',
+                password    = 'admin1234',
+                role_id     = 2,
+                status_id   = 5
+            )
+            db.session.add(account)
 
         # 5 students
         for i in range(5):

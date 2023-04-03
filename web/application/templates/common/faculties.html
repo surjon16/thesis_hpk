@@ -26,7 +26,7 @@
                     <a id=link-{{i.id}} href="/common/faculty/{{i.id}}">
                         <div class="card bg-white border m-0 p-0">
                             <div class="card-header text-center">
-                                <span id=badge-{{i.id}} class="badge badge-md badge-circle badge-success float-left"> </span>
+                                <span id=badge-{{i.id}} class="badge badge-md badge-circle badge-dark float-left"> </span>
                             </div>
                             <div class="card-body px-lg-5 py-lg-5 text-center">
                                 <h1>{{ i.first_name }} {{ i.middle_name }} {{ i.last_name }}</h1>
@@ -61,23 +61,19 @@
                 
             Controller.GET('/api/account/get/all').done(function(result) {
                 result.forEach(function(i){
+                    $('#badge-'+i.id).removeClass("badge-dark")
                     if(i.status_id == 5) {
-                        $('#link-'+i.id).attr("href", "/common/faculty/"+i.id)
-                        if($('#badge-'+i.id).hasClass("badge-danger")) {
-                            $('#badge-'+i.id).toggleClass("badge-danger")
-                            $('#badge-'+i.id).toggleClass("badge-success")
-                        }
+                        $('#badge-'+i.id).removeClass("badge-danger")
+                        $('#badge-'+i.id).addClass("badge-success")
                     }
                     else {
-                        if($('#badge-'+i.id).hasClass("badge-success")) {
-                            $('#badge-'+i.id).toggleClass("badge-danger")
-                            $('#badge-'+i.id).toggleClass("badge-success")
-                        }
+                        $('#badge-'+i.id).addClass("badge-danger")
+                        $('#badge-'+i.id).removeClass("badge-success")
                     }
                 })
             })
 
-        }, 5000);
+        }, 2000);
 
     </script>
 

@@ -107,9 +107,13 @@ class Consultations(db.Model):
     
     def serialize(self):
         return {
-            'id'        : self.id,
-            'schedule'  : self.schedule,
-            'faculty'   : self.faculty.first_name + ' ' + self.faculty.middle_name + ' ' + self.faculty.last_name,
+            'id'            : self.id,
+            'schedule'      : self.schedule,
+            'time_start'    : self.time_start.strftime('%H:%M'),
+            'time_end'      : self.time_end.strftime('%H:%M'),
+            'day'           : self.day,
+            'room'          : self.room,
+            'faculty'       : self.faculty.first_name + ' ' + self.faculty.middle_name + ' ' + self.faculty.last_name,
 
         }
 

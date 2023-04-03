@@ -1,6 +1,6 @@
-{% extends 'shared/layout.html' %}
+{% extends 'faculty/shared/layout.html' %}
 {% block title %}
-Accounts
+    Consultation
 {% endblock %}
 
 {% block css %}{% endblock %}
@@ -16,27 +16,7 @@ Accounts
                 <div class="modal-body card-body">
                     <div class="row">
                         <input id="id" name="id" type="text" class="form-control " hidden value="-1">
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-control-label">Roles <span id="role_id_error" class="h5 text-danger"></span></label>
-                                <select id="role_id" name="role_id" data-style="bg-white px-4 py-3 shadow-sm" class="form-control  selectpicker" data-live-search="true">
-                                    <option value="1">Administrator</option>
-                                    <option value="2">Faculty</option>
-                                    <option value="3">Student</option>
-                                    <option value="4">Guest</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-control-label">ID Number <span style="font-weight: 100">(Required if student)</span> <span id="id_number_error" class="h5 text-danger"></span></label>
-                                <input id="id_number" name="id_number" type="text" class="form-control ">
-                            </div>
-                        </div>
+                        <input id="role_id" name="role_id" type="text" class="form-control " hidden value="2">
                     </div>
                     <div class="row">
                         <div class="col-md-12">
@@ -125,16 +105,17 @@ Accounts
 
 {% block content %}
 <div class="main-content" id="panel">
+
     <!-- Header -->
     <div class="header pb-6">
         <div class="container-fluid">
             <div class="header-body">
                 <div class="row align-items-center py-4">
-                    <div class="col-lg-6 col-7">
-                        <p class="display-2 text-default d-inline-block mb-0">Accounts</p>
+                    <div class="col-lg-6 col-7 d-flex align-items-center">
+                        <p class="display-2 text-default d-inline-block mb-0 mr-4">Profile</p>
                     </div>
                 </div>
-            </div>
+            </div>  
         </div>
     </div>
 
@@ -146,7 +127,6 @@ Accounts
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col text-left">
-                                <button class="btn btn-sm btn-success" onclick="AddNew()">Add New</button>
                             </div>
                         </div>
                     </div>
@@ -157,30 +137,33 @@ Accounts
                                 <tr>
                                     <th scope="col">Full Name</th>
                                     <th scope="col">Email</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Address</th>
                                     <th scope="col">Account Type</th>
                                     <th scope="col" class="text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for account in data %}
-                                    {% if account.role_id is not none %}
-                                        <tr id='account-{{account.id}}' data-id={{account.id}}>
-                                            <th scope="row">
-                                                {{account.first_name + ' ' + account.last_name}}
-                                            </th>
-                                            <td>
-                                                {{account.email}}
-                                            </td>
-                                            <td>
-                                                {{account.role.role}}
-                                            </td>
-                                            <td class="text-right">
-                                                <button onclick='Edit(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
-                                                <button onclick='Delete(this)' class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                    {% endif %}
-                                {% endfor %}
+                                <tr id='account-{{data.id}}' data-id={{data.id}}>
+                                    <th scope="row">
+                                        {{data.first_name + ' ' + data.last_name}}
+                                    </th>
+                                    <td>
+                                        {{data.email}}
+                                    </td>
+                                    <td>
+                                        {{data.phone}}
+                                    </td>
+                                    <td>
+                                        {{data.address}}
+                                    </td>
+                                    <td>
+                                        {{data.role.role}}
+                                    </td>
+                                    <td class="text-right">
+                                        <button onclick='Edit(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> EDIT</button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -188,19 +171,19 @@ Accounts
             </div>
         </div>
     </div>
+
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-
-    setSideBar('#menu-accounts')
+    
+    setSideBar('#menu-profile')
 
     var modal = '#modal-default'
 
     var AddNew = function() {
         
-        $('#id_number_error').html('')
         $('#first_name_error').html('')
         $('#last_name_error').html('')
         $('#phone_error').html('')
@@ -233,7 +216,6 @@ Accounts
 
     var Save = function() {
         
-        $('#id_number_error').html('')
         $('#first_name_error').html('')
         $('#last_name_error').html('')
         $('#phone_error').html('')
@@ -243,7 +225,7 @@ Accounts
 
         data = {
             'id'            : $('#id').val(),
-            'id_number'     : $('#id_number').val(),
+            'id_number'     : '',
             'role_id'       : $('#role_id').val(),
             'first_name'    : $('#first_name').val(),
             'middle_name'   : $('#middle_name').val(),
@@ -260,22 +242,10 @@ Accounts
             
             console.log(data, result)
 
-            if (result.success == true) {
-                e = document.getElementById('account-'+result.account.id)
-                if (e == null) {
-                    location.reload()
-                }
-                else {
-                    e.childNodes[1].innerHTML = result.account.first_name + ' ' + result.account.last_name
-                    e.childNodes[3].innerHTML = result.account.email
-                    e.childNodes[5].innerHTML = result.account.role
-                    $(modal).modal('hide')
-                }
-            }
+            if (result.success == true) location.reload()
             else {
 
                 if(result.errors.role_id) $('#role_id_error').html(result.errors.role_id)
-                if(result.errors.id_number) $('#id_number_error').html(result.errors.id_number)
                 if(result.errors.first_name) $('#first_name_error').html(result.errors.first_name)
                 if(result.errors.last_name) $('#last_name_error').html(result.errors.last_name)
                 if(result.errors.phone) $('#phone_error').html(result.errors.phone)
@@ -290,7 +260,6 @@ Accounts
 
     var Edit = function(e) {
 
-        $('#id_number_error').html('')
         $('#first_name_error').html('')
         $('#last_name_error').html('')
         $('#phone_error').html('')
@@ -305,7 +274,6 @@ Accounts
             console.log(result)
 
             $('#id').val(result.id)
-            $('#id_number').val(result.id_number)
             $("#role_id").selectpicker('val', result.role_id)
             $('#first_name').val(result.first_name)
             $('#middle_name').val(result.middle_name)
@@ -326,34 +294,6 @@ Accounts
 
         })
 
-    }
-
-    var Delete = function(e) {
-        
-        id = e.parentNode.parentNode.dataset.id
-        
-        bootbox.confirm({
-            message: "All data related to this account will be lost. Continue?",
-            buttons: {
-                confirm: {
-                    label: 'Delete',
-                    className: 'btn-sm btn-danger'
-                },
-                cancel: {
-                    label: 'Cancel',
-                    className: 'btn-sm btn-info'
-                }
-            },
-            callback: function (result) {
-                if (result) {
-                    
-                    Controller.POST('/api/account/delete', {'id': id}).done(function(result) {
-                        if(result.success) e.parentNode.parentNode.remove()
-                    })
-
-                }
-            }
-        })
     }
 
 </script>

@@ -15,10 +15,9 @@ class QueuesRepo:
     def insertQueue(request):
     
         data = Queue(
-            priority        = request['priority'],
+            priority = request['priority'],
         )
         db.session.add(data)
-
         db.session.commit()
 
         return True

@@ -16,6 +16,18 @@
 
     <style>
 
+        .no-pad {
+            padding-right: 0px!important;
+            padding-left: 0px!important;
+            padding: 0px!important;
+        }
+
+        .border-cell {
+            border-style: solid;
+            border-color: #004f78;
+            border-width: .1em;
+        }
+
         .bg-01 {
             background-color: #FEFADF!important;
         }
@@ -61,61 +73,42 @@
                 <div class="header-body text-center">
                     <p class="display-1 fs-02">CALLING</p>
                     <hr class="border border-white border-5 my-0">
-                    <p class="display-1 fs-01 text-danger">ROJO 10</p>
+                    <p id="current_call" class="display-1 fs-01 text-danger">--</p>
                 </div>
             </div>
         </div>
 
         <div class="container-fluid py-4">
-            <div class="row justify-content-center">
-                <div class="col-5">
+            <div class="row">
+                <div class="col-4">
 
                     <div class="card shadow border-0">
                         <div class="card-header text-center">
-                            <h1>DECLINED</h1>
+                            <h1 class="display-3">DECLINED</h1>
                         </div>
-                        <div class="table-responsive">
-                            <!-- Projects table -->
-                            <table class="table table-striped align-items-center table-flush">
-                                <tbody>
-                                    {% for i in data.declined %}
-                                        <tr>
-                                            <td class="border">
-                                                <h1>{{i.priority}}</h1>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}                                      
-                                </tbody>
-                            </table>
-                        </div>
+                        <div id="declined" class="row"></div>
                     </div>
 
                 </div>
-                <div class="col-7">
+                <div class="col-8">
 
-                    <div class="card shadow border-0">
+                    <div class="card shadow">
                         <div class="card-header text-center">
-                            <h1>PRIORITY NUMBER</h1>
+                            <h1 class="display-3">PRIORITY NUMBER</h1>
                         </div>
-                        <div class="table-responsive ">
-                            <!-- Projects table -->
-                            <table class="table table-striped align-items-center table-flush">
-                                <tbody>
-                                    {% for i in data.active %}
-                                        <tr>
-                                            <td class="border">
-                                                <h1>{{i.faculty.last_name}}</h1>
-                                            </td>
-                                            <td class="border">
-                                                <h1 id="active-{{i.faculty.id}}">{{i.id}}</h1>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                        <div class="container-fluid">
+                            <div class="row">
+                                {% for i in data.faculties %}
+                                    <div class="col-3 p-4 text-right border">
+                                        <h1 class="display-3">{{i.first_name|first}}. {{i.last_name}}</h1>
+                                    </div>
+                                    <div class="col-3 p-4 text-left border-cell">
+                                        <h1 class="display-3" id="call-{{i.id}}"></h1>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -140,11 +133,19 @@
 
         setInterval(function() {
             
-            Controller.GET('/api/appointment/get/queue').done(function(result) {
+            Controller.GET('/api/appointment/get/window_data').done(function(result) {
                 console.log(result)
-                //result.forEach(function(i){
-                //    console.log(i)
-                //})
+                if (result.calls[0].priority) $('#current_call').html(result.calls[0].priority)
+                else $('#current_call').html('--')
+                
+                $('[id^="call-"]').html('--')
+                result.calls.forEach(i => {
+                    $('#call-'+i.faculty).html(i.priority)
+                });
+                $('#declined').html('')
+                result.declined.forEach(i=> {
+                    $('#declined').append('<div class="col-12 p-2 border text-center"><p class="display-4">'+i.priority+'</p> </div>')
+                })
             })
 
         }, 3000)

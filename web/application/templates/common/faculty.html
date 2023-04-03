@@ -128,8 +128,8 @@
                             </div>
                             <div class="card-footer border-1 d-flex justify-content-end">
                                 <a href="/" class="btn btn-lg btn-primary text-white">BACK</a>
-                                <a href="/common/site-map" class="btn btn-lg btn-primary text-white">SITE MAP</a>
-                                <button type="button" class="btn btn-lg btn-primary text-white" onclick="wave()">WAVE</button>
+                                <a href="/common/floor-plan" class="btn btn-lg btn-primary text-white">FLOOR PLAN</a>
+                                <button type="button" class="btn btn-lg btn-primary text-white" onclick="wave({{data.account.id}})">WAVE</button>
                             </div>
                         </div>
                     </div>
@@ -172,12 +172,24 @@
         
         var modal = '#modal-default'
         
-        function wave() {
-            $(modal).modal({ 
-                "backdrop"  : "static",
-                "keyboard"  : true,
-                "show"      : true
+        function wave(id) {
+
+            Controller.GET('/api/account/get/status/'+id).done(function(result) {
+                
+                if (result) {
+                    $(modal).modal({ 
+                        "backdrop"  : "static",
+                        "keyboard"  : true,
+                        "show"      : true
+                    })
+                }
+                else {
+                    bootbox.alert("<h3>The instructor is not available as of the moment.</h3><h3>Please try again later.</h3>")
+                }
+                
             })
+
+
         }
 
         
