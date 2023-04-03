@@ -141,7 +141,7 @@
                 $('[id^="call-"]').html('--')
                 result.calls.forEach(i => {
                     $('#call-'+i.faculty).html(i.priority)
-                });
+                })
                 $('#declined').html('')
                 result.declined.forEach(i=> {
                     $('#declined').append('<div class="col-12 p-2 border text-center"><h2 class="display-5">'+i.priority+'</h2> </div>')
