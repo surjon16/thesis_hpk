@@ -101,6 +101,30 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modal-photo">
+    <div class="modal-dialog">
+        <div class="modal-content card bg-secondary shadow">
+            <form class="form" method="post" action="{{url_for('uploader_file')}}" enctype = "multipart/form-data">
+                <div class="modal-header card-header bg-white border-0">
+                    <h4 class="card-title">Upload Photo</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body card-body">
+                    <div class="row">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                            <input type="file" name="file" />
+                            <input type="text" id="target" name="target" class="form-control " hidden value="1">
+                            <input type="text" id="photo" name="photo" class="form-control " hidden value="-1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-sm btn-success" type="submit" >Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -135,17 +159,22 @@
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
+                                    <th scope="col">Profile Picture</th>
                                     <th scope="col">Full Name</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Phone</th>
                                     <th scope="col">Address</th>
                                     <th scope="col">Account Type</th>
+                                    <th scope="col">Floor Plan</th>
                                     <th scope="col" class="text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr id='account-{{data.id}}' data-id={{data.id}}>
                                     <th scope="row">
+                                        <img src="{{url_for('static', filename=data.image_profile)}}" alt="" class="img-fluid" style="max-width: 100px" onclick='Profile(this)'>
+                                    </th>
+                                    <th>
                                         {{data.first_name + ' ' + data.last_name}}
                                     </th>
                                     <td>
@@ -160,6 +189,9 @@
                                     <td>
                                         {{data.role.role}}
                                     </td>
+                                    <th>
+                                        <img src="{{url_for('static', filename=data.image_location)}}" alt="" class="img-fluid" style="max-width: 100px" onclick='FloorPlan(this)'>
+                                    </th>
                                     <td class="text-right">
                                         <button onclick='Edit(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> EDIT</button>
                                     </td>
@@ -181,6 +213,7 @@
     setSideBar('#menu-profile')
 
     var modal = '#modal-default'
+    var photo = '#modal-photo'
 
     var AddNew = function() {
         
@@ -292,6 +325,34 @@
                 "show"      : true
             })
 
+        })
+
+    }
+
+    var Profile = function(e) {
+
+        id = e.parentNode.parentNode.dataset.id
+        $('#photo').val(id)
+        $('#target').val(1) // 1 for profile. 2 for floor plan.
+
+        $(photo).modal({
+            "backdrop"  : "static",
+            "keyboard"  : true,
+            "show"      : true
+        })
+
+    }
+
+    var FloorPlan = function(e) {
+
+        id = e.parentNode.parentNode.dataset.id
+        $('#photo').val(id)
+        $('#target').val(2) // 1 for profile. 2 for floor plan.
+
+        $(photo).modal({
+            "backdrop"  : "static",
+            "keyboard"  : true,
+            "show"      : true
         })
 
     }

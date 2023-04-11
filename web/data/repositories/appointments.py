@@ -10,25 +10,28 @@ class AppointmentsRepo:
     # APPOINTMENTS
     
     def readAppointments():
-        return Appointments.query.order_by(Appointments.status_id.desc(), Appointments.created_at.asc()).all()
+        return Appointments.query.order_by(Appointments.status_id.desc(), Appointments.schedule.asc()).all()
     
     def readAppointment(id):
         return Appointments.query.filter_by(id=id).first()
     
     def readCall(id):
-        return Appointments.query.filter(and_(Appointments.status_id==3, Appointments.account_id==id, func.date(Appointments.created_at) == datetime.now().date())).order_by(Appointments.id.asc()).first()
+        return Appointments.query.filter(and_(Appointments.status_id==3, Appointments.account_id==id, func.date(Appointments.schedule) == datetime.now().date())).order_by(Appointments.id.asc()).first()
 
     def readCalls():
-        return Appointments.query.filter(and_(Appointments.status_id==3, func.date(Appointments.created_at) == datetime.now().date())).group_by(Appointments.account_id).having(func.min(Appointments.id)).order_by(Appointments.updated_at.desc()).all()
+        return Appointments.query.filter(and_(Appointments.status_id==3, func.date(Appointments.schedule) == datetime.now().date())).group_by(Appointments.account_id).having(func.min(Appointments.id)).order_by(Appointments.updated_at.desc()).all()
 
     def readHistory(id):
-        return Appointments.query.filter(and_(Appointments.status_id.in_([1,2]), Appointments.account_id==id, func.date(Appointments.created_at) == datetime.now().date())).order_by(Appointments.updated_at.desc()).limit(5).all()
+        return Appointments.query.filter(and_(Appointments.status_id.in_([1,2]), Appointments.account_id==id, func.date(Appointments.schedule) == datetime.now().date())).order_by(Appointments.updated_at.desc()).limit(5).all()
 
     def readActive():
-        return Appointments.query.filter(and_(Appointments.status_id==4, func.date(Appointments.created_at) == datetime.now().date())).order_by(Appointments.id.asc()).all()
+        return Appointments.query.filter(and_(Appointments.status_id==4, func.date(Appointments.schedule) == datetime.now().date())).order_by(Appointments.id.asc()).all()
+
+    def readUpcoming():
+        return Appointments.query.filter(and_(Appointments.status_id==4, func.date(Appointments.schedule) > datetime.now().date())).order_by(Appointments.schedule.asc()).order_by(Appointments.id.asc()).all()
 
     def readDeclined():
-        return Appointments.query.filter(and_(Appointments.status_id==2, func.date(Appointments.created_at) == datetime.now().date())).order_by(Appointments.updated_at.desc()).limit(5).all()
+        return Appointments.query.filter(and_(Appointments.status_id==2, func.date(Appointments.schedule) == datetime.now().date())).order_by(Appointments.updated_at.desc()).limit(5).all()
 
     def updateAppointmentStatus(request):
 
@@ -48,9 +51,9 @@ class AppointmentsRepo:
     
     def setAppointment(id, account_id, request):
 
-        queues = Appointments.query.filter(Appointments.account_id==account_id, func.date(Appointments.created_at) == datetime.now().date()).all()
+        queues = Appointments.query.filter(Appointments.account_id==account_id, func.date(request['schedule']) == func.date(Appointments.schedule)).all()
         faculty = Accounts.query.filter_by(id=account_id).first()
-        priority = faculty.last_name.upper() + ' ' + str(len(queues) + 1)
+        priority = str(len(queues) + 1)
 
         if id == "1":
             
@@ -59,6 +62,7 @@ class AppointmentsRepo:
                 participants    = Accounts.query.filter(Accounts.id.in_(request['id_number'])).all(),
                 status_id       = Status.query.filter_by(status="Pending").first().id,
                 purpose_id      = request['purpose'],
+                schedule        = request['schedule'],
                 account_id      = account_id
             )
             db.session.add(data)
@@ -71,6 +75,7 @@ class AppointmentsRepo:
                 participants    = Accounts.query.filter(Accounts.id.in_(request['id_number'])).all(),
                 status_id       = Status.query.filter_by(status="Pending").first().id,
                 purpose_id      = request['purpose'],
+                schedule        = request['schedule'],
                 account_id      = account_id
             )
             db.session.add(data)
@@ -92,12 +97,13 @@ class AppointmentsRepo:
                 participants    = Accounts.query.filter(Accounts.id.in_([account.id])).all(),
                 status_id       = Status.query.filter_by(status="Pending").first().id,
                 purpose_id      = request['purpose'],
+                schedule        = request['schedule'],
                 account_id      = account_id
             )
             db.session.add(data)
             db.session.commit()
             
-        return priority
+        return faculty.last_name.upper() + ' ' + priority
 
     def upsertAppointment(request):
         
@@ -111,6 +117,7 @@ class AppointmentsRepo:
                 status_id       = request['status_id'],
                 remarks         = request['remarks'],
                 purpose_id      = request['purpose_id'],
+                schedule        = request['schedule'],
             )
             db.session.add(data)
 
@@ -121,6 +128,7 @@ class AppointmentsRepo:
             status_id       = request['status_id']
             remarks         = request['remarks']
             purpose_id      = request['purpose_id']
+            schedule        = request['schedule']
                 
         db.session.commit()
 

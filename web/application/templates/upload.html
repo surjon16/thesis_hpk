@@ -1,0 +1,8 @@
+{% extends 'shared/layout.html' %}
+{% block content %}
+    <form class="form" method="post" action="{{url_for('uploader_file')}}" enctype = "multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type = "file" name = "file" />
+        <input type = "submit"/>
+    </form>
+{% endblock %}

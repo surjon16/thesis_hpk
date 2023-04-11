@@ -27,6 +27,10 @@ def authenticate(username, password):
 def get_account(id):
     return jsonify(Repository.readAccount(id).serialize())
 
+@app.route('/api/account/get/consultations/<id>', methods=['GET'])
+def get_account_consultations(id):
+    return jsonify([data.serialize() for data in Repository.readAccountConstultations(id)])
+
 @app.route('/api/account/get/all', methods=['GET'])
 def get_all_accounts():
     return jsonify([data.serialize() for data in Repository.readAccounts()])
@@ -244,3 +248,7 @@ def delete_status():
 @app.route('/api/populate', methods=['GET'])
 def populate():
     return {'success': Repository.populate()}
+
+@app.route('/api/drop', methods=['GET'])
+def drop():
+    return {'success': Repository.drop()}

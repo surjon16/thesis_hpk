@@ -98,21 +98,20 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group mb-3">
-                                        <div class="form-group">
-                                            <label class="form-control-label">
-                                                Purpose
-                                                {% if data.errors.purpose %}
-                                                    <span id="purpose_error" class="h5 text-danger">{{data.errors.purpose[0]}}</span>
-                                                {% endif %}
-                                            </label>
-                                            <select id="purpose" name="purpose" data-style="bg-03 px-4 py-3 shadow-sm" class="form-control selectpicker" data-live-search="true" multiple data-max-options="1">
-                                                {% for p in data.repo.purpose %}
-                                                    <option value="{{p.id}}">{{p.purpose}}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
+                                    <div class="form-group">
+                                        <label class="form-control-label">
+                                            Purpose
+                                            {% if data.errors.purpose %}
+                                                <span id="purpose_error" class="h5 text-danger">{{data.errors.purpose[0]}}</span>
+                                            {% endif %}
+                                        </label>
+                                        <select id="purpose" name="purpose" data-style="bg-03 px-4 py-3 shadow-sm" class="form-control selectpicker" data-live-search="true" multiple data-max-options="1">
+                                            {% for p in data.repo.purpose %}
+                                                <option value="{{p.id}}">{{p.purpose}}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
+
                                     <div class="text-center">
                                         <a href="/common/faculty/{{data.faculty_id}}" class="btn btn-primary my-4">BACK</a>
                                         <button type="submit" class="btn btn-primary my-4">SUBMIT</button>
@@ -150,21 +149,20 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group mb-3">
-                                        <div class="form-group">
-                                            <label class="form-control-label">
-                                                Purpose
-                                                {% if data.errors.purpose %}
-                                                    <span id="purpose_error" class="h5 text-danger">{{data.errors.purpose[0]}}</span>
-                                                {% endif %}
-                                            </label>
-                                            <select id="purpose" name="purpose" data-style="bg-03 px-4 py-3" class="form-control selectpicker" data-live-search="true" multiple data-max-options="1">
-                                                {% for p in data.repo.purpose %}
-                                                    <option value="{{p.id}}">{{p.purpose}}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
+                                    <div class="form-group">
+                                        <label class="form-control-label">
+                                            Purpose
+                                            {% if data.errors.purpose %}
+                                                <span id="purpose_error" class="h5 text-danger">{{data.errors.purpose[0]}}</span>
+                                            {% endif %}
+                                        </label>
+                                        <select id="purpose" name="purpose" data-style="bg-03 px-4 py-3" class="form-control selectpicker" data-live-search="true" multiple data-max-options="1">
+                                            {% for p in data.repo.purpose %}
+                                                <option value="{{p.id}}">{{p.purpose}}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
+
                                     <div class="text-center">
                                         <a href="/common/faculty/{{data.faculty_id}}" class="btn btn-primary my-4">BACK</a>
                                         <button type="submit" class="btn btn-primary my-4">SUBMIT</button>
@@ -204,21 +202,30 @@
                                         <input id="last_name" name="last_name" type="text" class="form-control ">
                                     </div>
 
-                                    <div class="form-group mb-3">
-                                        <div class="form-group">
-                                            <label class="form-control-label">
-                                                Purpose
-                                                {% if data.errors.purpose %}
-                                                    <span id="purpose_error" class="h5 text-danger">{{data.errors.purpose[0]}}</span>
-                                                {% endif %}
-                                            </label>
-                                            <select id="purpose" name="purpose" data-style="bg-03 px-4 py-3 shadow-sm" class="form-control selectpicker" data-live-search="true" multiple data-max-options="1">
-                                                {% for p in data.repo.purpose %}
-                                                    <option value="{{p.id}}">{{p.purpose}}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
+                                    <div class="form-group">
+                                        <label class="form-control-label">
+                                            Purpose
+                                            {% if data.errors.purpose %}
+                                                <span id="purpose_error" class="h5 text-danger">{{data.errors.purpose[0]}}</span>
+                                            {% endif %}
+                                        </label>
+                                        <select id="purpose" name="purpose" data-style="bg-03 px-4 py-3 shadow-sm" class="form-control selectpicker" data-live-search="true" multiple data-max-options="1">
+                                            {% for p in data.repo.purpose %}
+                                                <option value="{{p.id}}">{{p.purpose}}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label class="form-control-label">Schedule <span id="schedule_error" class="h5 text-danger"></span></label>
+                                        <input id="schedule" name="schedule" type=text class="form-control">
+                                    </div>
+
+                                    <p class="h5 text-default">Available Schedules: </p>
+                                    {% for i in data.repo.faculty.consultations %}
+                                        <p class="h5 text-default">{{i.schedule.day}} {{i.schedule.time}}</p>
+                                    {% endfor %}
+                                    
                                     <div class="text-center">
                                         <a href="/common/faculty/{{data.faculty_id}}" class="btn btn-primary my-4">BACK</a>
                                         <button type="submit" class="btn btn-primary my-4">SUBMIT</button>
@@ -244,6 +251,12 @@
     <script src='/static/argon/vendor/jquery.scrollbar/jquery.scrollbar.min.js'></script>
     <script src='/static/argon/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js'></script>
     <script src='/static/argon/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+      integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
 
     <!-- Argon JS -->
     <script src='/static/argon/js/argon.min.js'></script>
@@ -251,23 +264,46 @@
     <!-- Select -->
     <script src="/static/js/bootstrap-select.min.js"></script>
 
+    <!-- Backend JS -->
+    <script src="/static/js/core.js"></script>
+    
     <script>
         
-        {% if data.input.first_name %}
-            $('#first_name').val('{{data.input.first_name}}')
-        {% endif %}
-        {% if data.input.last_name %}
-            $('#last_name').val('{{data.input.last_name}}')
-        {% endif %}
-        {% if data.input.phone %}
-            $('#phone').val('{{data.input.phone}}')
-        {% endif %}
-        {% if data.input.email %}
-            $('#email').val('{{data.input.email}}')
-        {% endif %}
-        {% if data.input.password %}
-            $('#password').val('{{data.input.password}}')
-        {% endif %}
+        // {% if data.input.first_name %}
+        //     $('#first_name').val('{{data.input.first_name}}')
+        // {% endif %}
+        // {% if data.input.last_name %}
+        //     $('#last_name').val('{{data.input.last_name}}')
+        // {% endif %}
+        // {% if data.input.phone %}
+        //     $('#phone').val('{{data.input.phone}}')
+        // {% endif %}
+        // {% if data.input.email %}
+        //     $('#email').val('{{data.input.email}}')
+        // {% endif %}
+        // {% if data.input.password %}
+        //     $('#password').val('{{data.input.password}}')
+        // {% endif %}
+
+        schedules = []
+        Controller.GET('/api/account/get/consultations/{{data.repo.faculty.id}}').done(function(result) {
+            result.forEach(i => {
+                schedules.push(i.day)
+            });
+            days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            $("#schedule").datepicker({
+                todayHighlight: true,
+                format: 'yyyy-mm-dd',
+                startDate: new Date(),
+                beforeShowDay: function(date) {
+                    if ($.inArray(days[date.getDay()], schedules) !== -1) {
+                        return { enabled: true }
+                    }
+                    else return { enabled: false }
+                }
+            })
+        })
+
 
     </script>
 

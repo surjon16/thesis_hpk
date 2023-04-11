@@ -5,6 +5,7 @@ from data.repo      import Repository
 from data.schemas   import RegisterAccountSchema, RegisterStudentAccountSchema
 from datetime       import datetime, timedelta
 from functools      import wraps
+from werkzeug.utils import secure_filename
 import dateutil.parser as parser
 
 # ===============================================================
@@ -12,6 +13,13 @@ import dateutil.parser as parser
 # ===============================================================
 
 app.jinja_env.filters['zip'] = zip
+
+@app.template_filter('day_of_week')
+def _jinja2_filter_datetime(date, fmt=None):
+    date = parser.parse(date)
+    native = date.replace(tzinfo=None)
+    format='%A, %B %d, %Y'
+    return native.strftime(format)
 
 @app.template_filter('strfdate')
 def _jinja2_filter_datetime(date, fmt=None):
@@ -135,7 +143,6 @@ def window():
 def faculty(id):
     response = {
         'account'       : Repository.readAccount(id),
-        'consultations' : Repository.readAccountConstultations(id),
     }
     return render_template('common/faculty.html', data=response)
 
@@ -149,6 +156,7 @@ def wave(id, faculty_id):
     response = {
         'purpose'   : Repository.readAllPurpose(),
         'students'  : Repository.readStudents(),
+        'faculty'   : Repository.readAccount(faculty_id),
     }
     return render_template('common/wave.html', data={'errors':[], 'input': [], 'id': id, 'faculty_id': faculty_id, 'repo': response})
 
@@ -170,6 +178,14 @@ def faculty_dashboard():
         'active'    : Repository.readActive()
     }
     return render_template('faculty/dashboard.html', data=response)
+
+@app.route('/faculty/appointments')
+@login_required
+def faculty_upcoming():
+    response = {
+        'upcoming'  : Repository.readUpcoming()
+    }
+    return render_template('faculty/appointments.html', data=response)
 
 @app.route('/faculty/consultation')
 @login_required
@@ -265,3 +281,20 @@ def settings():
         'status'    : Repository.readAllStatus()
     }
     return render_template('admin/settings.html', data=response)
+
+# ====================================================================================
+
+def redirect_url(default='index'):
+    return request.args.get('next') or \
+           request.referrer or \
+           url_for(default)
+
+@app.route('/uploader', methods = ['POST'])
+def uploader_file():
+    
+    f = request.files['file']
+    filename = 'img/'+secure_filename(f.filename)
+    f.save('application/static/'+filename)
+    Repository.updatePhoto(request.form, filename)
+
+    return redirect(redirect_url())

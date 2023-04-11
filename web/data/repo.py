@@ -95,8 +95,7 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
         )
         db.session.add(account)
 
-        # 5 faculties
-        
+        # faculties
         account = Accounts(
             first_name  = 'Arlene',
             middle_name = '',
@@ -564,8 +563,13 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
         )
         db.session.add(consultation)
         
-        # create queueing
-                    
         db.session.commit()
 
+        return True
+    
+    def drop():
+
+        db.drop_all()
+        db.create_all()
+    
         return True

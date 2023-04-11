@@ -100,7 +100,7 @@
                             <div class="row">
                                 {% for i in data.faculties %}
                                     <div class="col-2 p-2 text-right border">
-                                        <h2 class="display-5">{{i.first_name|first}}. {{i.last_name}}</h2>
+                                        <h2 class="display-5">{{i.last_name|upper}}</h2>
                                     </div>
                                     <div class="col-2 p-2 text-left border-cell">
                                         <h2 class="display-5" id="call-{{i.id}}">--</h2>
@@ -135,7 +135,7 @@
             
             Controller.GET('/api/appointment/get/window_data').done(function(result) {
                 console.log(result)
-                if (result.calls.length > 0) $('#current_call').html(result.calls[0].priority)
+                if (result.calls.length > 0) $('#current_call').html(result.calls[0].faculty_name + ' ' + result.calls[0].priority)
                 else $('#current_call').html('--')
                 
                 $('[id^="call-"]').html('--')
@@ -144,7 +144,7 @@
                 })
                 $('#declined').html('')
                 result.declined.forEach(i=> {
-                    $('#declined').append('<div class="col-12 p-2 border text-center"><h2 class="display-5">'+i.priority+'</h2> </div>')
+                    $('#declined').append('<div class="col-12 p-2 border text-center"><h2 class="display-5">'+i.faculty_name + ' ' + i.priority+'</h2> </div>')
                 })
             })
 

@@ -21,4 +21,3 @@ class QueuesRepo:
         db.session.commit()
 
         return True
-

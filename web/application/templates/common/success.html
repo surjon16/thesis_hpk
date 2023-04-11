@@ -46,7 +46,8 @@
             <h1 class="text-02">You waived successfully!</h1>
             <h1 class="text-danger display-2"> {{data}} </h1>
             <h1 class="text-02">Please wait for your turn to be called.</h1>
-            <h1 class="text-02">Redirecting in <span id="counter">5</span></h1>
+            <h1 class="text-02">Redirecting in <span id="counter">30</span></h1>
+            <h1 class="text-02">Tap <a href="/"><u>here</u></a> to exit.</h1>
         </div>
     </div>
 
@@ -82,7 +83,7 @@
         }
 
         delay   = 1000
-        counter = 5
+        counter = 30
         setInterval(function() {
             counter -= 1
             if(counter==0) location.href = "/"

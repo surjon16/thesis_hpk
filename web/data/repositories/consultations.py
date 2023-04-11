@@ -16,8 +16,8 @@ class ConsultationsRepo:
         return Consultations.query.filter_by(id=id).first()
 
     def readAccountConstultations(id):
-        return Consultations.query.filter_by(account_id=id).all()
-
+        return Consultations.query.filter_by(account_id=id).group_by(Consultations.day).all()
+    
     def upsertConsultation(request):
 
         data = Consultations.query.filter_by(id=request['id']).first()

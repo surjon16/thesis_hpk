@@ -80,6 +80,19 @@ class AccountsRepo:
         db.session.commit()
         return True
 
+    def updatePhoto(request, file):
+        
+        data = Accounts.query.filter_by(id=request['photo']).first()
+        if request['target'] == "1":
+            data.image_profile = file
+            db.session.commit()
+        
+        if request['target'] == "2":
+            data.image_location = file
+            db.session.commit()
+        
+        return data
+        
     def upsertAccount(request):
 
         data = Accounts.query.filter_by(id=request['id']).first()

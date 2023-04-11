@@ -57,11 +57,25 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal-floor">
+        <div class="modal-dialog">
+            <div class="modal-content card bg-secondary shadow">
+                <div class="modal-header card-header bg-white border-0">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body card-body">
+                    <img src="{{url_for('static', filename=data.account.image_location)}}" alt="" class="img-fluid">
+                    <button type="button" class="btn btn-lg btn-primary text-white d-block w-100 my-3" data-dismiss="modal">BACK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-dark bg-01" id="sidenav-main">
         <div class="scrollbar-inner">
             <!-- Brand -->
             <div class="sidenav-header align-items-center mt-5 ">
-                <img class="img-fluid p-3" src={{url_for('static', filename='img/no-photo.jpg')}} />
+                <img class="img-fluid p-3" src={{url_for('static', filename=data.account.image_profile)}} />
                 <p class="display-3 text-01">Contact</p>
                 <p class="text-dark"><b><i class="fas fa-phone"></i> {{data.account.phone}}</b></p>
                 <p class="text-dark"><b><i class="fas fa-envelope"></i> {{data.account.email}}</b></p>
@@ -107,7 +121,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for consultation in data.consultations %}
+                                        {% for consultation in data.account.consultations %}
                                             <tr id='consultation-{{consultation.id}}' data-id={{consultation.id}}>
                                                 <th scope="row">
                                                     {{consultation.day}}
@@ -128,7 +142,7 @@
                             </div>
                             <div class="card-footer border-1 d-flex justify-content-end">
                                 <a href="/" class="btn btn-lg btn-primary text-white">BACK</a>
-                                <a href="/common/floor-plan" class="btn btn-lg btn-primary text-white">FLOOR PLAN</a>
+                                <button type="button" class="btn btn-lg btn-primary text-white" onclick="floor_plan()">FLOOR PLAN</button>
                                 <button type="button" class="btn btn-lg btn-primary text-white" onclick="wave({{data.account.id}})">WAVE</button>
                             </div>
                         </div>
@@ -171,49 +185,35 @@
         }
         
         var modal = '#modal-default'
+        var floor = '#modal-floor'
         
         function wave(id) {
 
-            Controller.GET('/api/account/get/status/'+id).done(function(result) {
+            // Controller.GET('/api/account/get/status/'+id).done(function(result) {
                 
-                if (result) {
+            //     if (result) {
                     $(modal).modal({ 
                         "backdrop"  : "static",
                         "keyboard"  : true,
                         "show"      : true
                     })
-                }
-                else {
-                    bootbox.alert("<h3>The instructor is not available as of the moment.</h3><h3>Please try again later.</h3>")
-                }
+            //     }
+            //     else {
+            //         bootbox.alert("<h3>The instructor is not available as of the moment.</h3><h3>Please try again later.</h3>")
+            //     }
                 
-            })
+            // })
 
 
         }
 
-        
-        setInterval(function() {
-            
-            Controller.GET('/api/account/get/all').done(function(result) {
-                result.forEach(function(i){
-                    if(i.status_id == 5) {
-                        if($('#badge-'+i.id).hasClass("badge-danger")) {
-                            $('#badge-'+i.id).toggleClass("badge-danger")
-                            $('#badge-'+i.id).toggleClass("badge-success")
-                        }
-                    }
-                    else {
-                        if($('#badge-'+i.id).hasClass("badge-success")) {
-                            $('#badge-'+i.id).toggleClass("badge-danger")
-                            $('#badge-'+i.id).toggleClass("badge-success")
-                        }
-                    }
-                })
+        function floor_plan() {
+            $(floor).modal({ 
+                "backdrop"  : "static",
+                "keyboard"  : true,
+                "show"      : true
             })
-
-        }, 5000);
-    
+        }
 
     </script>
     

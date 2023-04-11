@@ -29,6 +29,10 @@ class Accounts(UserMixin, db.Model):
     email           = db.Column(db.String(100))
     password_hash   = db.Column(db.String(128))
 
+    # images
+    image_profile   = db.Column(db.String(128), default="img/no-photo.jpg")
+    image_location  = db.Column(db.String(128), default="img/no-photo.jpg")
+
     # timestamps
     login_date  = db.Column(db.DateTime, default=db.func.current_timestamp())
     created_at  = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -79,6 +83,8 @@ class Accounts(UserMixin, db.Model):
             'role_id'       : self.role_id,
             'role'          : self.role.role,
             'status_id'     : self.status_id,
+            'profile'       : self.image_profile,
+            'location'      : self.image_location,
             'status'        : self.status.status
         }
 
@@ -101,8 +107,8 @@ class Consultations(db.Model):
     @hybrid_property
     def schedule(self):
         return {
-            'day': self.time_start.strftime('%A'), 
-            'time': self.time_start.strftime('%I:%M%p') + '-' + self.time_end.strftime('%I:%M%p'),
+            'day': self.day, 
+            'time': self.time_start.strftime('%I:%M%p') + ' - ' + self.time_end.strftime('%I:%M%p'),
         }
     
     def serialize(self):
@@ -123,6 +129,7 @@ class Appointments(db.Model):
     id          = db.Column(db.Integer, primary_key=True)
     priority    = db.Column(db.String(15))
     remarks     = db.Column(db.String(100))
+    schedule    = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     # timestamps
     created_at  = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -144,6 +151,7 @@ class Appointments(db.Model):
             'purpose'       : self.purpose.purpose,
             'priority'      : self.priority,
             'faculty'       : self.account_id,
+            'faculty_name'  : self.faculty.last_name.upper(),
             'created_at'    : self.created_at,
             'updated_at'    : self.updated_at,
             'status'        : self.status.status,

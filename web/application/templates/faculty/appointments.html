@@ -1,0 +1,91 @@
+{% extends 'faculty/shared/layout.html' %}
+{% block title %}
+    Appointments
+{% endblock %}
+
+{% block css %}{% endblock %}
+{% block modal %}{% endblock %}
+
+{% block content %}
+<div class="main-content" id="panel">
+
+    <!-- Header -->
+    <div class="header pb-6">
+        <div class="container-fluid">
+            <div class="header-body">
+                <div class="row align-items-center py-4">
+                    <div class="col-lg-6 col-7 d-flex align-items-center">
+                        <p class="display-2 text-default d-inline-block mb-0 mr-4">Upcoming Appointments</p>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>
+
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col text-left d-flex justify-content-start align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">SCHEDULE</th>
+                                    <th scope="col">PRIORITY</th>
+                                    <th scope="col">ID NUMBER</th>
+                                    <th scope="col">NAME</th>
+                                    <th scope="col">PURPOSE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in data.upcoming | selectattr("account_id", "equalto", current_user.id) | list %}
+                                    <tr>
+                                        <td>
+                                            {{i.schedule.strftime('%h %d %Y')|day_of_week}}
+                                        </td>
+                                        <td>
+                                            {{i.priority}}
+                                        </td>
+                                        <td>
+                                            {% for x in i.participants_list %}
+                                                {% if x.id_number == None %}
+                                                    {{x.role.role|capitalize}}
+                                                {% else %}
+                                                    {{x.id_number}}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% for x in i.participants_list %}
+                                                {{x.last_name}}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {{i.purpose.purpose}}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    
+    setSideBar('#menu-appointments')
+
+</script>
+{% endblock %}
