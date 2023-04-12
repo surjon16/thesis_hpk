@@ -64,12 +64,16 @@
                                         </td>
                                         <td>
                                             {% for x in i.participants_list %}
-                                                <h3>{{x.id_number}}</h3>
+                                                {% if x.id_number == None %}
+                                                    <h3>{{x.role.role|capitalize}}</h3>
+                                                {% else %}
+                                                    <h3>{{x.id_number}}</h3>
+                                                {% endif %}
                                             {% endfor %}
                                         </td>
                                         <td>
                                             {% for x in i.participants_list %}
-                                                <h3>{{x.last_name}} ({{x.role.role|capitalize}})</h3>
+                                                <h3>{{x.first_name}} {{x.last_name}} ({{x.role.role|capitalize}})</h3>
                                             {% endfor %}
                                         </td>
                                         <td>
