@@ -7,7 +7,7 @@ from data.repositories.roles            import RolesRepo
 from data.repositories.status           import StatusRepo
 
 from data                               import db
-from data.models                        import Roles, Status, Accounts, Purpose, Consultations, Appointments
+from data.models                        import Roles, Status, Accounts, Purpose, Consultations
 
 class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo, QueuesRepo, RolesRepo, StatusRepo ):
 

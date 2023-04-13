@@ -22,6 +22,7 @@ class Accounts(UserMixin, db.Model):
     phone       = db.Column(db.String(15))
     birth_date  = db.Column(db.DateTime)
     address     = db.Column(db.String(100))
+    inquiries   = db.Column(db.Integer)
     # position    = db.Column(db.String(100))
     # objective   = db.Column(db.String(100))
 
@@ -83,6 +84,7 @@ class Accounts(UserMixin, db.Model):
             'role_id'       : self.role_id,
             'role'          : self.role.role,
             'status_id'     : self.status_id,
+            'inquiries'     : self.inquiries,
             'profile'       : self.image_profile,
             'location'      : self.image_location,
             'status'        : self.status.status

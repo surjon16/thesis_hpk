@@ -8,10 +8,7 @@ class CreateStudentAccountSchema(Schema):
     id_number   = fields.Str(required=True)
     first_name  = fields.Str(required=True)
     last_name   = fields.Str(required=True)
-    phone       = fields.Str(required=True)
-    email       = fields.Email(required=True)
     address     = fields.Str(required=True)
-    password    = fields.Str(required=True)
 
     @validates('id_number')
     def validate_id_number(self, value):
@@ -27,11 +24,6 @@ class CreateStudentAccountSchema(Schema):
     def validate_last_name(self, value):
         if value == '' or value is None:
             raise ValidationError('Please provide your last name.')
-
-    @validates('password')
-    def validate_password(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please provide a password.')
 
 class UpdateStudentAccountSchema(Schema):
     

@@ -97,7 +97,45 @@
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h3 class="mb-0">Accounts List</h3>
+                                <h3 class="mb-0">Faculties List</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Full Name</th>
+                                    <th scope="col">Account Type</th>
+                                    <th scope="col">Inquiry Attempts</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for account in data.accounts|selectattr("role_id", "equalto", 2) %}
+                                <tr>
+                                    <th scope="row">
+                                        {{account.first_name}} {{account.last_name}}
+                                    </th>
+                                    <td>
+                                        {{account.role.role}}
+                                    </td>
+                                    <td>
+                                        {{account.inquiries}}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="mb-0">Admin Accounts List</h3>
                             </div>
                         </div>
                     </div>
@@ -111,8 +149,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for account in data.accounts %}
-                                {% if account.role_id < 3%}
+                                {% for account in data.accounts|selectattr("role_id", "equalto", 1) %}
                                 <tr>
                                     <th scope="row">
                                         {{account.first_name}} {{account.last_name}}
@@ -121,7 +158,80 @@
                                         {{account.role.role}}
                                     </td>
                                 </tr>
-                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="mb-0">Students List</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Full Name</th>
+                                    <th scope="col">ID Number</th>
+                                    <th scope="col">Account Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for account in data.accounts|selectattr("role_id", "equalto", 3) %}
+                                <tr>
+                                    <th scope="row">
+                                        {{account.first_name}} {{account.last_name}}
+                                    </th>
+                                    <td>
+                                        {{account.id_number}}
+                                    </td>
+                                    <td>
+                                        {{account.role.role}}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="mb-0">Guests List</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Full Name</th>
+                                    <th scope="col">Account Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for account in data.accounts|selectattr("role_id", "equalto", 4) %}
+                                <tr>
+                                    <th scope="row">
+                                        {{account.first_name}} {{account.last_name}}
+                                    </th>
+                                    <td>
+                                        {{account.role.role}}
+                                    </td>
+                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>

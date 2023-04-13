@@ -93,6 +93,16 @@ class AccountsRepo:
         
         return data
         
+    def updateInquiries(id):
+        
+        data = Accounts.query.filter_by(id=id).first()
+        if data.inquiries is None: data.inquiries = 1
+        else: data.inquiries += 1
+
+        db.session.commit()
+        
+        return data
+        
     def upsertAccount(request):
 
         data = Accounts.query.filter_by(id=request['id']).first()
@@ -107,6 +117,7 @@ class AccountsRepo:
 
             if request['password']:
                 data = Accounts(
+                    id_number   = request['id_number'],
                     first_name  = request['first_name'],
                     middle_name = request['middle_name'],
                     last_name   = request['last_name'],
@@ -121,6 +132,7 @@ class AccountsRepo:
                 )
             else:
                 data = Accounts(
+                    id_number   = request['id_number'],
                     first_name  = request['first_name'],
                     middle_name = request['middle_name'],
                     last_name   = request['last_name'],
@@ -145,6 +157,7 @@ class AccountsRepo:
                 
         else:
 
+            data.id_number   = request['id_number']
             data.first_name  = request['first_name']
             data.middle_name = request['middle_name']
             data.last_name   = request['last_name']

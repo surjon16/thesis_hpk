@@ -152,6 +152,8 @@ def wave(id, faculty_id):
     if request.method == 'POST':
         response = Repository.setAppointment(id, faculty_id, request.form.to_dict(flat=False))
         return render_template('common/success.html', data=response)
+    
+    Repository.updateInquiries(faculty_id)
         
     response = {
         'purpose'   : Repository.readAllPurpose(),
