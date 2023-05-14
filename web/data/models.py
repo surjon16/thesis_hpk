@@ -23,8 +23,8 @@ class Accounts(UserMixin, db.Model):
     birth_date  = db.Column(db.DateTime)
     address     = db.Column(db.String(100))
     inquiries   = db.Column(db.Integer)
-    # position    = db.Column(db.String(100))
-    # objective   = db.Column(db.String(100))
+    position    = db.Column(db.String(100))
+    objective   = db.Column(db.String(100))
 
     # login
     email           = db.Column(db.String(100))
@@ -81,6 +81,8 @@ class Accounts(UserMixin, db.Model):
             'created_at'    : self.created_at,
             'updated_at'    : self.updated_at,
             'address'       : self.address,
+            'position'      : self.position,
+            'objective'     : self.objective,
             'role_id'       : self.role_id,
             'role'          : self.role.role,
             'status_id'     : self.status_id,
