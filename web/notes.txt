@@ -20,3 +20,22 @@ SET SCHEDULE    : WAITING > ON GOING > DONE (REMARKS: SPECIFIC REASON / NOT RESO
                 : WAITING > DECLINED (REMARKS: SKIPPED / NEEDS RESCHEDULE / APPEARED AS OFFLINE OR BUSY)
 
 
+================================================================
+
+TOUCH PANEL
+- where can the faculty type for their objectives?
+- Profile picture has no fixed size. no same exact size. Also on the floorplan dili uniform ilang sizes
+- Please widen the left side bar(yellow)
+
+ADMIN
+- how can the admin extract data from system?
+- Daddy said change the label "Dashboard". "Overview" ang akong gaka think na ipuli sir.
+
+FACULTY
+- na wala ang display sa profile picture sa side bar
+- where to edit faculty position?
+- on the upper right small picture, can we make it round when picture is being display
+
+MONITOR
+- "Calling" can be change to "Declining" when a sudent/guest is declined.
+- sa "Declined" pila ang maximum number na ma display?
