@@ -16,6 +16,13 @@
 
     <style>
 
+        #sidenav-main {
+            min-width: 400px;
+        }
+        #panel {
+            margin-left: 400px;
+        }
+
         .bg-01 {
             background-color: #FEFADF!important;
         }
@@ -75,7 +82,7 @@
         <div class="scrollbar-inner">
             <!-- Brand -->
             <div class="sidenav-header align-items-center mt-5 ">
-                <img class="img-fluid p-3" src={{url_for('static', filename=data.account.image_profile)}} style="max-width: 200px;"/>
+                <img class="img-fluid" src={{url_for('static', filename=data.account.image_profile)}} style="max-width: 300px;"/>
                 <p class="display-3 text-01">Contact</p>
                 <p class="text-dark"><b><i class="fas fa-phone"></i> {{data.account.phone}}</b></p>
                 <p class="text-dark"><b><i class="fas fa-envelope"></i> {{data.account.email}}</b></p>
@@ -83,74 +90,70 @@
         </div>
     </nav>
       
-    <div class="main-content">
-               
-        <div class="main-content" id="panel">
-            <!-- Header -->
-            <div class="header pb-6">
-                <div class="container-fluid">
-                    <div class="header-body">
-                        <div class="row align-items-center py-4">
-                            <div class="col-lg-6 col-7">
-                                <p class="display-2 text-02 d-inline-block mb-0">{{data.account.first_name}} {{data.account.middle_name}} {{data.account.last_name}}</p>
-                                <p class="display-3 text-03 mb-0">{{data.account.position}}</p>
-                                <p class="display-4 text-dark mb-0">{{data.account.objective}}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Page content -->
-            <div class="container-fluid mt--6">
-                <div class="row">
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-header border-1">
-                                <h2 class="card-title margin-left-auto">Consultation Days / Hours</h2>
-                            </div>
-                            <div class="table-responsive">
-                                <!-- Projects table -->
-                                <table class="table align-items-center table-flush">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th scope="col">Day</th>
-                                            <th scope="col">From</th>
-                                            <th scope="col">To</th>
-                                            <th scope="col">Room</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for consultation in data.account.consultations %}
-                                            <tr id='consultation-{{consultation.id}}' data-id={{consultation.id}}>
-                                                <th scope="row">
-                                                    {{consultation.day}}
-                                                </th>
-                                                <td>
-                                                    {{consultation.time_start.strftime('%I:%M %p')}}
-                                                </td>
-                                                <td>
-                                                    {{consultation.time_end.strftime('%I:%M %p')}}
-                                                </td>
-                                                <td>
-                                                    {{consultation.room}}
-                                                </td>
-                                            </tr>                                            
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="card-footer border-1 d-flex justify-content-end">
-                                <a href="/" class="btn btn-lg btn-primary text-white">BACK</a>
-                                <button type="button" class="btn btn-lg btn-primary text-white" onclick="floor_plan()">FLOOR PLAN</button>
-                                <button type="button" class="btn btn-lg btn-primary text-white" onclick="wave({{data.account.id}})">WAVE</button>
-                            </div>
+    <div class="main-content" id="panel">
+        <!-- Header -->
+        <div class="header pb-6">
+            <div class="container-fluid">
+                <div class="header-body">
+                    <div class="row align-items-center py-4">
+                        <div class="col-lg-6 col-7">
+                            <p class="display-2 text-02 d-inline-block mb-0">{{data.account.first_name}} {{data.account.middle_name}} {{data.account.last_name}}</p>
+                            <p class="display-3 text-03 mb-0">{{data.account.position}}</p>
+                            <p class="display-4 text-dark mb-0">{{data.account.objective}}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Page content -->
+        <div class="container-fluid mt--6">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header border-1">
+                            <h2 class="card-title margin-left-auto">Consultation Days / Hours</h2>
+                        </div>
+                        <div class="table-responsive">
+                            <!-- Projects table -->
+                            <table class="table align-items-center table-flush">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Day</th>
+                                        <th scope="col">From</th>
+                                        <th scope="col">To</th>
+                                        <th scope="col">Room</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for consultation in data.account.consultations %}
+                                        <tr id='consultation-{{consultation.id}}' data-id={{consultation.id}}>
+                                            <th scope="row">
+                                                {{consultation.day}}
+                                            </th>
+                                            <td>
+                                                {{consultation.time_start.strftime('%I:%M %p')}}
+                                            </td>
+                                            <td>
+                                                {{consultation.time_end.strftime('%I:%M %p')}}
+                                            </td>
+                                            <td>
+                                                {{consultation.room}}
+                                            </td>
+                                        </tr>                                            
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer border-1 d-flex justify-content-end">
+                            <a href="/" class="btn btn-lg btn-primary text-white">BACK</a>
+                            <button type="button" class="btn btn-lg btn-primary text-white" onclick="floor_plan()">FLOOR PLAN</button>
+                            <button type="button" class="btn btn-lg btn-primary text-white" onclick="wave({{data.account.id}})">WAVE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Argon Scripts -->

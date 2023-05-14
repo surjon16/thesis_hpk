@@ -31,7 +31,7 @@ class AppointmentsRepo:
         return Appointments.query.filter(and_(Appointments.status_id==4, func.date(Appointments.schedule) > datetime.now().date())).order_by(Appointments.schedule.asc()).order_by(Appointments.id.asc()).all()
 
     def readDeclined():
-        return Appointments.query.filter(and_(Appointments.status_id==2, func.date(Appointments.schedule) == datetime.now().date())).order_by(Appointments.updated_at.desc()).limit(5).all()
+        return Appointments.query.filter(and_(Appointments.status_id==2, func.date(Appointments.schedule) == datetime.now().date())).order_by(Appointments.updated_at.desc()).limit(10).all()
 
     def updateAppointmentStatus(request):
 
