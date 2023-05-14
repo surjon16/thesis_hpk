@@ -71,7 +71,7 @@
         <div class="header bg-02 py-4">
             <div class="container-fluid">
                 <div class="header-body text-center">
-                    <p class="display-1 fs-02">CALLING</p>
+                    <p id="current_status" class="display-1 fs-02">--</p>
                     <hr class="border border-white border-5 my-0">
                     <p id="current_call" class="display-1 fs-01 text-danger">--</p>
                 </div>
@@ -135,8 +135,14 @@
             
             Controller.GET('/api/appointment/get/window_data').done(function(result) {
                 console.log(result)
-                if (result.calls.length > 0) $('#current_call').html(result.calls[0].faculty_name + ' ' + result.calls[0].priority)
-                else $('#current_call').html('--')
+                if (result.calls.length > 0) {
+                    $('#current_status').html(result.calls[0].faculty_name + ' ' + result.calls[0].status)
+                    $('#current_call').html(result.calls[0].faculty_name + ' ' + result.calls[0].priority)
+                }
+                else {
+                    $('#current_status').html('--')
+                    $('#current_call').html('--')
+                }
                 
                 $('[id^="call-"]').html('--')
                 result.calls.forEach(i => {
