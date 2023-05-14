@@ -64,7 +64,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body card-body">
-                    <img src="{{url_for('static', filename=data.account.image_location)}}" alt="" class="img-fluid">
+                    <img src="{{url_for('static', filename=data.account.image_location)}}" alt="" style="min-width: 100%;">
                     <button type="button" class="btn btn-lg btn-primary text-white d-block w-100 my-3" data-dismiss="modal">BACK</button>
                 </div>
             </div>
@@ -75,7 +75,7 @@
         <div class="scrollbar-inner">
             <!-- Brand -->
             <div class="sidenav-header align-items-center mt-5 ">
-                <img class="img-fluid p-3" src={{url_for('static', filename=data.account.image_profile)}} />
+                <img class="img-fluid p-3" src={{url_for('static', filename=data.account.image_profile)}} style="max-width: 200px;"/>
                 <p class="display-3 text-01">Contact</p>
                 <p class="text-dark"><b><i class="fas fa-phone"></i> {{data.account.phone}}</b></p>
                 <p class="text-dark"><b><i class="fas fa-envelope"></i> {{data.account.email}}</b></p>
