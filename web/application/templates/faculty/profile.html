@@ -93,6 +93,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-control-label">Position <span id="position_error" class="h5 text-danger"></span></label>
+                                <input id="position" name="position" type="text" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-control-label">Objective <span id="objective_error" class="h5 text-danger"></span></label>
+                                <input id="objective" name="objective" type="text" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
@@ -164,6 +180,8 @@
                                     <th scope="col">Email</th>
                                     <th scope="col">Phone</th>
                                     <th scope="col">Address</th>
+                                    <th scope="col">Position</th>
+                                    <th scope="col">Objective</th>
                                     <th scope="col">Account Type</th>
                                     <th scope="col">Floor Plan</th>
                                     <th scope="col" class="text-right">Action</th>
@@ -185,6 +203,12 @@
                                     </td>
                                     <td>
                                         {{data.address}}
+                                    </td>
+                                    <td>
+                                        {{data.position}}
+                                    </td>
+                                    <td>
+                                        {{data.objective}}
                                     </td>
                                     <td>
                                         {{data.role.role}}
@@ -223,6 +247,8 @@
         $('#email_error').html('')
         $('#password_error').html('')
         $('#address_error').html('')
+        $('#position_error').html('')
+        $('#objective_error').html('')
 
         $('#id').val('-1')
         $('#first_name').val('')
@@ -237,6 +263,8 @@
         $('#password').val('')
         $('#birth_date').val('')
         $('#address').val('')
+        $('#position').val('')
+        $('#objective').val('')
         $('#role').val('')
 
         $(modal).modal({ 
@@ -255,6 +283,8 @@
         $('#email_error').html('')
         $('#password_error').html('')
         $('#address_error').html('')
+        $('#position_error').html('')
+        $('#objective_error').html('')
 
         data = {
             'id'            : $('#id').val(),
@@ -268,7 +298,9 @@
             'gender'        : $('#gender').val(),
             'password'      : $('#password').val(),
             'birth_date'    : $('#birth_date').val(),
-            'address'       : $('#address').val()
+            'address'       : $('#address').val(),
+            'position'      : $('#position').val(),
+            'objective'     : $('#objective').val()
         }
 
         Controller.POST('/api/account/upsert', data).done(function(result) {
@@ -285,6 +317,8 @@
                 if(result.errors.email) $('#email_error').html(result.errors.email)
                 if(result.errors.password) $('#password_error').html(result.errors.password)
                 if(result.errors.address) $('#address_error').html(result.errors.address)
+                if(result.errors.position) $('#position_error').html(result.errors.position)
+                if(result.errors.objective) $('#objective_error').html(result.errors.objective)
 
             }
         })
@@ -299,6 +333,8 @@
         $('#email_error').html('')
         $('#password_error').html('')
         $('#address_error').html('')
+        $('#position_error').html('')
+        $('#objective_error').html('')
 
         id = e.parentNode.parentNode.dataset.id
         
@@ -317,7 +353,8 @@
             $("#civil").selectpicker('val', result.civil)
             $('#birth_date').val(result.birth_date)
             $('#address').val(result.address)
-            $('#occupation').val(result.occupation)
+            $('#position').val(result.position)
+            $('#objective').val(result.objective)
 
             $(modal).modal({
                 "backdrop"  : "static",

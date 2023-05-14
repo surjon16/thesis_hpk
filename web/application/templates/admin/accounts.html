@@ -207,6 +207,8 @@ Accounts
         $('#email_error').html('')
         $('#password_error').html('')
         $('#address_error').html('')
+        $('#position_error').html('')
+        $('#objective_error').html('')
 
         $('#id').val('-1')
         $('#first_name').val('')
@@ -221,6 +223,8 @@ Accounts
         $('#password').val('')
         $('#birth_date').val('')
         $('#address').val('')
+        $('#position').val('')
+        $('#objective').val('')
         $('#role').val('')
 
         $(modal).modal({ 
@@ -240,6 +244,8 @@ Accounts
         $('#email_error').html('')
         $('#password_error').html('')
         $('#address_error').html('')
+        $('#position_error').html('')
+        $('#objective_error').html('')
 
         data = {
             'id'            : $('#id').val(),
@@ -253,7 +259,9 @@ Accounts
             'gender'        : $('#gender').val(),
             'password'      : $('#password').val(),
             'birth_date'    : $('#birth_date').val(),
-            'address'       : $('#address').val()
+            'address'       : $('#address').val(),
+            'position'      : $('#position').val(),
+            'objective'     : $('#objective').val()
         }
 
         Controller.POST('/api/account/upsert', data).done(function(result) {
@@ -282,6 +290,8 @@ Accounts
                 if(result.errors.email) $('#email_error').html(result.errors.email)
                 if(result.errors.password) $('#password_error').html(result.errors.password)
                 if(result.errors.address) $('#address_error').html(result.errors.address)
+                if(result.errors.postition) $('#postition_error').html(result.errors.postition)
+                if(result.errors.objective) $('#objective_error').html(result.errors.objective)
 
             }
         })
@@ -297,6 +307,8 @@ Accounts
         $('#email_error').html('')
         $('#password_error').html('')
         $('#address_error').html('')
+        $('#position_error').html('')
+        $('#objective_error').html('')
 
         id = e.parentNode.parentNode.dataset.id
         
@@ -316,7 +328,8 @@ Accounts
             $("#civil").selectpicker('val', result.civil)
             $('#birth_date').val(result.birth_date)
             $('#address').val(result.address)
-            $('#occupation').val(result.occupation)
+            $('#position').val(result.position)
+            $('#objective').val(result.objective)
 
             $(modal).modal({
                 "backdrop"  : "static",

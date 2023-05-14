@@ -125,6 +125,8 @@ class AccountsRepo:
                     phone       = request['phone'],
                     birth_date  = birth_date,
                     address     = request['address'],
+                    position    = request['position'],
+                    objective   = request['objective'],
                     email       = request['email'],
                     password    = request['password'],
                     role_id     = int(request['role_id']),
@@ -140,6 +142,8 @@ class AccountsRepo:
                     phone       = request['phone'],
                     birth_date  = birth_date,
                     address     = request['address'],
+                    position    = request['position'],
+                    objective   = request['objective'],
                     email       = request['email'],
                     role_id     = int(request['role_id']),
                     status_id   = 5
@@ -165,6 +169,8 @@ class AccountsRepo:
             data.phone       = request['phone']
             data.birth_date  = birth_date
             data.address     = request['address']
+            data.position    = request['position']
+            data.objective   = request['objective']
             data.email       = request['email']
             data.role_id     = int(request['role_id'])
 
