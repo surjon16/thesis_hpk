@@ -136,7 +136,8 @@
             Controller.GET('/api/appointment/get/window_data').done(function(result) {
                 console.log(result)
                 if (result.calls.length > 0) {
-                    $('#current_status').html(result.calls[0].faculty_name + ' ' + result.calls[0].status)
+                    if(result.calls[0].status == 'Declined') $('#current_status').html('Declining')
+                    else $('#current_status').html('Calling')
                     $('#current_call').html(result.calls[0].faculty_name + ' ' + result.calls[0].priority)
                 }
                 else {
