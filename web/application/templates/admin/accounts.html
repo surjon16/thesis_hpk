@@ -73,6 +73,22 @@ Accounts
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label class="form-control-label">Position <span style="font-weight: 100">(for non-student)</span> <span id="position_error" class="h5 text-danger"></span></label>
+                                <input id="position" name="position" type="text" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-control-label">Objective <span style="font-weight: 100">(for non-student)</span> <span id="objective_error" class="h5 text-danger"></span></label>
+                                <input id="objective" name="objective" type="text" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label class="form-control-label">Phone <span id="phone_error" class="h5 text-danger"></span></label>
                                 <input id="phone" name="phone" type="text" class="form-control ">
                             </div>
@@ -290,7 +306,7 @@ Accounts
                 if(result.errors.email) $('#email_error').html(result.errors.email)
                 if(result.errors.password) $('#password_error').html(result.errors.password)
                 if(result.errors.address) $('#address_error').html(result.errors.address)
-                if(result.errors.postition) $('#postition_error').html(result.errors.postition)
+                if(result.errors.position) $('#position_error').html(result.errors.position)
                 if(result.errors.objective) $('#objective_error').html(result.errors.objective)
 
             }

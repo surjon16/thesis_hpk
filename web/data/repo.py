@@ -92,7 +92,7 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             image_profile   = 'img/admin.jpg',
             password        = 'admin1234',
             role_id         = 1,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -108,8 +108,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'arlene.baldelovar@ustp.edu.ph',
             image_profile   = 'img/arlene.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -124,8 +125,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'jocelyn.barbosa@ustp.edu.ph',
             image_profile   = 'img/jocelyn.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -139,8 +141,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             address         = '',
             email           = 'jbl.bernardo@ustp.edu.ph',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -155,8 +158,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'geraldine.blanco@ustp.edu.ph',
             image_profile   = 'img/geraldine.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -171,8 +175,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'petalmay.dal@ustp.edu.ph',
             image_profile   = 'img/petalmay.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -187,8 +192,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'mseder@ustp.edu.ph',
             image_profile   = 'img/mseder.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -203,8 +209,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'paul.estrera@ustp.edu.ph',
             image_profile   = 'img/paul.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -219,8 +226,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'rhea.haguisan@ustp.edu.ph',
             image_profile   = 'img/rhea.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -235,8 +243,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'angel.jumawan@ustp.edu.ph',
             image_profile   = 'img/angel.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -251,8 +260,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'junarlandicho@ustp.edu.ph',
             image_profile   = 'img/junarlandicho.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -267,8 +277,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'jomar.llevado@ustp.edu.ph',
             image_profile   = 'img/jomar.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -283,8 +294,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'jun.quinito@ustp.edu.ph',
             image_profile   = 'img/jun.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -299,8 +311,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'lovejhoye.raboy@ustp.edu.ph',
             image_profile   = 'img/lovejhoye.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -315,8 +328,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'jaynoel.rojo@ustp.edu.ph',
             image_profile   = 'img/jaynoel.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -331,8 +345,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'jcvannymill.saledaien@ustp.edu.ph',
             image_profile   = 'img/jcvannymill.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -347,8 +362,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'ulrich.uy@ustp.edu.ph',
             image_profile   = 'img/ulrich.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -363,8 +379,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'charlane.vallar@ustp.edu.ph',
             image_profile   = 'img/charlane.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -379,8 +396,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'vince.calo@ustp.edu.ph',
             image_profile   = 'img/vince.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -395,8 +413,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'maesther.chio@ustp.edu.ph',
             image_profile   = 'img/maesther.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -411,8 +430,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'maricel.esclamado@ustp.edu.ph',
             image_profile   = 'img/maricel.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -427,8 +447,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'jocelyn.garrido@ustp.edu.ph',
             image_profile   = 'img/garrido.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
@@ -443,8 +464,9 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
             email           = 'archie.pachica@ustp.edu.ph',
             image_profile   = 'img/archie.jpg',
             password        = 'admin1234',
+            position        = 'Instructor',
             role_id         = 2,
-            status_id       = 5
+            status_id       = 6
         )
         db.session.add(account)
 
