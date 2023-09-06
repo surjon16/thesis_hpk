@@ -17,10 +17,24 @@
     <style>
 
         #sidenav-main {
-            min-width: 400px;
+            max-width: 200px!important;
         }
-        #panel {
-            margin-left: 400px;
+
+        .navbar-vertical.navbar-expand-xs.fixed-left+.main-content {
+            margin-left: 200px!important;
+        }
+
+        .modal {
+            left: 100px!important;
+        }
+
+        .sidenav {
+            transform: translateX(0px)!important;
+        }
+        
+        .sidenav-header {
+            height: 75%!important;
+            text-align: center!important;
         }
 
         .bg-01 {
@@ -81,11 +95,11 @@
     <nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-dark bg-01" id="sidenav-main">
         <div class="scrollbar-inner">
             <!-- Brand -->
-            <div class="sidenav-header align-items-center mt-5 ">
-                <img class="img-fluid w-100" src={{url_for('static', filename=data.account.image_profile)}} style="max-width: 300px;"/>
-                <p class="display-3 text-01">Contact</p>
-                <p class="text-dark"><b><i class="fas fa-phone"></i> {{data.account.phone}}</b></p>
-                <p class="text-dark"><b><i class="fas fa-envelope"></i> {{data.account.email}}</b></p>
+            <div class="sidenav-header align-items-center mt-3 ">
+                <img class="img-fluid h-50" src={{url_for('static', filename=data.account.image_profile)}} style="max-width: 300px;"/>
+                <p class="display-4 text-01">Contact</p>
+                <h6 class="text-dark"><b><i class="fas fa-phone"></i> {{data.account.phone}}</b></h6>
+                <h6 class="text-dark"><b><i class="fas fa-envelope"></i> {{data.account.email}}</b></h6>
             </div>
         </div>
     </nav>
@@ -96,10 +110,10 @@
             <div class="container-fluid">
                 <div class="header-body">
                     <div class="row align-items-center py-4">
-                        <div class="col-lg-6 col-7">
-                            <p class="display-2 text-02 d-inline-block mb-0">{{data.account.first_name}} {{data.account.middle_name}} {{data.account.last_name}}</p>
-                            <p class="display-3 text-03 mb-0">{{data.account.position}}</p>
-                            <p class="display-4 text-dark mb-0">{{data.account.objective}}</p>
+                        <div class="col">
+                            <p class="display-3 text-02 d-inline-block mb-0">{{data.account.first_name}} {{data.account.middle_name}} {{data.account.last_name}}</p>
+                            <p class="display-4 text-03 mb-0">{{data.account.position}}</p>
+                            <p class="display-5 text-dark mb-0">{{data.account.objective}}</p>
                         </div>
                     </div>
                 </div>
@@ -120,8 +134,7 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th scope="col">Day</th>
-                                        <th scope="col">From</th>
-                                        <th scope="col">To</th>
+                                        <th scope="col">Time</th>
                                         <th scope="col">Room</th>
                                     </tr>
                                 </thead>
@@ -132,10 +145,7 @@
                                                 {{consultation.day}}
                                             </th>
                                             <td>
-                                                {{consultation.time_start.strftime('%I:%M %p')}}
-                                            </td>
-                                            <td>
-                                                {{consultation.time_end.strftime('%I:%M %p')}}
+                                                {{consultation.time_start.strftime('%I:%M %p')}} - {{consultation.time_end.strftime('%I:%M %p')}}
                                             </td>
                                             <td>
                                                 {{consultation.room}}
