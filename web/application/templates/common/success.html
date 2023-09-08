@@ -14,6 +14,15 @@
     <link rel="stylesheet" href='/static/argon/css/argon.min.css' type="text/css">
     <link rel="stylesheet" href='/static/css/bootstrap-select.min.css' type="text/css">
 
+    <!-- ELEMENT STYLES -->
+    <style>
+        .bottom-container {
+            position: absolute;
+            padding: 0!important;
+            bottom: 0;
+        }
+    </style>
+    <!-- TEXT/COLOR STYLES -->
     <style>
 
         .bg-01 {
@@ -37,17 +46,78 @@
         }
 
     </style>
+    <!-- ICON STYLES -->
+    <style>
+        
+        .t5 {
+            max-height: 100px;
+        }
+
+        .t9 {
+            width: 14%;
+        }
+
+        .t12 {
+            width: 10%;
+            height: 5%;
+        }
+
+        .t13 {
+            width: 10%;
+        }
+
+        .t6 {
+            width: 8%;
+        }
+
+        .t8 {
+            width: 17%;
+        }
+
+        .t11 {
+            width: 10%;
+        }
+
+        .t7 {
+            width: 10%;
+        }
+
+        .t4 {
+            width: 9%;
+        }
+
+        .t10 {
+            width: 12%;
+        }
+
+    </style>
 
 </head>
 <body class="bg-01">
   
-    <div class="w-100 vh-100 p-5 d-flex align-items-center">
-        <div class="container text-center">
-            <h1 class="text-02">You waived successfully!</h1>
-            <h1 class="text-danger display-2"> {{data}} </h1>
+    <div class="w-100">
+        <div class="container mt-7 text-center">
+            <h1 class="text-02"><b>You waived successfully!</b></h1>
+            <h1 class="text-danger display-2">
+                <img src="{{url_for('static', filename='/img/touchpanel/T5.png')}}" class="t5"/>
+                <b>{{data}}</b>
+            </h1>
             <h1 class="text-02">Please wait for your turn to be called.</h1>
-            <h1 class="text-02">Redirecting in <span id="counter">30</span></h1>
-            <h1 class="text-02">Tap <a href="/"><u>here</u></a> to exit.</h1>
+            <h3 class="text-02">Redirecting in <span id="counter">30</span> or tap <a href="/"><u>here</u></a> to exit.</h3>
+        </div>
+        
+        <div class="container-fluid bottom-container d-flex justify-content-end align-items-end">
+
+            <img src="{{url_for('static', filename='/img/touchpanel/T9.png')}}" class="t9"/>
+            <img src="{{url_for('static', filename='/img/touchpanel/T12.png')}}" class="t12"/>
+            <img src="{{url_for('static', filename='/img/touchpanel/T13.png')}}" class="t13"/>
+            <img src="{{url_for('static', filename='/img/touchpanel/T6.png')}}" class="t6"/>
+            <img src="{{url_for('static', filename='/img/touchpanel/T8.png')}}" class="t8"/>
+            <img src="{{url_for('static', filename='/img/touchpanel/T11.png')}}" class="t11"/>
+            <img src="{{url_for('static', filename='/img/touchpanel/T7.png')}}" class="t7"/>
+            <img src="{{url_for('static', filename='/img/touchpanel/T4.png')}}" class="t4"/>
+            <img src="{{url_for('static', filename='/img/touchpanel/T10.png')}}" class="t10"/>
+    
         </div>
     </div>
 
@@ -82,13 +152,13 @@
             $(element + "-title").text(_title);
         }
 
-        delay   = 1000
-        counter = 30
-        setInterval(function() {
-            counter -= 1
-            if(counter==0) location.href = "/"
-            else $('#counter').text(counter)
-        }, delay)
+        // delay   = 1000
+        // counter = 30
+        // setInterval(function() {
+        //     counter -= 1
+        //     if(counter==0) location.href = "/"
+        //     else $('#counter').text(counter)
+        // }, delay)
 
     </script>
     

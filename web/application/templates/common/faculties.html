@@ -15,11 +15,23 @@
 
 </head>
 
-<body class="bg-secondary">
+<style>
+    .bg-secondary-darker{
+        background-color: #edeef0!important;
+    }
+    .card-header {
+        margin-bottom: 0!important;
+        padding: 0.25rem 0.5rem!important;
+        border-bottom: 1px solid rgba(0,0,0,.05)!important;
+        background-color: #fff!important;
+    }
+</style>
+
+<body class="bg-secondary-darker">
 
     <div class="main-content">
 
-        <div class="container-fluid py-5 ">
+        <div class="container-fluid py-4 ">
             <div class="row m-0 p-0">
             {% for i in data.faculties %}
                 <div class="col-lg-3 col-md-4 m-0 p-1">
