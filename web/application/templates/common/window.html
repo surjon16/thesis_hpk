@@ -60,6 +60,53 @@
             font-size: 4em;
         }
 
+        /* ICON/IMAGES */
+
+        .left-container {
+            position: absolute;
+            height: 60%;
+            width: 50%;
+            left: 0;
+            bottom: 0;
+        }
+
+        .right-container {
+            position: absolute;
+            height: 60%;
+            width: 50%;
+            right: 0;
+            bottom: 0;
+        }
+
+        .m2 {
+            left: 0;
+            bottom: 0;
+            height: 90%;
+        }
+
+        .m4 {
+            bottom: 0;
+            height: 60%;
+        }
+
+        .m1 {
+            left: 100%;
+            bottom: 0;
+            height: 40%;
+        }
+
+        .m3 {
+            left: 60%;
+            bottom: 0;
+            height: 50%;
+        }
+
+        .m6 {
+            right: 0;
+            bottom: 0;
+            height: 50%;
+        }
+
     </style>
 
 </head>
@@ -75,6 +122,19 @@
                     <hr class="border border-white border-5 my-0">
                     <p id="current_call" class="display-1 fs-01 text-danger">--</p>
                 </div>
+                
+                <div class="col left-container d-flex justify-content-start align-items-end">
+                    <img class="m2" src="{{url_for('static', filename='/img/monitor/M2.png')}}" alt="">
+                    <img class="m4" src="{{url_for('static', filename='/img/monitor/M4.png')}}" alt="">
+                    <img class="m1" src="{{url_for('static', filename='/img/monitor/M1.png')}}" alt="">
+                </div>
+
+                <div class=" col right-container d-flex justify-content-end align-items-end">
+                    <img class="m6" src="{{url_for('static', filename='/img/monitor/M5.png')}}" alt="">
+                    <img class="m4" src="{{url_for('static', filename='/img/monitor/M3.png')}}" alt="">
+                    <img class="m2" src="{{url_for('static', filename='/img/monitor/M6.png')}}" alt="">
+                </div>
+
             </div>
         </div>
 
