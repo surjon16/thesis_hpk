@@ -297,7 +297,7 @@ def uploader_file():
     
     f = request.files['file']
     filename = 'img/'+secure_filename(f.filename)
-    f.save('application/static/'+filename)
+    f.save('/application/static/'+filename)
     Repository.updatePhoto(request.form, filename)
 
     return redirect(redirect_url())
