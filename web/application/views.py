@@ -95,8 +95,8 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
-    logout_user()
     Repository.logoutAccount(current_user.id)
+    logout_user()
     flash('You have been logged out.')
     return redirect(url_for('login'))
 
