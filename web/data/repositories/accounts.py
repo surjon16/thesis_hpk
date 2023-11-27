@@ -18,6 +18,12 @@ class AccountsRepo:
         else:
             return False
 
+    def logoutAccount():
+        data = Accounts.query.filter_by(id=current_user.id).first()
+        data.status_id = 6
+        db.session.commit()
+        return True
+
     def readAccounts():
         return Accounts.query.all()
 
