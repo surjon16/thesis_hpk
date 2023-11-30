@@ -60,24 +60,24 @@
                                 {% for i in data.active | selectattr("account_id", "equalto", current_user.id) | list %}
                                     <tr>
                                         <td>
-                                            <h3>{{i.priority}}</h3>
+                                            <h5>{{i.priority}}</h5>
                                         </td>
                                         <td>
                                             {% for x in i.participants_list %}
                                                 {% if x.id_number == None %}
-                                                    <h3>{{x.role.role|capitalize}}</h3>
+                                                    <h5>{{x.role.role|capitalize}}</h5>
                                                 {% else %}
-                                                    <h3>{{x.id_number}}</h3>
+                                                    <h5>{{x.id_number}}</h5>
                                                 {% endif %}
                                             {% endfor %}
                                         </td>
                                         <td>
                                             {% for x in i.participants_list %}
-                                                <h3>{{x.first_name}} {{x.last_name}} ({{x.role.role|capitalize}})</h3>
+                                                <h5>{{x.first_name}} {{x.last_name}} ({{x.role.role|capitalize}})</h5>
                                             {% endfor %}
                                         </td>
                                         <td>
-                                            <h3>{{i.purpose.purpose}}</h3>
+                                            <h5>{{i.purpose.purpose}}</h5>
                                         </td>
                                         <td class="text-right">
                                             <button onclick='Call({{i.id}})' class="btn btn-success btn-sm">CALL</button>
