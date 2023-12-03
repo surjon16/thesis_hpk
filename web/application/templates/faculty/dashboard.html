@@ -169,10 +169,35 @@
 
             bootbox.prompt({
                 title: 'Remarks',
-                callback: function(remarks) {
+            callback: function(proceed) {
+                    if (proceed) {
+                        data = {
+                            'id'        :   id,
+                            'status_id' :   2,
+                            'remarks'   :   remarks
+                        }
+                        Controller.POST('/api/appointment/update/remarks', data).done(function(result) {
+                            console.log(result)
+                            Controller.POST('/api/appointment/update/status', data).done(function(result) {
+                                console.log(result)
+                                window.location = "/faculty/dashboard"
+                            })
+                        })
+                    }
+                }
+            });
+
+    }
+
+    function Done(id) {
+
+        bootbox.prompt({
+            title: 'Remarks',
+            callback: function(proceed) {
+                if (proceed) {
                     data = {
                         'id'        :   id,
-                        'status_id' :   2,
+                        'status_id' :   1,
                         'remarks'   :   remarks
                     }
                     Controller.POST('/api/appointment/update/remarks', data).done(function(result) {
@@ -183,27 +208,6 @@
                         })
                     })
                 }
-            });
-
-    }
-
-    function Done(id) {
-
-        bootbox.prompt({
-            title: 'Remarks',
-            callback: function(remarks) {
-                data = {
-                    'id'        :   id,
-                    'status_id' :   1,
-                    'remarks'   :   remarks
-                }
-                Controller.POST('/api/appointment/update/remarks', data).done(function(result) {
-                    console.log(result)
-                    Controller.POST('/api/appointment/update/status', data).done(function(result) {
-                        console.log(result)
-                        window.location = "/faculty/dashboard"
-                    })
-                })
             }
         });
 
