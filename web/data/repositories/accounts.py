@@ -202,6 +202,11 @@ class AccountsRepo:
             # for appointment in data.account_appointments:
             #     db.session.delete(appointments)
 
+            # Participants.query.filter_by(participant_id=request['id'])
+
+            # for appointment in Appointments.query.filter_by(id=request):
+            #     db.session.delete(appointment)
+
             # finally, delete account
             db.session.delete(data)
             db.session.commit()

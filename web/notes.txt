@@ -39,3 +39,13 @@ FACULTY
 MONITOR
 - "Calling" can be change to "Declining" when a sudent/guest is declined.*
 - sa "Declined" pila ang maximum number na ma display?*
+
+================================================================
+
+DECEMBER 11, 2023
+
+1. Add appointment if faculty is online even if not in consultation schedule.
+2. Extract data to excel.
+3. Delete accounts on admin panel.
+4. Mobile view admin panel.
+5. Approve or Disapprove on Upcoming Appointments.
