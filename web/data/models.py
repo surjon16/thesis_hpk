@@ -42,7 +42,7 @@ class Accounts(UserMixin, db.Model):
     # relationship
     role_id         = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=True)
     status_id       = db.Column(db.Integer, db.ForeignKey('status.id'), nullable=True)
-    participant     = db.relationship('Appointments', secondary=participants, backref=db.backref('participant', uselist=False),  lazy='dynamic')
+    # participant     = db.relationship('Appointments', secondary=participants, backref=db.backref('participant', uselist=False),  lazy='dynamic')
     consultations   = db.relationship('Consultations', backref='faculty', lazy=True)
     faculty         = db.relationship('Appointments', backref='faculty', lazy=True)
 

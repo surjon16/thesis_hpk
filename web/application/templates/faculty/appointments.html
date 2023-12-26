@@ -25,7 +25,7 @@
     <!-- Page content -->
     <div class="container-fluid mt--6">
         <div class="row">
-            <div class="col">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-header border-0">
                         <div class="row align-items-center">
@@ -39,9 +39,9 @@
                                 <tr>
                                     <th scope="col">SCHEDULE</th>
                                     <th scope="col">PRIORITY</th>
-                                    <th scope="col">ID NUMBER</th>
-                                    <th scope="col">NAME</th>
+                                    <th scope="col">PARTICIPANT(S)</th>
                                     <th scope="col">PURPOSE</th>
+                                    <th scope="col" class="text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,19 +56,18 @@
                                         <td>
                                             {% for x in i.participants_list %}
                                                 {% if x.id_number == None %}
-                                                    {{x.role.role|capitalize}}
+                                                    {{x.role.role|capitalize}} {{x.last_name}}
                                                 {% else %}
-                                                    {{x.id_number}}
+                                                    {{x.id_number}} {{x.last_name}}
                                                 {% endif %}
                                             {% endfor %}
                                         </td>
                                         <td>
-                                            {% for x in i.participants_list %}
-                                                {{x.first_name}} {{x.last_name}}
-                                            {% endfor %}
-                                        </td>
-                                        <td>
                                             {{i.purpose.purpose}}
+                                        </td>
+                                        <td class="text-right">
+                                            <button onclick='Approve({{i.id}})' class="btn btn-success btn-sm">APPROVE</button>
+                                            <button onclick='Disapprove({{i.id}})' class="btn btn-danger btn-sm">DISAPPROVE</button>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -76,7 +75,55 @@
                         </table>
                     </div>
                 </div>
-        </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <h3>APPROVAL STATUS</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <!-- Projects table -->
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">APPOINTMENT</th>
+                                    <th scope="col">STATUS</th>
+                                    <th scope="col">REMARKS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in data.approval %}
+                                    <tr>
+                                        <td>
+                                            {% if i.participants_list|length < 1 %}
+                                                <h5>--</h5>
+                                            {% endif %}
+                                            {% for x in i.participants_list %}
+                                                {% if x.id_number == None %}
+                                                    <h5>{{x.role.role|capitalize}}</h5>
+                                                {% else %}
+                                                    <h5>{{x.id_number}}</h5>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            <h5>{{i.status.status}}</h5>
+                                        </td>
+                                        <td>
+                                            <h5>{{i.remarks}}</h5>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
     </div>
 
 </div>
@@ -86,6 +133,55 @@
 <script>
     
     setSideBar('#menu-appointments')
+
+    function Approve(id) {
+        
+        bootbox.prompt({
+                title: 'Remarks',
+            callback: function(proceed) {
+                    if (proceed) {
+                        data = {
+                            'id'        :   id,
+                            'status_id' :   7,
+                            'remarks'   :   proceed
+                        }
+                        Controller.POST('/api/appointment/update/remarks', data).done(function(result) {
+                            console.log(result)
+                            Controller.POST('/api/appointment/update/status', data).done(function(result) {
+                                console.log(result)
+                                window.location = "/faculty/appointments"
+                            })
+                        })
+                    }
+                }
+            });
+
+    }
+
+    function Disapprove(id) {
+        bootbox.prompt({
+                title: 'Remarks',
+            callback: function(proceed) {
+                    if (proceed) {
+                        data = {
+                            'id'        :   id,
+                            'status_id' :   8,
+                            'remarks'   :   proceed
+                        }
+                        Controller.POST('/api/appointment/update/remarks', data).done(function(result) {
+                            console.log(result)
+                            Controller.POST('/api/appointment/update/status', data).done(function(result) {
+                                console.log(result)
+                                window.location = "/faculty/appointments"
+                            })
+                        })
+                    }
+                }
+            });
+
+    }
+
+
 
 </script>
 {% endblock %}

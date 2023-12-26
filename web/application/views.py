@@ -18,7 +18,7 @@ app.jinja_env.filters['zip'] = zip
 def _jinja2_filter_datetime(date, fmt=None):
     date = parser.parse(date)
     native = date.replace(tzinfo=None)
-    format='%A, %B %d, %Y'
+    format='%B %d, %Y'
     return native.strftime(format)
 
 @app.template_filter('strfdate')
@@ -186,7 +186,8 @@ def faculty_dashboard():
 @login_required
 def faculty_upcoming():
     response = {
-        'upcoming'  : Repository.readUpcoming()
+        'upcoming'  : Repository.readUpcoming(),
+        'approval'  : Repository.readApprovalStatus(),
     }
     return render_template('faculty/appointments.html', data=response)
 

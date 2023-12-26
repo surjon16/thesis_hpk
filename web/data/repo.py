@@ -75,7 +75,10 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
         status = Status(status='Unavailable')
         db.session.add(status)
 
-        status = Status(status='Fullybooked')
+        status = Status(status='Approved')
+        db.session.add(status)
+
+        status = Status(status='Disapproved')
         db.session.add(status)
 
         # create accounts
