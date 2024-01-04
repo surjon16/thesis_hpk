@@ -49,3 +49,10 @@ DECEMBER 11, 2023
 3. Delete accounts on admin panel.
 4. Mobile view admin panel.
 5. Approve or Disapprove on Upcoming Appointments.
+
+================================================================
+
+JANUARY 04, 2024
+
+1. FEATURE  - Extract Data - Appointment Details - Participants - Consultant (Instructor) - Date of Appointment - Status
+2. BUG      - Waving an appointment does no effect on the Faculty's Dashboard
