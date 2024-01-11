@@ -12,6 +12,9 @@ class AppointmentsRepo:
     def readAppointments():
         return Appointments.query.order_by(Appointments.status_id.desc(), Appointments.schedule.asc()).all()
     
+    def exportAppointments(request):
+        return Appointments.query.order_by(Appointments.status_id.desc(), Appointments.schedule.asc()).all()
+    
     def readAppointment(id):
         return Appointments.query.filter_by(id=id).first()
     

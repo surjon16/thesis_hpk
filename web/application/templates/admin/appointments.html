@@ -1,4 +1,4 @@
-{% extends 'shared/layout.html' %}
+{% extends 'admin/shared/layout.html' %}
 {% block title %}
 Appointments
 {% endblock %}
@@ -95,268 +95,63 @@ Appointments
 
     <!-- Page content -->
     <div class="container-fluid mt--6">
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header border-0">                        
-                        <div class="row align-items-center">
-                            
-                            <div class="col">
 
-                                <form action="/admin/appointment/search" method="post">
-
-                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                                    <!-- <input id="date" name="date" type="text" class="datepicker form-control form-control-sm  w-25 d-inline-block" value="{{data.current_date.strftime('%m/%d/%Y')}}"> -->
-                                    
-                                    <div class="row">
-                                        <div class="input-daterange datepicker col-md-4 row">
-                                            <div class="form-group col">
-                                                <label class="form-control-label">Start Date</label>
-                                                <input name="start_date" class="form-control form-control-sm" placeholder="Start date" type="text" value="{{ now.strftime('%m/%d/%Y') if data.form is none else data.form['start_date'] }}">
-                                            </div>
-                                            <div class="form-group col">
-                                                <label class="form-control-label">End Date</label>
-                                                <input name="end_date" class="form-control form-control-sm" placeholder="End date" type="text" value="{{ now.strftime('%m/%d/%Y') if data.form is none else data.form['end_date'] }}">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label class="form-control-label">Participants</label>
-                                                <select id="participants" name="participants" data-style="bg-white shadow-sm border border-1"  class="form-control form-control-sm selectpicker" data-live-search="true">
-                                                    <option value="-1" selected hidden>Please Select</option>
-                                                    {% for participant in data.participants %}
-                                                        <option value="{{participant.id}}">{{participant.first_name}} {{participant.last_name}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label class="form-control-label">Purpose</label>
-                                                <select id="purpose" name="purpose" data-style="bg-white shadow-sm border border-1" class="form-control form-control-sm selectpicker" data-live-search="true">
-                                                    <option value="-1" selected hidden>Please Select</option>
-                                                    {% for purpose in data.purposes %}
-                                                        <option value="{{purpose.id}}">{{purpose.purpose}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label class="form-control-label">Status</label>
-                                                <select id="status" name="status" data-style="bg-white shadow-sm border border-1" class="form-control form-control-sm selectpicker" data-live-search="true">
-                                                    <option value="-1" selected hidden>Please Select</option>
-                                                    {% for status in data.status %}
-                                                        <option value="{{status.id}}">{{status.status}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1 d-flex justify-content-between py-3">
-                                            <button class="btn btn-sm btn-success" type="submit">Start Search</button>
-                                        </div>
-                                    </div>
-
-                                </form>
-
-                                <button class="btn btn-sm btn-success" onclick="AddNewAppointment()">Add New</button>
-
-
-                            </div>
-
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row">
             <div class="col">
                 <div class="card">
                     <div class="card-header border-0">
                         <div class="row align-items-center">
-                            <div class="col text-left">
-                                <h4 class="card-title">Approved</h4>
+                            <div class="col text-left d-flex justify-content-start align-items-center">
+
                             </div>
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <!-- Projects table -->
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">Appointment Date</th>
-                                    <th scope="col">Participants</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Purpose</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col" class="text-right">Action</th>
+                                    <th scope="col">APPOINTMENT DATE</th>
+                                    <th scope="col">FACULTY</th>
+                                    <th scope="col">PARTICIPANT(S)</th>
+                                    <th scope="col">PURPOSE</th>
+                                    <th scope="col">STATUS</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for appointment in data.appointments %}
-                                    {% if appointment.status.status == 'Approved' %}
-                                    <tr id='appointment-{{appointment.id}}' data-id={{appointment.id}}>
-                                        <th scope="row">
-                                            {% if appointment.appointment_date is not none %}
-                                                {{appointment.appointment_date.strftime('%h %d %Y %I:%M %p')}}
-                                            {% else %}
-                                                None
-                                            {% endif %}
+                                {% for i in data.appointments %}
+                                    <tr>
+                                        <td>
+                                            {{i.schedule.strftime('%h %d %Y')|day_of_week}}
                                         </td>
                                         <td>
-                                            {{appointment.account.last_name}}
+                                            {{i.faculty.first_name}} {{i.faculty.last_name}}
                                         </td>
                                         <td>
-                                            {{ appointment.account.phone }}
+                                            {% for x in i.participants_list %}
+                                                {% if x.id_number == None %}
+                                                    {{x.role.role|capitalize}} {{x.last_name}}
+                                                {% else %}
+                                                    {{x.id_number}} {{x.last_name}}
+                                                {% endif %}
+                                            {% endfor %}
                                         </td>
                                         <td>
-                                            {{ appointment.service.service }}
+                                            {{i.purpose.purpose}}
                                         </td>
                                         <td>
-                                            {{ appointment.status.status }}
-                                        </td>
-                                        <td class="text-right">
-                                            <a href="/admin/appointment/{{appointment.id}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                            <button onclick='EditAppointment(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
-                                            <button onclick='DeleteAppointment(this)' class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                            {{i.status.status}}
                                         </td>
                                     </tr>
-                                    {% endif %}
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header border-0">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <div class="col text-left">
-                                    <h4 class="card-title">Pending</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <!-- Projects table -->
-                        <table class="table align-items-center table-flush">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Appointment Date</th>
-                                    <th scope="col">Participants</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Purpose</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col" class="text-right">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for appointment in data.appointments %}
-                                    {% if appointment.status.status == 'Pending' %}
-                                    <tr id='appointment-{{appointment.id}}' data-id={{appointment.id}}>
-                                        <th scope="row">
-                                            {% if appointment.appointment_date is not none %}
-                                                {{appointment.appointment_date.strftime('%h %d %Y %I:%M %p')}}
-                                            {% else %}
-                                                None
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {{appointment.account.last_name}}
-                                        </td>
-                                        <td>
-                                            {{ appointment.account.phone }}
-                                        </td>
-                                        <td>
-                                            {{ appointment.service.service }}
-                                        </td>
-                                        <td>
-                                            {{ appointment.status.status }}
-                                        </td>
-                                        <td class="text-right">
-                                            <a href="/admin/appointment/{{appointment.id}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                            <button onclick='EditAppointment(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
-                                            <button onclick='DeleteAppointment(this)' class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    {% endif %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header border-0">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <div class="col text-left">
-                                    <h4 class="card-title">Declined / Cancelled</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <!-- Projects table -->
-                        <table class="table align-items-center table-flush">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Appointment Date</th>
-                                    <th scope="col">Participants</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Purpose</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col" class="text-right">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for appointment in data.appointments %}
-                                    {% if appointment.status.status == 'Declined' or appointment.status.status == 'Cancelled' %}
-                                    <tr id='appointment-{{appointment.id}}' data-id={{appointment.id}}>
-                                        <th scope="row">
-                                            {% if appointment.appointment_date is not none %}
-                                                {{appointment.appointment_date.strftime('%h %d %Y %I:%M %p')}}
-                                            {% else %}
-                                                None
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {{appointment.account.last_name}}
-                                        </td>
-                                        <td>
-                                            {{ appointment.account.phone }}
-                                        </td>
-                                        <td>
-                                            {{ appointment.service.service }}
-                                        </td>
-                                        <td>
-                                            {{ appointment.status.status }}
-                                        </td>
-                                        <td class="text-right">
-                                            <a href="/admin/appointment/{{appointment.id}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                            <button onclick='EditAppointment(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
-                                            <button onclick='DeleteAppointment(this)' class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    {% endif %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
+
 </div>
 {% endblock %}
 

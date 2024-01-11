@@ -1,4 +1,4 @@
-{% extends 'shared/layout.html' %}
+{% extends 'admin/shared/layout.html' %}
 {% block title %}
 Accounts
 {% endblock %}
@@ -146,8 +146,11 @@ Accounts
         <div class="container-fluid">
             <div class="header-body">
                 <div class="row align-items-center py-4">
-                    <div class="col-lg-6 col-7">
+                    <div class="col">
                         <p class="display-2 text-default d-inline-block mb-0">Accounts</p>
+                    </div>
+                    <div class="col text-right">
+                        <button class="btn btn-md btn-success" onclick="AddNew()">Add New</button>
                     </div>
                 </div>
             </div>
@@ -162,7 +165,7 @@ Accounts
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col text-left">
-                                <button class="btn btn-sm btn-success" onclick="AddNew()">Add New</button>
+                                <p class="display-4 text-default d-inline-block">Administrators List</p>
                             </div>
                         </div>
                     </div>
@@ -179,7 +182,101 @@ Accounts
                             </thead>
                             <tbody>
                                 {% for account in data %}
-                                    {% if account.role_id is not none %}
+                                    {% if account.role_id is not none and account.role_id == 1 %}
+                                        <tr id='account-{{account.id}}' data-id={{account.id}}>
+                                            <th scope="row">
+                                                {{account.first_name + ' ' + account.last_name}}
+                                            </th>
+                                            <td>
+                                                {{account.email}}
+                                            </td>
+                                            <td>
+                                                {{account.role.role}}
+                                            </td>
+                                            <td class="text-right">
+                                                <button onclick='Edit(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                                                <button onclick='Delete(this)' class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <p class="display-4 text-default d-inline-block">Faculty List</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <!-- Projects table -->
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Full Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Account Type</th>
+                                    <th scope="col" class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for account in data %}
+                                    {% if account.role_id is not none and account.role_id == 2 %}
+                                        <tr id='account-{{account.id}}' data-id={{account.id}}>
+                                            <th scope="row">
+                                                {{account.first_name + ' ' + account.last_name}}
+                                            </th>
+                                            <td>
+                                                {{account.email}}
+                                            </td>
+                                            <td>
+                                                {{account.role.role}}
+                                            </td>
+                                            <td class="text-right">
+                                                <button onclick='Edit(this)' class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                                                <button onclick='Delete(this)' class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col text-left">
+                                <p class="display-4 text-default d-inline-block">Students & Guests List</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <!-- Projects table -->
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Full Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Account Type</th>
+                                    <th scope="col" class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for account in data %}
+                                    {% if account.role_id is not none and (account.role_id == 3 or account.role_id == 4) %}
                                         <tr id='account-{{account.id}}' data-id={{account.id}}>
                                             <th scope="row">
                                                 {{account.first_name + ' ' + account.last_name}}

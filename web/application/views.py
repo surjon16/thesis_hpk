@@ -1,12 +1,15 @@
-from flask          import flash, jsonify, render_template, request, redirect, url_for, session
+from flask          import flash, jsonify, render_template, request, redirect, url_for, session, send_file
 from flask_login    import login_required, login_user, logout_user, current_user
 from application    import app
 from data.repo      import Repository
 from data.schemas   import RegisterAccountSchema, RegisterStudentAccountSchema
 from datetime       import datetime, timedelta
 from functools      import wraps
+from io             import BytesIO
 from werkzeug.utils import secure_filename
-import dateutil.parser as parser
+
+import pandas as pd
+import numpy  as np
 
 # ===============================================================
 # DECORATORS
@@ -227,7 +230,7 @@ def appointments():
         'roles'         : Repository.readRoles(),
         'status'        : Repository.readAllStatus(),
         'accounts'      : Repository.readAccounts(),
-        'appointments'  : Repository.readDailyAppointments(datetime.now().strftime('%m/%d/%Y')),
+        'appointments'  : Repository.readAppointments(),
         'current_date'  : datetime.now(),
         'form'          : None
     }
@@ -260,6 +263,45 @@ def search_appointments():
         return render_template('admin/appointments.html', data=response)
 
     return redirect(url_for('appointments'))
+
+@app.route("/admin/table_appointments", methods=['GET'])
+@login_required
+@admin_login_required
+def table_appointments():
+    response = {
+        'appointments'  : Repository.readAppointments(),
+        'current_date'  : datetime.now(),
+    }
+    return render_template('admin/table_appointments.html', data=response)
+
+@app.route("/admin/export_to_excel", methods=['GET'])
+@login_required
+@admin_login_required
+def export_to_excel():
+
+    #create a random Pandas dataframe
+    df_1 = pd.read_html(url_for('table_appointments'))
+
+    #create an output stream
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+
+    #taken from the original question
+    df_1.to_excel(writer, startrow = 0, merge_cells = False, sheet_name = "Sheet_1")
+    workbook = writer.book
+    worksheet = writer.sheets["Sheet_1"]
+    format = workbook.add_format()
+    format.set_bg_color('#eeeeee')
+    worksheet.set_column(0,9,28)
+
+    #the writer has done its job
+    writer.close()
+
+    #go back to the beginning of the stream
+    output.seek(0)
+
+    #finally return the file
+    return send_file(output, attachment_filename="testing.xlsx", as_attachment=True)
 
 @app.route('/admin/accounts')
 @login_required
