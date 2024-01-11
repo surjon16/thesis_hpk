@@ -55,7 +55,11 @@
                                         </td>
                                         <td>
                                             {% for x in i.participants_list %}
-                                                ({{x.role.role|capitalize}}) {{x.first_name}} {{x.last_name}}
+                                                {% if x.id_number == None %}
+                                                    ({{x.role.role|capitalize}}) {{x.first_name}} {{x.last_name}}
+                                                {% else %}
+                                                    {{x.id_number}} {{x.first_name}} {{x.last_name}}
+                                                {% endif %}
                                             {% endfor %}
                                         </td>
                                         <td>
