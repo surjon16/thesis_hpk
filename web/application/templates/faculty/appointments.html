@@ -40,7 +40,6 @@
                                     <th scope="col">SCHEDULE</th>
                                     <th scope="col">PRIORITY</th>
                                     <th scope="col">PARTICIPANT(S)</th>
-                                    <th scope="col">ROLE</th>
                                     <th scope="col">PURPOSE</th>
                                     <th scope="col" class="text-right">Action</th>
                                 </tr>
@@ -56,11 +55,8 @@
                                         </td>
                                         <td>
                                             {% for x in i.participants_list %}
-                                                {{x.first_name}} {{x.last_name}}
+                                                ({{x.role.role|capitalize}}) {{x.first_name}} {{x.last_name}}
                                             {% endfor %}
-                                        </td>
-                                        <td>
-                                            {{i.role.role}}
                                         </td>
                                         <td>
                                             {{i.purpose.purpose}}
