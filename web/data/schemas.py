@@ -8,7 +8,6 @@ class CreateStudentAccountSchema(Schema):
     id_number   = fields.Str(required=True)
     first_name  = fields.Str(required=True)
     last_name   = fields.Str(required=True)
-    address     = fields.Str(required=True)
 
     @validates('id_number')
     def validate_id_number(self, value):
@@ -30,9 +29,6 @@ class UpdateStudentAccountSchema(Schema):
     id_number   = fields.Str(required=True)
     first_name  = fields.Str(required=True)
     last_name   = fields.Str(required=True)
-    phone       = fields.Str(required=True)
-    email       = fields.Email(required=True)
-    address     = fields.Str(required=True)
     role_id     = fields.Str(required=True)
 
     @validates('id_number')
@@ -61,7 +57,6 @@ class RegisterStudentAccountSchema(Schema):
     first_name  = fields.Str(required=True)
     last_name   = fields.Str(required=True)
     email       = fields.Email(required=True)
-    phone       = fields.Str(required=True)
     password    = fields.Str(required=True)
 
     @validates('id_number')
@@ -111,9 +106,7 @@ class UpdateAccountSchema(Schema):
     id_number   = fields.Str(required=True)
     first_name  = fields.Str(required=True)
     last_name   = fields.Str(required=True)
-    phone       = fields.Str(required=True)
     email       = fields.Email(required=True)
-    address     = fields.Str(required=True)
     role_id     = fields.Str(required=True)
 
     @validates('first_name')
@@ -126,11 +119,6 @@ class UpdateAccountSchema(Schema):
         if value == '' or value is None:
             raise ValidationError('Please provide your last name.')
 
-    @validates('address')
-    def validate_address(self, value):
-        if value == '' or value is None:
-            raise ValidationError('Please provide an address.')
-
     @validates('role_id')
     def validate_role_id(self, value):
         if value == '' or value is None:
@@ -141,7 +129,6 @@ class RegisterAccountSchema(Schema):
     first_name  = fields.Str(required=True)
     last_name   = fields.Str(required=True)
     email       = fields.Email(required=True)
-    phone       = fields.Str(required=True)
     password    = fields.Str(required=True)
 
     @validates('first_name')

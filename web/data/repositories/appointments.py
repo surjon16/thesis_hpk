@@ -5,6 +5,9 @@ from sqlalchemy     import extract, or_, and_, func
 from datetime       import datetime
 
 class AppointmentsRepo:
+
+    def toDate(dateString): 
+        return 
     
     # ==================================================================================
     # APPOINTMENTS
@@ -12,8 +15,35 @@ class AppointmentsRepo:
     def readAppointments():
         return Appointments.query.order_by(Appointments.status_id.desc(), Appointments.schedule.asc()).all()
     
-    def exportAppointments(request):
-        return Appointments.query.order_by(Appointments.status_id.desc(), Appointments.schedule.asc()).all()
+    def searchAppointments(request):
+
+        # if request is None:
+        #     return Appointments.query.order_by(Appointments.status_id.desc(), Appointments.schedule.asc()).all()
+
+        start_date  = request.args.get('start_date',    default = datetime.now)
+        end_date    = request.args.get('end_date',      default = datetime.now)
+        account     = request.args.get('account',       None)
+        status      = request.args.get('status',        None)
+        purpose     = request.args.get('purpose',       None)
+
+        query = Appointments.query
+
+        if request.args.get('start_date') == '' or request.args.get('start_date') is None:
+            start_date  = end_date = datetime.now().date()
+        else:
+            start_date  = datetime.strptime(start_date, "%m/%d/%Y").date()
+            end_date    = datetime.strptime(end_date, "%m/%d/%Y").date()
+
+        if account is not None:
+            query = query.filter_by(account_id=account)
+
+        if status is not None:
+            query = query.filter_by(status_id=status)
+
+        if purpose is not None:
+            query = query.filter_by(purpose_id=purpose)
+
+        return query.filter(and_(func.date(Appointments.schedule) >= start_date, func.date(Appointments.schedule) <= end_date)).order_by(Appointments.updated_at.desc()).all()
     
     def readAppointment(id):
         return Appointments.query.filter_by(id=id).first()
