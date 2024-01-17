@@ -1,0 +1,7 @@
+1. Open Git Bash
+2. ssh server@hpk-server
+    - if hpk-server doesn't connect, try server-hpk or try using the actual IP address of the server raspi.
+3. enter password: server
+4. cd thesis_hpk
+5. git pull
+6. sudo reboot

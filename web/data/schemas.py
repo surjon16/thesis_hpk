@@ -83,7 +83,7 @@ class CreateAccountSchema(Schema):
     
     first_name  = fields.Str(required=True)
     last_name   = fields.Str(required=True)
-    email       = fields.Email(required=True)
+    # email       = fields.Email(required=True)
     password    = fields.Str(required=True)
 
     @validates('first_name')
@@ -106,7 +106,7 @@ class UpdateAccountSchema(Schema):
     id_number   = fields.Str(required=True)
     first_name  = fields.Str(required=True)
     last_name   = fields.Str(required=True)
-    email       = fields.Email(required=True)
+    # email       = fields.Email(required=True)
     role_id     = fields.Str(required=True)
 
     @validates('first_name')
