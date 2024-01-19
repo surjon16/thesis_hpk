@@ -27,6 +27,14 @@ def authenticate(username, password):
 def get_account(id):
     return jsonify(Repository.readAccount(id).serialize())
 
+@app.route('/api/account/get/consultation_status/<id>', methods=['GET'])
+def get_account_consultation_status(id):
+    return jsonify({
+        'status'        : Repository.getAccountStatus(id),
+        'consultations' : [data.serialize() for data in Repository.readAccountConstultations(id)]
+    })
+    # return jsonify([data.serialize() for data in Repository.readAccountConstultations(id)])
+
 @app.route('/api/account/get/consultations/<id>', methods=['GET'])
 def get_account_consultations(id):
     return jsonify([data.serialize() for data in Repository.readAccountConstultations(id)])

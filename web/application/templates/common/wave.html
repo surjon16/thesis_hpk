@@ -290,21 +290,23 @@
     <script>
         
         status_id = 6
-        Controller.GET('/api/account/get/{{data.repo.faculty.id}}').done(function(result) {
-            status_id = result.status_id
-        })
+        // Controller.GET('/api/account/get/{{data.repo.faculty.id}}').done(function(result) {
+        //     status_id = result.status_id
+        // })
         schedules = []
-        Controller.GET('/api/account/get/consultations/{{data.repo.faculty.id}}').done(function(result) {
-            result.forEach(i => {
+        Controller.GET('/api/account/get/consultation_status/{{data.repo.faculty.id}}').done(function(result) {
+            result.consultations.forEach(i => {
                 schedules.push(i.day)
             });
+            if (result.status) status_id = 5;
             days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
             $("#schedule").datepicker({
                 todayHighlight: true,
                 format: 'yyyy-mm-dd',
                 startDate: new Date(),
                 beforeShowDay: function(date) {
-                    if (date.getDate() == (new Date()).getDate() && date.getMonth() == (new Date()).getMonth() && date.getYear() == (new Date()).getYear()) {
+                    new_date = new Date()
+                    if (date.getDate() == new_date.getDate() && date.getMonth() == new_date.getMonth() && date.getYear() == new_date.getYear()) {
                         if (status_id == 5) return { enabled: true }
                         else return { enabled: false }
                     }
