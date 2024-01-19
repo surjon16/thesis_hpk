@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content='{{ csrf_token() }}'>
+
+    {% if data.id == "1" %}
+        <title>Individual | Hi-Prof Kiosk</title>
+    {% elif data.id == "2" %}
+        <title>Group | Hi-Prof Kiosk</title>
+    {% elif data.id == "3" %}
+        <title>Guest | Hi-Prof Kiosk</title>
+    {% endif %}
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href='/static/argon/vendor/nucleo/css/nucleo.css' type="text/css">
+    <link rel="stylesheet" href='/static/argon/vendor/@fortawesome/fontawesome-free/css/all.min.css' type="text/css">
+    <link rel="stylesheet" href='/static/argon/css/argon.min.css' type="text/css">
+    <link rel="stylesheet" href='/static/css/bootstrap-select.min.css' type="text/css">
+
+    <style>
+
+        .bg-01 {
+            background-color: #FEFADF!important;
+        }
+
+        .bg-02 {
+            background-color: #FEBD89!important;
+        }
+
+        .bg-03 {
+            background-color: #F1F1F1!important;
+        }
+
+        .text-01 {
+            color: #E59567!important;
+        }
+
+        .text-02 {
+            color: #004F78!important;
+        }
+
+        .text-03 {
+            color: #C4D9E7!important;
+        }
+
+    </style>
+
+</head>
+
+<body class="bg-01">
+
+    <div class="main-content">
+
+        <div class="header bg-02 py-7 py-lg-8">
+            <div class="container">
+                <div class="header-body text-center mb-3">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5 col-md-6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt--8 pb-3">
+            <div class="row justify-content-center">
+                <div class="col-lg-7 col-md-7">
+
+                    <div class="card shadow border-0">
+                        <div class="card-header text-center">
+                            <h1>Guest</h1>
+                        </div>
+                        <div class="card-body px-lg-5 py-lg-5">
+                            <form class="form" method="post" action="/common/wave/3/{{data.faculty_id}}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                        
+                                <div class="form-group">
+                                    <label class="form-control-label">
+                                        First Name 
+                                        {% if data.errors.first_name %}
+                                            <span id="first_name_error" class="h5 text-danger">{{data.errors.first_name[0]}}</span>
+                                        {% endif %}
+                                    </label>
+                                    <input id="first_name" name="first_name" type="text" class="form-control" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-control-label">
+                                        Last Name 
+                                        {% if data.errors.last_name %}
+                                            <span id="last_name_error" class="h5 text-danger">{{data.errors.last_name[0]}}</span>
+                                        {% endif %}
+                                    </label>
+                                    <input id="last_name" name="last_name" type="text" class="form-control" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-control-label">
+                                        Purpose
+                                        {% if data.errors.purpose %}
+                                            <span id="purpose_error" class="h5 text-danger">{{data.errors.purpose[0]}}</span>
+                                        {% endif %}
+                                    </label>
+                                    <select id="purpose" name="purpose" data-style="bg-03 px-4 py-3 shadow-sm" class="form-control selectpicker" data-live-search="true" multiple data-max-options="1" required>
+                                        {% for p in data.repo.purpose %}
+                                            <option value="{{p.id}}">{{p.purpose}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-control-label">
+                                        Schedule
+                                        {% if data.errors.schedule %}
+                                            <span id="schedule_error" class="h5 text-danger">{{data.errors.schedule[0]}}</span>
+                                        {% endif %} 
+                                    </label>
+                                    <input id="schedule" name="schedule" type=date autocomplete="false" class="form-control" required>
+                                </div>
+
+                                <p class="h5 text-default">Available Schedules: </p>
+                                {% for i in data.repo.faculty.consultations %}
+                                    <p class="h5 text-default">{{i.schedule.day}} {{i.schedule.time}}</p>
+                                {% endfor %}
+                                
+                                <div class="text-center">
+                                    <a href="/common/faculty/{{data.faculty_id}}" class="btn btn-primary my-4">BACK</a>
+                                    <button type="submit" class="btn btn-primary my-4">SUBMIT</button>
+                                    <!-- <small class="text-muted d-block">Don't have an account?<a href="{{url_for('register_non_faculty')}}"> Register</a></small> -->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Argon Scripts -->
+    <!-- Core -->
+    <script src='/static/argon/vendor/jquery/dist/jquery.min.js'></script>
+    <script src='/static/argon/vendor/bootstrap/dist/js/bootstrap.bundle.min.js'></script>
+    <script src='/static/argon/vendor/js-cookie/js.cookie.js'></script>
+    <script src='/static/argon/vendor/jquery.scrollbar/jquery.scrollbar.min.js'></script>
+    <script src='/static/argon/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js'></script>
+    <script src='/static/argon/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+      integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <!-- Argon JS -->
+    <script src='/static/argon/js/argon.min.js'></script>
+
+    <!-- Select -->
+    <script src="/static/js/bootstrap-select.min.js"></script>
+
+    <!-- Backend JS -->
+    <script src="/static/js/core.js"></script>
+    
+    <script>
+        
+        status_id = 6
+        // Controller.GET('/api/account/get/{{data.repo.faculty.id}}').done(function(result) {
+        //     status_id = result.status_id
+        // })
+        schedules = []
+        Controller.GET('/api/account/get/consultation_status/{{data.repo.faculty.id}}').done(function(result) {
+            result.consultations.forEach(i => {
+                schedules.push(i.day)
+            });
+            if (result.status) status_id = 5;
+            days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            $("#schedule").datepicker({
+                todayHighlight: true,
+                format: 'yyyy-mm-dd',
+                startDate: new Date(),
+                beforeShowDay: function(date) {
+                    new_date = new Date()
+                    if (date.getDate() == new_date.getDate() && date.getMonth() == new_date.getMonth() && date.getYear() == new_date.getYear()) {
+                        if (status_id == 5) return { enabled: true }
+                        else return { enabled: false }
+                    }
+                    else if ($.inArray(days[date.getDay()], schedules) !== -1) {
+                        return { enabled: true }
+                    }
+                    else return { enabled: false }
+                }
+            })
+        })
+
+
+    </script>
+
+</body>
+
+</html>

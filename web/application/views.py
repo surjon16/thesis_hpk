@@ -2,7 +2,7 @@ from flask          import flash, jsonify, render_template, request, redirect, u
 from flask_login    import login_required, login_user, logout_user, current_user
 from application    import app
 from data.repo      import Repository
-from data.schemas   import RegisterAccountSchema, RegisterStudentAccountSchema
+from data.schemas   import RegisterAccountSchema, RegisterStudentAccountSchema, SetStudentAppointmentSchema, SetGuestAppointmentSchema
 from datetime       import datetime, timedelta
 from functools      import wraps
 from io             import BytesIO
@@ -151,19 +151,52 @@ def faculty(id):
 
 @app.route('/common/wave/<id>/<faculty_id>', methods=['POST', 'GET'])
 def wave(id, faculty_id):
-
-    if request.method == 'POST':
-        response = Repository.setAppointment(id, faculty_id, request.form.to_dict(flat=False))
-        return render_template('common/success.html', data=response)
-    
-    Repository.updateInquiries(faculty_id)
-        
+       
     response = {
         'purpose'   : Repository.readAllPurpose(),
         'students'  : Repository.readStudents(),
         'faculty'   : Repository.readAccount(faculty_id),
     }
-    return render_template('common/wave.html', data={'errors':[], 'input': [], 'id': id, 'faculty_id': faculty_id, 'repo': response})
+
+    if request.method == 'POST':
+
+        if id == "1":
+            
+            validator = SetStudentAppointmentSchema(unknown='EXCLUDE')
+            errors = validator.validate(request.form)
+
+            if errors:
+                return render_template('common/wave_student.html', data={'errors': errors, 'input': request.form, 'id': id, 'faculty_id': faculty_id, 'repo': response})
+
+        if id == "2":
+            
+            validator = SetStudentAppointmentSchema(unknown='EXCLUDE')
+            errors = validator.validate(request.form)
+
+            if errors:
+                return render_template('common/wave_group.html', data={'errors': errors, 'input': request.form, 'id': id, 'faculty_id': faculty_id, 'repo': response})
+
+        if id == "3":
+
+            validator = SetGuestAppointmentSchema(unknown='EXCLUDE')
+            errors = validator.validate(request.form)
+
+            if errors:
+                return render_template('common/wave_guest.html', data={'errors': errors, 'input': request.form, 'id': id, 'faculty_id': faculty_id, 'repo': response})
+
+        _response = Repository.setAppointment(id, faculty_id, request.form.to_dict(flat=False))
+        return render_template('common/success.html', data=_response)
+         
+    Repository.updateInquiries(faculty_id)
+
+    if id == "1":
+        return render_template('common/wave_student.html', data={'errors':[], 'input': [], 'id': id, 'faculty_id': faculty_id, 'repo': response})
+
+    if id == "2":
+        return render_template('common/wave_group.html', data={'errors':[], 'input': [], 'id': id, 'faculty_id': faculty_id, 'repo': response})
+
+    if id == "3":
+        return render_template('common/wave_guest.html', data={'errors':[], 'input': [], 'id': id, 'faculty_id': faculty_id, 'repo': response})
 
 # @app.route('/common/wave/send', methods=['POST', 'GET'])
 # def wave_send():

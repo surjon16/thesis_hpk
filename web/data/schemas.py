@@ -174,6 +174,54 @@ class CreateAppointmentSchema(Schema):
         if value == '' or value is None:
             raise ValidationError('Please select a status.')
 
+class SetStudentAppointmentSchema(Schema):
+    
+    id_number = fields.Str(required=True)
+    schedule = fields.Date(required=True)
+    purpose  = fields.Str(required=True)
+    
+    @validates('id_number')
+    def validate_id_number(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide id_number.')
+
+    @validates('purpose')
+    def validate_purpose(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide purpose.')
+
+    @validates('schedule')
+    def validate_schedule(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide schedule.')
+
+class SetGuestAppointmentSchema(Schema):
+    
+    first_name = fields.Str(required=True)
+    last_name = fields.Str(required=True)
+    schedule = fields.Str(required=True)
+    purpose  = fields.Str(required=True)
+    
+    @validates('first_name')
+    def validate_first_name(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide first_name.')
+
+    @validates('last_name')
+    def validate_last_name(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide last_name.')
+
+    @validates('purpose')
+    def validate_purpose(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide purpose.')
+
+    @validates('schedule')
+    def validate_schedule(self, value):
+        if value == '' or value is None:
+            raise ValidationError('Please provide schedule.')
+
 class CreateConsultationSchema(Schema):
     
     time_start  = fields.Str(required=True)
