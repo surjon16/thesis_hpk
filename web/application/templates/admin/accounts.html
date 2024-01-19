@@ -259,7 +259,7 @@ Accounts
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col text-left">
-                                <p class="display-4 text-default d-inline-block">Students & Guests List</p>
+                                <p class="display-4 text-default d-inline-block">Students List</p>
                             </div>
                         </div>
                     </div>
@@ -276,7 +276,7 @@ Accounts
                             </thead>
                             <tbody>
                                 {% for account in data %}
-                                    {% if account.role_id is not none and (account.role_id == 3 or account.role_id == 4) %}
+                                    {% if account.role_id is not none and account.role_id == 3 %}
                                         <tr id='account-{{account.id}}' data-id={{account.id}}>
                                             <th scope="row">
                                                 {{account.first_name + ' ' + account.last_name}}

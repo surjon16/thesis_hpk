@@ -3,6 +3,14 @@
 Appointments
 {% endblock %}
 
+{% block css %}
+<style>
+    .dropdown-menu {
+        min-width: 6rem;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="main-content" id="panel">
     <!-- Header -->
@@ -14,7 +22,15 @@ Appointments
                         <p class="display-2 text-default d-inline-block mb-0">Appointments</p>
                     </div>
                     <div class="col text-right">
-                        <button class="btn btn-md btn-success" onclick="exportCSVExcel()">Export</button>
+                        <div class="dropdown">
+                            <button class="btn btn-success btn-md dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Export
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="#" onclick="export_to_excel()">Excel</a>
+                              <a class="dropdown-item" href="#" onclick="export_to_pdf()">PDF</a>
+                            </div>
+                          </div>
                     </div>
                 </div>
             </div>
@@ -87,7 +103,8 @@ Appointments
                                             </div>
                                         </div>
                                         <div class="col text-left d-flex justify-content-start align-items-center">
-                                            <button class="btn btn-md btn-success" onclick="search()">Search</button>
+                                            <button class="btn btn-md btn-success" >Search</button>
+                                            <!-- <button class="btn btn-md btn-success" onclick="clear()">Clear</button> -->
                                         </div>
                                     </div>
 
@@ -113,6 +130,9 @@ Appointments
                                         <tr>
                                             <td>
                                                 {{i.schedule.strftime('%h %d %Y')|day_of_week}}
+                                                {% for x in i.faculty.consultations %}
+                                                    {{x.schedule.time}}
+                                                {% endfor %}
                                             </td>
                                             <td>
                                                 {{i.faculty.first_name}} {{i.faculty.last_name}}
@@ -152,17 +172,35 @@ Appointments
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
 <script>
 
     setSideBar('#menu-appointments')
 
-    function exportCSVExcel() {
+    function export_to_excel() {
         $('#table-appointments').table2excel({
             exclude: ".no-export",
             filename: "download.xls",
             fileext: ".xls",
             exclude_links: true,
             exclude_inputs: true
+        });
+    }
+
+    function export_to_pdf() {
+        html2canvas($('#table-appointments')[0], {
+            onrendered: function (canvas) {
+                var data = canvas.toDataURL();
+                var docDefinition = {
+                    content: [{
+                        image: data,
+                        width: 500
+                    }]
+                };
+                pdfMake.createPdf(docDefinition).download("download.pdf");
+            }
         });
     }
 
