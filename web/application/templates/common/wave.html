@@ -289,22 +289,10 @@
     
     <script>
         
-        // {% if data.input.first_name %}
-        //     $('#first_name').val('{{data.input.first_name}}')
-        // {% endif %}
-        // {% if data.input.last_name %}
-        //     $('#last_name').val('{{data.input.last_name}}')
-        // {% endif %}
-        // {% if data.input.phone %}
-        //     $('#phone').val('{{data.input.phone}}')
-        // {% endif %}
-        // {% if data.input.email %}
-        //     $('#email').val('{{data.input.email}}')
-        // {% endif %}
-        // {% if data.input.password %}
-        //     $('#password').val('{{data.input.password}}')
-        // {% endif %}
-
+        status_id = 6
+        Controller.GET('/api/account/get/{{data.repo.faculty.id}}').done(function(result) {
+            status_id = result.status_id
+        })
         schedules = []
         Controller.GET('/api/account/get/consultations/{{data.repo.faculty.id}}').done(function(result) {
             result.forEach(i => {
@@ -316,7 +304,11 @@
                 format: 'yyyy-mm-dd',
                 startDate: new Date(),
                 beforeShowDay: function(date) {
-                    if ($.inArray(days[date.getDay()], schedules) !== -1) {
+                    if (date.getDate() == (new Date()).getDate() && date.getMonth() == (new Date()).getMonth() && date.getYear() == (new Date()).getYear()) {
+                        if (status_id == 5) return { enabled: true }
+                        else return { enabled: false }
+                    }
+                    else if ($.inArray(days[date.getDay()], schedules) !== -1) {
                         return { enabled: true }
                     }
                     else return { enabled: false }
