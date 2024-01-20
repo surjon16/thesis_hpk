@@ -55,9 +55,11 @@ class AppointmentsRepo:
         return Appointments.query.filter(and_(Appointments.status_id.in_([2,3]), func.date(Appointments.schedule) == datetime.now().date())).order_by(Appointments.updated_at.desc()).all()
     
     def readMonitorHeader():
-        return []
-        return Appointments.query.filter(and_(Appointments.status_id.in_([1,2,3]), func.date(Appointments.schedule) == datetime.now().date())).all()
-        return db.session.query(Appointments).filter(Appointments.updated_at.in_(db.session.query(func.max(Appointments.updated_at)).filter(and_(Appointments.status_id.in_([1,2,3]), func.date(Appointments.schedule) == datetime.now().date())).group_by(Appointments.account_id).order_by(Appointments.updated_at.desc()).subquery())).order_by(Appointments.updated_at.desc())
+        # return Appointments.query.filter(and_(Appointments.status_id.in_([1,2,3]), func.date(Appointments.schedule) == datetime.now().date())).all()
+        sub = db.session.query(func.max(Appointments.updated_at)).filter(and_(Appointments.status_id.in_([1,2,3]), func.date(Appointments.schedule) == datetime.now().date())).group_by(Appointments.account_id).order_by(Appointments.updated_at.desc()).subquery()
+        db.session.close()
+        data = Appointments.query.filter(Appointments.updated_at.in_(sub)).order_by(Appointments.updated_at.desc()).all()
+        return data
     
     def readMonitorLastCall():
         # connection = db.session
