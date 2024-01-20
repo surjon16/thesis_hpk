@@ -144,6 +144,8 @@ class Appointments(db.Model):
     status_id       = db.Column(db.Integer, db.ForeignKey('status.id'), nullable=True)
     account_id      = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=True)
     participants    = db.relationship('Accounts', secondary=participants, lazy='subquery', backref=db.backref('appointment', lazy=True))
+    appointment     = db.relationship('Queue', backref='appointment', lazy=True)
+
     
     @hybrid_property
     def participants_list(self): 
@@ -164,17 +166,23 @@ class Appointments(db.Model):
 class Queue(db.Model):
 
     # appointment info
-    id              = db.Column(db.Integer, primary_key=True)
-    priority        = db.Column(db.String(15))
+    id          = db.Column(db.Integer, primary_key=True)
+    schedule    = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     # timestamps
     created_at  = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at  = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
+    # relationship
+    appointment_id  = db.Column(db.Integer, db.ForeignKey('appointments.id'), nullable=True)
+    account_id      = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=True)
+    # appointment_queue  = db.relationship('Appointments', backref='queue', lazy=True)
+
     def serialize(self):
         return {
             'id'            : self.id,
-            'priority'      : self.priority,
+            'faculty'       : self.appointment.faculty.id,
+            'priority'      : self.appointment.priority,
             'created_at'    : self.created_at,
             'updated_at'    : self.updated_at,
         }

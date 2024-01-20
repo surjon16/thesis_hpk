@@ -472,6 +472,50 @@ class Repository(AccountsRepo, AppointmentsRepo, ConsultationsRepo, PurposeRepo,
         )
         db.session.add(account)
 
+        # create sample students
+        
+        account = Accounts(
+            first_name      = 'Eric',
+            middle_name     = '',
+            last_name       = 'Bernards',
+            gender          = '',
+            phone           = '',
+            address         = '',
+            password        = 'admin1234',
+            id_number       = '1020200926',
+            role_id         = 3,
+            status_id       = 6
+        )
+        db.session.add(account)
+
+        account = Accounts(
+            first_name      = 'Bernard',
+            middle_name     = '',
+            last_name       = 'Erics',
+            gender          = '',
+            phone           = '',
+            address         = '',
+            password        = 'admin1234',
+            id_number       = '1020300927',
+            role_id         = 3,
+            status_id       = 6
+        )
+        db.session.add(account)
+
+        account = Accounts(
+            first_name      = 'Sam',
+            middle_name     = '',
+            last_name       = 'Smith',
+            gender          = '',
+            phone           = '',
+            address         = '',
+            password        = 'admin1234',
+            id_number       = '1020400928',
+            role_id         = 3,
+            status_id       = 6
+        )
+        db.session.add(account)
+
         # create consultations
 
         consultation = Consultations(

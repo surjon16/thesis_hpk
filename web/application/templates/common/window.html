@@ -196,17 +196,13 @@
             Controller.GET('/api/appointment/get/window_data').done(function(result) {
                 console.log(result)
                 if (result.header.length > 0) {
-                    if(result.header[0].status == 'Declined') $('#current_status').html('Declining')
-                    if(result.header[0].status == 'Done') $('#current_status').html('Calling')
+                    if(result.header[0].status == 'Declined') $('#current_status').html('Declining');
+                    else if(result.header[0].status == 'Done') {}
                     else $('#current_status').html(result.header[0].status)
                     $('#current_call').html(result.header[0].faculty_name + ' ' + result.header[0].priority)
                 }
-                else {
-                    $('#current_status').html('--')
-                    $('#current_call').html('--')
-                }
                 
-                $('[id^="call-"]').html('--')
+                // $('[id^="call-"]').html('--')
                 result.last_call.forEach(i => {
                     $('#call-'+i.faculty).html(i.priority)
                 })

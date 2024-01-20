@@ -1,4 +1,4 @@
-from data.models    import Accounts, Appointments, Status
+from data.models    import Accounts, Appointments, Status, Queue
 from data           import db
 
 from sqlalchemy     import extract, or_, and_, func
@@ -58,7 +58,7 @@ class AppointmentsRepo:
         return db.session.query(Appointments).filter(Appointments.updated_at.in_(db.session.query(func.max(Appointments.updated_at)).filter(and_(Appointments.status_id.in_([1,2,3]), func.date(Appointments.schedule) == datetime.now().date())).group_by(Appointments.account_id).order_by(Appointments.updated_at.desc()).subquery())).order_by(Appointments.updated_at.desc())
     
     def readMonitorLastCall():
-        return db.session.query(Appointments).filter(Appointments.updated_at.in_(db.session.query(func.max(Appointments.updated_at)).filter(and_(Appointments.status_id.in_([1,2,3]), func.date(Appointments.schedule) == datetime.now().date())).group_by(Appointments.account_id).order_by(Appointments.updated_at.desc()).subquery())).order_by(Appointments.updated_at.desc())
+        return db.session.query(Queue).filter(Queue.updated_at.in_(db.session.query(func.max(Queue.updated_at)).filter(and_(func.date(Queue.schedule) == datetime.now().date())).group_by(Queue.account_id).order_by(Queue.updated_at.desc()).subquery())).order_by(Queue.updated_at.desc())
 
     def readHistory(id):
         return Appointments.query.filter(and_(Appointments.status_id.in_([1,2]), Appointments.account_id==id, func.date(Appointments.schedule) == datetime.now().date())).order_by(Appointments.updated_at.desc()).limit(5).all()
@@ -80,6 +80,17 @@ class AppointmentsRepo:
         data = Appointments.query.filter_by(id=request['id']).first()
         data.status_id = request['status_id']
         db.session.commit()
+
+        if request['status_id'] == '3':
+            
+            queue = Queue(
+                appointment_id     = data.id,
+                schedule           = data.schedule,
+                account_id         = data.account_id
+            )
+            db.session.add(queue)
+            db.session.commit()
+
 
         return True
     
