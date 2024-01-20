@@ -100,7 +100,8 @@ def get_all_appointments():
 @app.route('/api/appointment/get/window_data', methods=['GET'])
 def get_window_data():
     return jsonify({
-        'calls'     : [data.serialize() for data in Repository.readCalls()],
+        'header'    : [data.serialize() for data in Repository.readMonitorHeader()],
+        'last_call' : [data.serialize() for data in Repository.readMonitorLastCall()],
         'declined'  : [data.serialize() for data in Repository.readDeclined()]
     })
 
