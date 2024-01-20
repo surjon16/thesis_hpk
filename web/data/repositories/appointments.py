@@ -55,16 +55,15 @@ class AppointmentsRepo:
         return Appointments.query.filter(and_(Appointments.status_id.in_([2,3]), func.date(Appointments.schedule) == datetime.now().date())).order_by(Appointments.updated_at.desc()).all()
     
     def readMonitorHeader():
-        connection = db.session
-        data = connection.query(Appointments).filter(Appointments.updated_at.in_(db.session.query(func.max(Appointments.updated_at)).filter(and_(Appointments.status_id.in_([1,2,3]), func.date(Appointments.schedule) == datetime.now().date())).group_by(Appointments.account_id).order_by(Appointments.updated_at.desc()).subquery())).order_by(Appointments.updated_at.desc())
-        connection.remove()
-        return data
+        return []
+        return Appointments.query.filter(and_(Appointments.status_id.in_([1,2,3]), func.date(Appointments.schedule) == datetime.now().date())).all()
+        return db.session.query(Appointments).filter(Appointments.updated_at.in_(db.session.query(func.max(Appointments.updated_at)).filter(and_(Appointments.status_id.in_([1,2,3]), func.date(Appointments.schedule) == datetime.now().date())).group_by(Appointments.account_id).order_by(Appointments.updated_at.desc()).subquery())).order_by(Appointments.updated_at.desc())
     
     def readMonitorLastCall():
-        connection = db.session
-        data = connection.query(Queue).filter(Queue.updated_at.in_(db.session.query(func.max(Queue.updated_at)).filter(and_(func.date(Queue.schedule) == datetime.now().date())).group_by(Queue.account_id).order_by(Queue.updated_at.desc()).subquery())).order_by(Queue.updated_at.desc())
-        connection.remove()
-        return data
+        # connection = db.session
+        # data = connection.query(Queue).filter(Queue.updated_at.in_(db.session.query(func.max(Queue.updated_at)).filter(and_(func.date(Queue.schedule) == datetime.now().date())).group_by(Queue.account_id).order_by(Queue.updated_at.desc()).subquery())).order_by(Queue.updated_at.desc())
+        # connection.remove()
+        return []
     
     def readHistory(id):
         return Appointments.query.filter(and_(Appointments.status_id.in_([1,2]), Appointments.account_id==id, func.date(Appointments.schedule) == datetime.now().date())).order_by(Appointments.updated_at.desc()).limit(5).all()
