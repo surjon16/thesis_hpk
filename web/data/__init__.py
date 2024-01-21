@@ -7,6 +7,8 @@ from flask_httpauth import HTTPBasicAuth
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/db_hpk' 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SQLALCHEMY_POOL_TIMEOUT'] = 300
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
