@@ -195,27 +195,32 @@
             
             Controller.GET('/api/appointment/get/window_data').done(function(result) {
                 console.log(result)
-                if(result.header.status == 'Declined') {
-                    $('#current_status').html('Declining')
-                    $('#current_call').html(result.header.faculty_name + ' ' + result.header.priority)
-                }
-                else if(result.header.status == 'Done') {}
-                else {
-                    $('#current_status').html(result.header.status)
-                    $('#current_call').html(result.header.faculty_name + ' ' + result.header.priority)
-                }
+
+                if(result.calls[0].status == 'Declined') $('#current_status').html('Declining')
+                else $('#current_status').html(result.calls[0].status)
+
+                $('#current_call').html(result.calls[0].faculty_name + ' ' + result.calls[0].priority)
                 
                 // $('[id^="call-"]').html('--')
-                result.last_call.forEach(i => {
-                    $('#call-'+i.faculty).html(i.priority)
+                faculties = []
+                result.calls.forEach(i => {
+                    if (i.status == 'Calling' && !faculties.includes(i.faculty)) {
+                        $('#call-'+i.faculty).html(i.priority);
+                        faculties.push(i.faculty);
+                    }
                 })
+
                 $('#declined').html('')
-                result.declined.forEach(i=> {
-                    $('#declined').append('<div class="col-12 p-2 border text-center"><h3 class="display-6">'+i.faculty_name + ' ' + i.priority+'</h3> </div>')
+                limits = 10
+                result.calls.forEach(i=> {
+                    if (i.status == 'Declined' && limits > 0) {
+                        $('#declined').append('<div class="col-12 p-2 border text-center"><h3 class="display-6">'+i.faculty_name + ' ' + i.priority+'</h3> </div>')
+                        limits--;
+                    }
                 })
             })
 
-        }, 3000)
+        }, 1000)
 
     </script>
 

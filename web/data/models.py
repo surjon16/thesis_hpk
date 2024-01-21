@@ -45,6 +45,7 @@ class Accounts(UserMixin, db.Model):
     # participant     = db.relationship('Appointments', secondary=participants, backref=db.backref('participant', uselist=False),  lazy='dynamic')
     consultations   = db.relationship('Consultations', backref='faculty', lazy=True)
     faculty         = db.relationship('Appointments', backref='faculty', lazy=True)
+    queues          = db.relationship('Queue', backref='faculty', lazy=True)
 
 
     @property
@@ -144,7 +145,7 @@ class Appointments(db.Model):
     status_id       = db.Column(db.Integer, db.ForeignKey('status.id'), nullable=True)
     account_id      = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=True)
     participants    = db.relationship('Accounts', secondary=participants, lazy='subquery', backref=db.backref('appointment', lazy=True))
-    appointment     = db.relationship('Queue', backref='appointment', lazy=True)
+    queues          = db.relationship('Queue', backref='appointment', lazy=True)
 
     
     @hybrid_property
@@ -168,6 +169,7 @@ class Queue(db.Model):
     # appointment info
     id          = db.Column(db.Integer, primary_key=True)
     schedule    = db.Column(db.DateTime, default=db.func.current_timestamp())
+    status      = db.Column(db.String(50))
 
     # timestamps
     created_at  = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -182,7 +184,9 @@ class Queue(db.Model):
         return {
             'id'            : self.id,
             'faculty'       : self.appointment.faculty.id,
+            'faculty_name'  : self.appointment.faculty.last_name.upper(),
             'priority'      : self.appointment.priority,
+            'status'        : self.status,
             'created_at'    : self.created_at,
             'updated_at'    : self.updated_at,
         }

@@ -10,7 +10,7 @@ class QueuesRepo:
     # QUEUES
     
     def readQueue():
-        return Queue.query.filter(func.date(Queue.created_at) == datetime.now().date()).order_by(Queue.created_at.asc()).all()
+        return Queue.query.filter(func.date(Queue.created_at) == datetime.now().date()).order_by(Queue.created_at.desc()).all()
     
     def insertQueue(request):
     
