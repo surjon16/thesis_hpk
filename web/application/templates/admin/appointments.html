@@ -131,7 +131,7 @@ Appointments
                                             <td>
                                                 {{i.schedule.strftime('%h %d %Y')|day_of_week}}
                                                 {% for x in i.queues %}
-                                                    {{x.created_at.strftime('%I:%M %p')}}
+                                                    {{x.created_at.strftime('%I:%M%p')}}
                                                 {% endfor %}
                                             </td>
                                             <td>
