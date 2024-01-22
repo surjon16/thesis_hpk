@@ -130,9 +130,11 @@ Appointments
                                         <tr>
                                             <td>
                                                 {{i.schedule.strftime('%h %d %Y')|day_of_week}}
-                                                {% for x in i.queues %}
-                                                    {{x.created_at.strftime('%I:%M%p')}}
-                                                {% endfor %}
+                                                {% if i.queues|length > 1 %}
+                                                    {{i.queues[0].created_at.strftime('%I:%M%p')}} - {{i.queues[0].created_at.strftime('%I:%M%p')}}
+                                                {% elif i.queues|length == 1 %}
+                                                    {{i.queues[0].created_at.strftime('%I:%M%p')}}
+                                                {% endif %}
                                             </td>
                                             <td>
                                                 {{i.faculty.first_name}} {{i.faculty.last_name}}
