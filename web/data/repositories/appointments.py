@@ -58,27 +58,8 @@ class AppointmentsRepo:
 
         return Queue.query.filter(func.date(Queue.created_at) == datetime.now().date()).order_by(Queue.created_at.desc()).first()
         
-        # return Appointments.query.filter(and_(Appointments.status_id.in_([1,2,3]), func.date(Appointments.schedule) == datetime.now().date())).group_by(Appointments.account_id).order_by(Appointments.updated_at.desc()).first()
-        
-        # return Appointments.query.filter(Appointments.updated_at.in_(Appointments.query.with_entities(func.max(Appointments.updated_at)).filter(and_(Appointments.status_id.in_([1,2,3]), func.date(Appointments.schedule) == datetime.now().date())).group_by(Appointments.account_id).order_by(Appointments.updated_at.desc()).subquery())).order_by(Appointments.updated_at.desc()).first()
-        
-        # sub = db.session.query(func.max(Appointments.updated_at)).filter(and_(Appointments.status_id.in_([1,2,3]), func.date(Appointments.schedule) == datetime.now().date())).group_by(Appointments.account_id).order_by(Appointments.updated_at.desc()).subquery()
-        # db.session.close()
-        # return Appointments.query.filter(and_(Appointments.status_id.in_([2,3]), func.date(Appointments.schedule) == datetime.now().date())).order_by(Appointments.updated_at.desc()).first()
-        
-        # return Queue.query.filter(and_(Queue.status.in_(["Calling","Decline"]), func.date(Queue.schedule) == datetime.now().date())).order_by(Queue.updated_at.desc()).first()
-
     def readMonitorLastCall():
 
-        # return Queue.query.filter(and_(func.date(Queue.schedule) == datetime.now().date())).order_by(Queue.updated_at.desc()).all()
-        
-        # return Queue.query.filter(Queue.updated_at.in_(Queue.query.with_entities(func.max(Queue.updated_at)).filter(and_(func.date(Queue.schedule) == datetime.now().date())).group_by(Queue.account_id).order_by(Queue.updated_at.desc()).subquery())).order_by(Queue.updated_at.desc()).all()
-        
-        # sub = db.session.query(func.max(Queue.updated_at)).filter(and_(func.date(Queue.schedule) == datetime.now().date())).group_by(Queue.account_id).order_by(Queue.updated_at.desc()).subquery()
-        # db.session.close()
-        # data = Queue.query.filter(Queue.updated_at.in_(sub)).order_by(Queue.updated_at.desc()).all()
-        # return data
-        
         return Queue.query.filter(and_(Queue.status.in_(["Calling"]), func.date(Queue.schedule) == datetime.now().date())).order_by(Queue.updated_at.desc()).distinct()
     
     def readAllCalls():

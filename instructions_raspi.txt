@@ -3,5 +3,7 @@
     - if hpk-server doesn't connect, try server-hpk or try using the actual IP address of the server raspi.
 3. enter password: server
 4. cd thesis_hpk
-5. git pull
+5. git stash
+6. git pull
+7. git statsh pop
 6. sudo reboot
