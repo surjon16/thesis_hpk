@@ -134,6 +134,9 @@ Appointments
                                                     {{i.queues[0].created_at.strftime('%I:%M%p')}} - {{i.queues[0].created_at.strftime('%I:%M%p')}}
                                                 {% elif i.queues|length == 1 %}
                                                     {{i.queues[0].created_at.strftime('%I:%M%p')}}
+                                                    {% if i.status_id == 1 %}
+                                                        - {{i.updated_at.strftime('%I:%M%p')}}
+                                                    {% endif %}
                                                 {% endif %}
                                             </td>
                                             <td>
