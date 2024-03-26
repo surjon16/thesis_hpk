@@ -122,6 +122,7 @@ Appointments
                                     <th scope="col">PARTICIPANT(S)</th>
                                     <th scope="col">PURPOSE</th>
                                     <th scope="col">STATUS</th>
+                                    <th scope="col">REMARKS</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -156,6 +157,9 @@ Appointments
                                             </td>
                                             <td>
                                                 {{i.status.status}}
+                                            </td>
+                                            <td>
+                                                {{i.remarks}}
                                             </td>
                                         </tr>
                                     {% endfor %}
